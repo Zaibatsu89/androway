@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- A theme that has a wallpaper background.  Here we explicitly specify
+         that this theme is to inherit from the system's wallpaper theme,
+         which sets up various attributes correctly. -->
+    <style name="AppBackground" parent="android:style/Theme.Wallpaper.NoTitleBar">
+        <item name="android:background">#5f000000</item>
+    </style>
+
+    <style name="StatusBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:background">@drawable/statusbar_bg</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+</resources>

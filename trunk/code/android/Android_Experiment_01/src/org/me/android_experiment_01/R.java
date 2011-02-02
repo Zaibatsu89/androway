@@ -10,13 +10,22 @@ package org.me.android_experiment_01;
 public final class R {
     public static final class attr {
     }
-    public static final class id {
-        public static final int imageview=0x7f040000;
+    public static final class drawable {
+        public static final int statusbar_bg=0x7f020000;
     }
     public static final class layout {
-        public static final int main=0x7f020000;
+        public static final int main=0x7f030000;
     }
     public static final class string {
-        public static final int app_name=0x7f030000;
+        public static final int app_label=0x7f040001;
+        public static final int app_name=0x7f040000;
+    }
+    public static final class style {
+        /**  A theme that has a wallpaper background.  Here we explicitly specify
+         that this theme is to inherit from the system's wallpaper theme,
+         which sets up various attributes correctly. 
+         */
+        public static final int AppBackground=0x7f050000;
+        public static final int StatusBar=0x7f050001;
     }
 }
