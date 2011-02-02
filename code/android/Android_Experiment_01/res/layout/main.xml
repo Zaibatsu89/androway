@@ -3,6 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout style="@style/TitleFade"></LinearLayout>
+    <LinearLayout style="@style/TitleBar"></LinearLayout>
+    <ImageView style="@style/Title"></ImageView>
+
+
     <LinearLayout style="@style/StatusBar">
     </LinearLayout>
 </RelativeLayout>
