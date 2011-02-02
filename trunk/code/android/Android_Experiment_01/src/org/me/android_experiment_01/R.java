@@ -12,6 +12,9 @@ public final class R {
     }
     public static final class drawable {
         public static final int statusbar_bg=0x7f020000;
+        public static final int titlebar_bg=0x7f020001;
+        public static final int titlebar_fade=0x7f020002;
+        public static final int titlebar_title=0x7f020003;
     }
     public static final class layout {
         public static final int main=0x7f030000;
@@ -21,11 +24,14 @@ public final class R {
         public static final int app_name=0x7f040000;
     }
     public static final class style {
-        /**  A theme that has a wallpaper background.  Here we explicitly specify
+        /**  A theme that has a wallpaper background. Here we explicitly specify
          that this theme is to inherit from the system's wallpaper theme,
          which sets up various attributes correctly. 
          */
         public static final int AppBackground=0x7f050000;
-        public static final int StatusBar=0x7f050001;
+        public static final int StatusBar=0x7f050004;
+        public static final int Title=0x7f050003;
+        public static final int TitleBar=0x7f050001;
+        public static final int TitleFade=0x7f050002;
     }
 }
