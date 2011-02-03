@@ -10,29 +10,38 @@
     <style name="TitleBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:background">@drawable/titlebar_bg</item>
         <item name="android:layout_alignParentTop">true</item>
+        <item name="android:background">@drawable/titlebar_bg</item>
     </style>
 
-    <style name="TitleFade">
+    <style name="TitleBarFade">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">20dp</item>
-        <item name="android:background">@drawable/titlebar_fade</item>
         <item name="android:layout_alignParentTop">true</item>
+        <item name="android:background">@drawable/titlebar_fade</item>
     </style>
 
     <style name="Title">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:src">@drawable/titlebar_title</item>
         <item name="android:layout_marginTop">10dp</item>
+        <item name="android:src">@drawable/titlebar_title</item>
+        <item name="android:background">#01000000</item>
     </style>
 
     <style name="StatusBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">100dp</item>
-        <item name="android:background">@drawable/statusbar_bg</item>
         <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@drawable/statusbar_bg</item>
+    </style>
+
+    <style name="StatusBarFade">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_marginBottom">48dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@drawable/statusbar_fade</item>
     </style>
 </resources>
