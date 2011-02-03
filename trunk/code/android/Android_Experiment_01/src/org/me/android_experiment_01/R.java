@@ -12,9 +12,10 @@ public final class R {
     }
     public static final class drawable {
         public static final int statusbar_bg=0x7f020000;
-        public static final int titlebar_bg=0x7f020001;
-        public static final int titlebar_fade=0x7f020002;
-        public static final int titlebar_title=0x7f020003;
+        public static final int statusbar_fade=0x7f020001;
+        public static final int titlebar_bg=0x7f020002;
+        public static final int titlebar_fade=0x7f020003;
+        public static final int titlebar_title=0x7f020004;
     }
     public static final class layout {
         public static final int main=0x7f030000;
@@ -30,8 +31,9 @@ public final class R {
          */
         public static final int AppBackground=0x7f050000;
         public static final int StatusBar=0x7f050004;
+        public static final int StatusBarFade=0x7f050005;
         public static final int Title=0x7f050003;
         public static final int TitleBar=0x7f050001;
-        public static final int TitleFade=0x7f050002;
+        public static final int TitleBarFade=0x7f050002;
     }
 }
