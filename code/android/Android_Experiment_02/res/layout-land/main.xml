@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <View android:id="@id/window_tint" android:background="#5f000000" android:visibility="visible" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <View android:id="@id/window_tint" style="@style/WindowTint" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,30 +14,14 @@
         <include layout="@layout/titlebar" />
 
         <LinearLayout
-            android:layout_gravity="left"
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="25.0dip"
-            android:layout_marginTop="18.0dip"
-            android:layout_marginRight="18.0dip"
-            android:layout_marginBottom="12.0dip"
-            android:layout_weight="1.0">
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="20.0dip">
 
-            <!-- Top content element (in clock it is battery + safe mode button)-->
-            <LinearLayout
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4.0dip"
-                android:layout_marginBottom="6.0dip"
-                android:layout_weight="0.0">
-            </LinearLayout>
-
-            <!-- Bottom content element (in clock it is time/date + weather info)-->
-            <LinearLayout android:gravity="bottom" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
-            </LinearLayout>
+            <include layout="@layout/inclination" />
 
         </LinearLayout>
 
