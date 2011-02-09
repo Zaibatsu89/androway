@@ -25,10 +25,11 @@ public final class R {
         public static final int btn_strip_trans_right_normal=0x7f02000b;
         public static final int btn_strip_trans_right_pressed=0x7f02000c;
         public static final int btn_strip_trans_right_selected=0x7f02000d;
-        public static final int launcher_icon=0x7f02000e;
-        public static final int log_web_icon=0x7f02000f;
-        public static final int title_bar_bg=0x7f020010;
-        public static final int title_text=0x7f020011;
+        public static final int inclination_bg=0x7f02000e;
+        public static final int launcher_icon=0x7f02000f;
+        public static final int log_web_icon=0x7f020010;
+        public static final int title_bar_bg=0x7f020011;
+        public static final int title_text=0x7f020012;
     }
     public static final class id {
         public static final int battery_button=0x7f040002;
@@ -37,18 +38,21 @@ public final class R {
         public static final int window_tint=0x7f040000;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
-        public static final int statusbar=0x7f030001;
-        public static final int titlebar=0x7f030002;
+        public static final int direction=0x7f030000;
+        public static final int inclination=0x7f030001;
+        public static final int main=0x7f030002;
+        public static final int statusbar=0x7f030003;
+        public static final int titlebar=0x7f030004;
     }
     public static final class string {
         public static final int app_label=0x7f050001;
         public static final int app_name=0x7f050000;
     }
     public static final class style {
-        public static final int StatusBarLeft=0x7f060001;
-        public static final int StatusBarMiddle=0x7f060002;
-        public static final int StatusBarRight=0x7f060003;
-        public static final int TitleBar=0x7f060000;
+        public static final int StatusBarLeft=0x7f060002;
+        public static final int StatusBarMiddle=0x7f060003;
+        public static final int StatusBarRight=0x7f060004;
+        public static final int TitleBar=0x7f060001;
+        public static final int WindowTint=0x7f060000;
     }
 }
