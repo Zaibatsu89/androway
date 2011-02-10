@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <View android:id="@id/window_tint" style="@style/WindowTint" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <include layout="@layout/titlebar" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="20.0dip">
+
+            <include layout="@layout/inclination" />
+
+        </LinearLayout>
+
+        <include layout="@layout/statusbar" />
+        
+    </LinearLayout>
+</FrameLayout>
