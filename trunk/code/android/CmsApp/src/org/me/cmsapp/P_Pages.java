@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.me.cmsapp;
 
 import android.app.ListActivity;
@@ -27,8 +22,8 @@ public class P_Pages extends ListActivity
 {
     private Context context = this;
     private HttpHandler httpHandler;
-    private JSONObject json;
-    private String url = "http://t-squad.nl/http.php";
+    private JSONArray jsonItems;
+    private String url = "http://m.androway.nl/webservice.php";
     private ArrayList listArray = new ArrayList();
     
     /** Called when the activity is first created. */
@@ -40,31 +35,28 @@ public class P_Pages extends ListActivity
         // Assemble data to post
         ArrayList data = new ArrayList();
         data.add(new ArrayList());
-            ((ArrayList)data.get(data.size()-1)).add("naam");
-            ((ArrayList)data.get(data.size()-1)).add("Tymen");
+            ((ArrayList)data.get(data.size()-1)).add("page_name");
+            ((ArrayList)data.get(data.size()-1)).add("Home");
         data.add(new ArrayList());
-            ((ArrayList)data.get(data.size()-1)).add("leeftijd");
-            ((ArrayList)data.get(data.size()-1)).add("20");
+            ((ArrayList)data.get(data.size()-1)).add("page_description");
+            ((ArrayList)data.get(data.size()-1)).add("The home page of the website");
 
         try
         {
             // postData returns the post result. Create a JSON object out of the result.
-            json = new JSONObject(postData(url, data));
-
-            // Parse the JSON object into an array of names
-            JSONArray jsonItems = json.names();
+            jsonItems = new JSONArray(postData(url, data));
 
             for(int i = jsonItems.length()-1; i > -1; i--)
             {
                 // Retrieve the data of the JSON item and parse it into an array of names and an array of values
-                JSONObject jsonChild = (JSONObject)json.get(jsonItems.getString(i));
+                JSONObject jsonChild = (JSONObject)jsonItems.get(i);
 
                 listArray.add(jsonChild.getString("page_name"));
-            }
+			}
         }
         catch (JSONException ex)
         {
-            Logger.getLogger(P_Pages.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(P_Pages.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         // Create an ArrayAdapter, that will actually make the Strings above appear in the ListView
@@ -79,8 +71,9 @@ public class P_Pages extends ListActivity
         // Get the item that was clicked
         Object o = this.getListAdapter().getItem(position);
 
+		/*
         // Parse the JSON object into an array of names
-        /*JSONArray jsonItems = json.names();
+        JSONArray jsonItems = json.names();
 
         // Loop the json array, and check until we find the clicked item (search by name)
         for(int i = jsonItems.length()-1; i > -1; i--)
@@ -95,7 +88,7 @@ public class P_Pages extends ListActivity
                 Logger.getLogger(P_Pages.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        */
+		*/
 
         Toast.makeText(context, "Loading page: \""+o.toString()+"\"", Toast.LENGTH_SHORT).show();
     }
