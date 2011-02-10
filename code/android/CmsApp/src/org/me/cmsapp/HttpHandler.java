@@ -5,8 +5,6 @@
 
 package org.me.cmsapp;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
