@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="androway.ui">
+    <application>
+         <activity
+             android:name=".View"
+             android:label="@string/app_label"
+             android:icon="@drawable/launcher_icon"
+             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+             android:launchMode="singleInstance">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
