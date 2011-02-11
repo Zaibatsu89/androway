@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">Android_Experiment_03</string>
+	<string name="button_01">Add</string>
+	<string name="button_02">Get</string>
+	<string name="button_03">Delete</string>
+</resources>

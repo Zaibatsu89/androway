@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<Button android:id="@+id/button_01"
+		android:text="@string/button_01"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="Add" />
+	<Button android:id="@+id/button_02"
+		android:text="@string/button_02"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="Get" />
+	<Button android:id="@+id/button_03"
+		android:text="@string/button_03"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:onClick="Delete" />
+</LinearLayout>
