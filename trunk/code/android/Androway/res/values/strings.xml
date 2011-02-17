@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Androway</string>
     <string name="app_label">Androway</string>
+
+	<!-- Exception messages -->
+	<string name="MaxPoolSizeReachedException">The ConnectionFactory object pool has reached its maximum size.</string>
 </resources>

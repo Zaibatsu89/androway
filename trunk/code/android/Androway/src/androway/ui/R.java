@@ -90,6 +90,9 @@ public final class R {
         public static final int titlebar=0x7f030006;
     }
     public static final class string {
+        /**  Exception messages 
+         */
+        public static final int MaxPoolSizeReachedException=0x7f060002;
         public static final int app_label=0x7f060001;
         public static final int app_name=0x7f060000;
     }
