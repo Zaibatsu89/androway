@@ -15,7 +15,7 @@ import android.util.Log;
  * @version 0.3
  */
 public class DBAdapter {
-	public static final String KEY_ROWID = "_id";
+    public static final String KEY_ROWID = "_id";
     public static final String KEY_TIME = "time";
     public static final String KEY_SUBJECT = "subject";
     public static final String KEY_MESSAGE = "message";
