@@ -1,9 +1,14 @@
 package androway.ui;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
@@ -77,6 +82,30 @@ public class View extends Activity {
                     quickAction.addActionItem(actionItem);
 
                 quickAction.show();
+            }
+        });
+		
+        ImageButton logWebButton = (ImageButton) this.findViewById(R.id.log_web_button);
+        logWebButton.setOnClickListener(new android.view.View.OnClickListener()
+        {
+            public void onClick(android.view.View v)
+            {
+   		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.segway_body_inclination);
+
+                // Getting width & height of the given image.
+		int w = bmp.getWidth();
+		int h = bmp.getHeight();
+
+                // Setting post rotate to 90
+		Matrix mtx = new Matrix();
+		mtx.postRotate(45);
+
+                // Rotating Bitmap
+		Bitmap rotatedBMP = Bitmap.createBitmap(bmp, 0, 0, w, h, mtx, true);
+		BitmapDrawable bmd = new BitmapDrawable(rotatedBMP);
+
+                ImageView img = (ImageView)findViewById(R.id.segway_body);
+		img.setImageDrawable(bmd);
             }
         });
     }

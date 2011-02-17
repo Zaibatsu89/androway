@@ -7,7 +7,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageButton
-        android:id="@id/log_web_button"
+        android:id="@+id/log_web_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/log_web_icon"
@@ -15,7 +15,7 @@
         style="@style/StatusBarLeft" />
 
     <ImageButton
-        android:id="@id/battery_button"
+        android:id="@+id/battery_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/battery_icon"
@@ -23,7 +23,7 @@
         style="@style/StatusBarMiddle" />
 
     <ImageButton
-        android:id="@id/bluetooth_button"
+        android:id="@+id/bluetooth_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/bluetooth_icon"
