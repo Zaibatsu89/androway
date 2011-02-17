@@ -1,5 +1,6 @@
 package androway.connection;
 
+import android.app.Activity;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.ui.R;
 import java.util.HashMap;
@@ -18,20 +19,22 @@ import java.util.Map;
  */
 public final class ConnectionFactory
 {
+	private static Activity _mainActivity;
 	private static ConnectionFactory _connectionFactory;
 	private static Map _connectionManagersCollection;
 	private static int _managerCount;
 	private static int _maxPoolSize;
 
-	private ConnectionFactory()
+	private ConnectionFactory(Activity mainActivity)
 	{
+		_mainActivity = mainActivity;
 		_connectionManagersCollection = new HashMap();
 	}
 
 	public ConnectionFactory getInstance()
 	{
 		if (_connectionFactory == null)
-			_connectionFactory = new ConnectionFactory();
+			_connectionFactory = new ConnectionFactory(_mainActivity);
 
 		return _connectionFactory;
 	}
@@ -47,9 +50,9 @@ public final class ConnectionFactory
 			else
 			{
 				if (managerName.equals("http"))
-					cm = new HttpManager();
+					cm = new HttpManager(_mainActivity);
 				else if (managerName.equals("bluetooth"))
-					cm = new BluetoothManager();
+					cm = new BluetoothManager(_mainActivity);
 
 				_managerCount++;
 			}
@@ -57,7 +60,7 @@ public final class ConnectionFactory
 			return cm;
 		}
 		else
-			throw new MaxPoolSizeReachedException(String.valueOf(R.string.MaxPoolSizeReachedException));
+			throw new MaxPoolSizeReachedException(_mainActivity.getString(R.string.MaxPoolSizeReachedException));
 	}
 
 	public static void releaseConnectionManager(String managerName)

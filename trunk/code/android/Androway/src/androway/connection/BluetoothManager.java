@@ -1,5 +1,6 @@
 package androway.connection;
 
+import android.app.Activity;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +13,13 @@ import java.util.ArrayList;
  */
 public class BluetoothManager implements ConnectionManager
 {
+	private Activity _mainActivity;
+
+	public BluetoothManager(Activity mainActivity) {
+		_mainActivity = mainActivity;
+	}
+
+
 	public void open() {
 		
 	}

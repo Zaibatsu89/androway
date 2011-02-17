@@ -8,5 +8,7 @@ package androway.logging;
  * @version 0.2
  */
 public interface LoggingManager {
-	
+	public abstract void add(String subject, String message);
+	public abstract void get();
+	public abstract void remove();
 }
