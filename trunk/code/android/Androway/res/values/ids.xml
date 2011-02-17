@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
-    <item type="id" name="window_tint">false</item>
-    <item type="id" name="log_web_button">false</item>
-    <item type="id" name="battery_button">false</item>
-    <item type="id" name="bluetooth_button">false</item>
-</resources>

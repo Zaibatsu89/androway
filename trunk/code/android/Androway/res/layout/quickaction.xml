@@ -4,13 +4,13 @@
     android:layout_height="wrap_content">
         
      <FrameLayout
-  		android:layout_marginTop="10dip"
+  	android:layout_marginTop="10dip"
         android:id="@+id/header2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/quickcontact_top_frame"/>
         
-  	<ImageView
+    <ImageView
         android:id="@+id/arrow_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"	

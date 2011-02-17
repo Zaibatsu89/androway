@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The portrait direction layout -->
+<!-- The landscape direction layout -->
 <LinearLayout
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="fill_parent"
-    android:layout_height="335dip"
+    android:layout_height="fill_parent"
     android:layout_weight="1"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -43,7 +43,6 @@
                 android:textSize="20sp"
                 android:textColor="#FFF"
                 android:text="--" />
-
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +70,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-13dip"
+            android:layout_marginTop="-15dip"
             android:src="@drawable/segway_body_direction" />
             
     </LinearLayout>

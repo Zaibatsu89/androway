@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The portrait direction layout -->
+<!-- The landscape direction layout -->
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -25,14 +25,14 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="-205dip"
+        android:layout_marginTop="-158dip"
         android:gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/segway_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
+            android:layout_marginTop="7dip"
             android:src="@drawable/segway_body_inclination" />
 
         <!-- Used to keep the lego_wheel in a static position -->
@@ -44,9 +44,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-111dip"
+            android:layout_marginTop="-90dip"
             android:src="@drawable/lego_wheel" />
-
-    </LinearLayout>    
-
+            
+    </LinearLayout>
 </LinearLayout>
