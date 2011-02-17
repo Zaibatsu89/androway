@@ -3,6 +3,26 @@
     <string name="app_name">Androway</string>
     <string name="app_label">Androway</string>
 
+	<!-- UI -->
+	<string name="connect">Verbinden</string>
+	<string name="disconnect">Verbreken</string>
+	<string name="settings">Instellingen</string>
+
+	<!-- Logging -->
+	<string name="add">Toevoegen</string>
+	<string name="get">Bekijken</string>
+	<string name="remove">Verwijderen</string>
+	<string name="format">dd-MM-yyyy h:mm</string>
+	<string name="added">Log toegevoegd.</string>
+	<string name="empty">Er zijn geen logs.</string>
+	<string name="last">De laatste log met ID:</string>
+	<string name="removed">is succesvol verwijderd.</string>
+	<string name="xremoved">kon niet verwijderd worden.</string>
+	<string name="id">id:</string>
+	<string name="time">tijd:</string>
+	<string name="subject">onderwerp:</string>
+	<string name="message">bericht:</string>
+
 	<!-- Exception messages -->
 	<string name="MaxPoolSizeReachedException">The ConnectionFactory object pool has reached its maximum size.</string>
 </resources>

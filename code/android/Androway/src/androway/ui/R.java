@@ -100,9 +100,29 @@ public final class R {
     public static final class string {
         /**  Exception messages 
          */
-        public static final int MaxPoolSizeReachedException=0x7f050002;
+        public static final int MaxPoolSizeReachedException=0x7f050012;
+        /**  Logging 
+         */
+        public static final int add=0x7f050005;
+        public static final int added=0x7f050009;
         public static final int app_label=0x7f050001;
         public static final int app_name=0x7f050000;
+        /**  UI 
+         */
+        public static final int connect=0x7f050002;
+        public static final int disconnect=0x7f050003;
+        public static final int empty=0x7f05000a;
+        public static final int format=0x7f050008;
+        public static final int get=0x7f050006;
+        public static final int id=0x7f05000e;
+        public static final int last=0x7f05000b;
+        public static final int message=0x7f050011;
+        public static final int remove=0x7f050007;
+        public static final int removed=0x7f05000c;
+        public static final int settings=0x7f050004;
+        public static final int subject=0x7f050010;
+        public static final int time=0x7f05000f;
+        public static final int xremoved=0x7f05000d;
     }
     public static final class style {
         public static final int Animations=0x7f060005;

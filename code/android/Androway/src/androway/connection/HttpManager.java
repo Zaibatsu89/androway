@@ -1,5 +1,6 @@
 package androway.connection;
 
+import android.app.Activity;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +13,12 @@ import java.util.ArrayList;
  */
 public class HttpManager implements ConnectionManager
 {
+	private Activity _mainActivity;
+
+	public HttpManager(Activity mainActivity) {
+		_mainActivity = mainActivity;
+	}
+
 	public void open() {
 
 	}

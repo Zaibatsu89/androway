@@ -9,62 +9,69 @@ import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
+import androway.logging.LocalManager;
+import androway.logging.LoggingManager;
 import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class View is.
- * @author Tymen
- * @since 10-02-2011
- * @version 0.1
+ * Class View is stoer.
+ * @author Tymen en Rinse
+ * @since 17-02-2011
+ * @version 0.3
  */
 public class View extends Activity {
+	LoggingManager lm;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        // ToDo add your GUI initialization code here
-		// Set the content of our screen
         setContentView(R.layout.main);
+		lm = new LocalManager(this);
 
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
 
         ActionItem connect = new ActionItem();
-        connect.setTitle("Connect");
+        //connect.setTitle(this.getString(R.string.connect));
+		connect.setTitle(this.getString(R.string.add));
         connect.setIcon(getResources().getDrawable(R.drawable.bt_connect_icon));
         connect.setOnClickListener(new OnClickListener()
         {
             public void onClick(android.view.View v)
             {
-                Toast.makeText(View.this, "Connecting to the Segway", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(View.this, "Connecting to the Segway", Toast.LENGTH_SHORT).show();
+				lm.add("NHL Hogeschool", "Minor Androway");
             }
         });
         actionItems.add(connect);
 
         ActionItem disconnect = new ActionItem();
-        disconnect.setTitle("Disconnect");
+		//disconnect.setTitle(this.getString(R.string.disconnect));
+		disconnect.setTitle(this.getString(R.string.get));
         disconnect.setIcon(getResources().getDrawable(R.drawable.bt_disconnect_icon));
         disconnect.setOnClickListener(new OnClickListener()
         {
             public void onClick(android.view.View v)
             {
-                Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
+				lm.get();
             }
         });
         actionItems.add(disconnect);
 
         ActionItem settings = new ActionItem();
-        settings.setTitle("Settings");
+        //settings.setTitle(this.getString(R.string.settings));
+		settings.setTitle(this.getString(R.string.remove));
         settings.setIcon(getResources().getDrawable(R.drawable.settings_icon));
         settings.setOnClickListener(new OnClickListener()
         {
             public void onClick(android.view.View v)
             {
-                Toast.makeText(View.this, "Go to Bluetooth settings", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(View.this, "Go to Bluetooth settings", Toast.LENGTH_SHORT).show();
+				lm.remove();
             }
         });
         actionItems.add(settings);

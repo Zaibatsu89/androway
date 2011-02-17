@@ -1,5 +1,7 @@
 package androway.logging;
 
+import android.app.Activity;
+import android.app.Application;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.ui.R;
 import java.util.HashMap;
@@ -16,22 +18,24 @@ import java.util.Map;
  * @since 17-02-2011
  * @version 0.3
  */
-public final class LoggingFactory
+public final class LoggingFactory extends Application
 {
+	private static Activity _mainActivity;
 	private static LoggingFactory _loggingFactory;
 	private static Map _loggingManagersCollection;
 	private static int _managerCount;
 	private static int _maxPoolSize;
 
-	private LoggingFactory()
+	private LoggingFactory(Activity mainActivity)
 	{
+		_mainActivity = mainActivity;
 		_loggingManagersCollection = new HashMap();
 	}
 
 	public LoggingFactory getInstance()
 	{
 		if (_loggingFactory == null)
-			_loggingFactory = new LoggingFactory();
+			_loggingFactory = new LoggingFactory(_mainActivity);
 
 		return _loggingFactory;
 	}
@@ -47,9 +51,9 @@ public final class LoggingFactory
 			else
 			{
 				if (managerName.equals("http"))
-					lm = new HttpManager();
+					lm = new HttpManager(_mainActivity);
 				else if (managerName.equals("local"))
-					lm = new LocalManager();
+					lm = new LocalManager(_mainActivity);
 
 				_managerCount++;
 			}
@@ -57,7 +61,7 @@ public final class LoggingFactory
 			return lm;
 		}
 		else
-			throw new MaxPoolSizeReachedException(String.valueOf(R.string.MaxPoolSizeReachedException));
+			throw new MaxPoolSizeReachedException(_mainActivity.getString(R.string.MaxPoolSizeReachedException));
 	}
 
 	public static void releaseLoggingManager(String managerName)
