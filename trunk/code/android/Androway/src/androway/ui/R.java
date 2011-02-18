@@ -22,6 +22,10 @@ public final class R {
         public static final int shrink_from_top=0x7f04000a;
         public static final int shrink_from_topleft_to_bottomright=0x7f04000b;
         public static final int shrink_from_topright_to_bottomleft=0x7f04000c;
+        public static final int slide_left_in=0x7f04000d;
+        public static final int slide_left_out=0x7f04000e;
+        public static final int slide_right_in=0x7f04000f;
+        public static final int slide_right_out=0x7f040010;
     }
     public static final class attr {
     }
@@ -74,18 +78,22 @@ public final class R {
         public static final int title_text=0x7f02002d;
     }
     public static final class id {
-        public static final int arrow_down=0x7f070009;
-        public static final int arrow_up=0x7f070005;
-        public static final int battery_button=0x7f07000b;
-        public static final int bluetooth_button=0x7f07000c;
-        public static final int footer=0x7f070008;
-        public static final int header2=0x7f070004;
+        public static final int arrow_down=0x7f07000d;
+        public static final int arrow_up=0x7f070009;
+        public static final int battery_button=0x7f07000f;
+        public static final int block1=0x7f070004;
+        public static final int block1_flipper=0x7f070005;
+        public static final int block2=0x7f070006;
+        public static final int block2_flipper=0x7f070007;
+        public static final int bluetooth_button=0x7f070010;
+        public static final int footer=0x7f07000c;
+        public static final int header2=0x7f070008;
         public static final int icon=0x7f070000;
-        public static final int log_web_button=0x7f07000a;
-        public static final int scroll=0x7f070006;
+        public static final int log_web_button=0x7f07000e;
+        public static final int scroll=0x7f07000a;
         public static final int segway_body=0x7f070002;
         public static final int title=0x7f070001;
-        public static final int tracks=0x7f070007;
+        public static final int tracks=0x7f07000b;
         public static final int window_tint=0x7f070003;
     }
     public static final class layout {
@@ -93,9 +101,11 @@ public final class R {
         public static final int direction=0x7f030001;
         public static final int inclination=0x7f030002;
         public static final int main=0x7f030003;
-        public static final int quickaction=0x7f030004;
-        public static final int statusbar=0x7f030005;
-        public static final int titlebar=0x7f030006;
+        public static final int phone_balance=0x7f030004;
+        public static final int quickaction=0x7f030005;
+        public static final int statusbar=0x7f030006;
+        public static final int temperature=0x7f030007;
+        public static final int titlebar=0x7f030008;
     }
     public static final class string {
         /**  Exception messages 
@@ -125,22 +135,23 @@ public final class R {
         public static final int xremoved=0x7f05000d;
     }
     public static final class style {
-        public static final int Animations=0x7f060005;
+        public static final int Animations=0x7f060006;
         /**  PopDownMenu 
          */
-        public static final int Animations_PopDownMenu=0x7f060006;
-        public static final int Animations_PopDownMenu_Center=0x7f060009;
-        public static final int Animations_PopDownMenu_Left=0x7f060007;
-        public static final int Animations_PopDownMenu_Right=0x7f060008;
+        public static final int Animations_PopDownMenu=0x7f060007;
+        public static final int Animations_PopDownMenu_Center=0x7f06000a;
+        public static final int Animations_PopDownMenu_Left=0x7f060008;
+        public static final int Animations_PopDownMenu_Right=0x7f060009;
         /**  PopUpMenu 
          */
-        public static final int Animations_PopUpMenu=0x7f06000a;
-        public static final int Animations_PopUpMenu_Center=0x7f06000d;
-        public static final int Animations_PopUpMenu_Left=0x7f06000b;
-        public static final int Animations_PopUpMenu_Right=0x7f06000c;
-        public static final int StatusBarLeft=0x7f060002;
-        public static final int StatusBarMiddle=0x7f060003;
-        public static final int StatusBarRight=0x7f060004;
+        public static final int Animations_PopUpMenu=0x7f06000b;
+        public static final int Animations_PopUpMenu_Center=0x7f06000e;
+        public static final int Animations_PopUpMenu_Left=0x7f06000c;
+        public static final int Animations_PopUpMenu_Right=0x7f06000d;
+        public static final int GestureOverlay=0x7f060002;
+        public static final int StatusBarLeft=0x7f060003;
+        public static final int StatusBarMiddle=0x7f060004;
+        public static final int StatusBarRight=0x7f060005;
         public static final int TitleBar=0x7f060001;
         public static final int WindowTint=0x7f060000;
     }
