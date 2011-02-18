@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">" 
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adres:"/>
+	<EditText android:id="@+id/bt_address"
+		android:imeOptions="actionDone"
+		android:inputType="textNoSuggestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:maxLength="17"
+        android:hint="Het BT adres van de ontvanger bestaat uit 12 hexadecimale tekens."/>
+	<Button android:id="@+id/btn_connect"
+		android:text="Connect"
+		android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
