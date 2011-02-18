@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * connection between the Android device and the
  * mini Segway.
  * @author Rinse
- * @since 17-03-2011
- * @version 0.3
+ * @since 18-03-2011
+ * @version 0.4
  */
 public class BluetoothManager implements ConnectionManager
 {
@@ -19,16 +19,15 @@ public class BluetoothManager implements ConnectionManager
 		_mainActivity = mainActivity;
 	}
 
-
-	public void open() {
-		
+	public boolean open(String address) {
+		return true;
 	}
 
 	public void close() {
 		
 	}
 
-	public void post() {
+	public void post(ArrayList data) {
 		
 	}
 
