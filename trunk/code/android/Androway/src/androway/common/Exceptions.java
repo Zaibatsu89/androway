@@ -3,8 +3,8 @@ package androway.common;
 /**
  * Exceptions handles all exceptions inside Androway.
  * @author Tymen
- * @since 17-02-2011
- * @version 0.1
+ * @since 01-03-2011
+ * @version 0.11
  */
 public class Exceptions
 {
@@ -14,6 +14,17 @@ public class Exceptions
 	public static class MaxPoolSizeReachedException extends Exception
 	{
 		public MaxPoolSizeReachedException(String message)
+		{
+			super(message);
+		}
+	}
+
+	/**
+	 * Exception used for checking the supported query type
+	 */
+	public static class NotSupportedQueryTypeException extends Exception
+	{
+		public NotSupportedQueryTypeException(String message)
 		{
 			super(message);
 		}

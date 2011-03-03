@@ -1,6 +1,7 @@
 package androway.ui;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,19 +14,24 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
-import androway.logging.LocalManager;
+import androway.common.Exceptions.MaxPoolSizeReachedException;
+import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.logging.LoggingManager;
 import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The main view of the system
  * @author Tymen en Rinse
- * @since 18-02-2011
- * @version 0.4
+ * @since 02-03-2011
+ * @version 0.41
  */
 public class View extends Activity
 {
@@ -40,22 +46,29 @@ public class View extends Activity
     {
         super.onCreate(icicle);
         setContentView(R.layout.main);
-
-        _lm = new LocalManager(this);
+		try {
+			_lm = new LoggingManager(this);
+		} catch (MaxPoolSizeReachedException ex) {
+			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
 
         /* EXAMPLE QUICK ACTION ITEMS WITH TEMP LOGGING AS ACTION */
             ActionItem connect = new ActionItem();
             //connect.setTitle(this.getString(R.string.connect));
-            connect.setTitle(this.getString(R.string.add));
+            connect.setTitle(getString(R.string.add));
             connect.setIcon(getResources().getDrawable(R.drawable.bt_connect_icon));
             connect.setOnClickListener(new OnClickListener()
             {
                 public void onClick(android.view.View v)
                 {
-                    //Toast.makeText(View.this, "Connecting to the Segway", Toast.LENGTH_SHORT).show();
-                    _lm.add("NHL Hogeschool", "Minor Androway");
+				try {
+					//Toast.makeText(View.this, "Connecting to the Segway", Toast.LENGTH_SHORT).show();
+					_lm.addLog("NHL Hogeschool", "Minor Androway");
+				} catch (NotSupportedQueryTypeException ex) {
+					Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+				}
                 }
             });
             actionItems.add(connect);
@@ -69,7 +82,22 @@ public class View extends Activity
                 public void onClick(android.view.View v)
                 {
                     //Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
-                    _lm.get();
+                    Map<String, ContentValues> dataMap = _lm.getLog(0);
+
+					String message = "";
+
+					for (String key : dataMap.keySet()) {
+						ContentValues cv = dataMap.get(key);
+						message = cv.getAsString(key);
+					}
+
+					if (!message.equals("")) {
+						Toast.makeText(View.this,
+						getString(R.string.id) + "\n" + message,
+						Toast.LENGTH_LONG).show();
+					}
+					else
+						Toast.makeText(View.this, getString(R.string.empty), Toast.LENGTH_LONG).show();
                 }
             });
             actionItems.add(disconnect);
@@ -82,8 +110,12 @@ public class View extends Activity
             {
                 public void onClick(android.view.View v)
                 {
-                    //Toast.makeText(View.this, "Go to Bluetooth settings", Toast.LENGTH_SHORT).show();
-                    _lm.remove();
+				try {
+					//Toast.makeText(View.this, "Go to Bluetooth settings", Toast.LENGTH_SHORT).show();
+					_lm.clearAll();
+				} catch (NotSupportedQueryTypeException ex) {
+					Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+				}
                 }
             });
             actionItems.add(settings);
