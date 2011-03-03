@@ -111,6 +111,7 @@ public final class R {
         /**  Exception messages 
          */
         public static final int MaxPoolSizeReachedException=0x7f050012;
+        public static final int NotSupportedQueryTypeException=0x7f050013;
         /**  Logging 
          */
         public static final int add=0x7f050005;

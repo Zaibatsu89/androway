@@ -16,7 +16,7 @@
 	<string name="added">Log toegevoegd.</string>
 	<string name="empty">Er zijn geen logs.</string>
 	<string name="last">De laatste log met ID:</string>
-	<string name="removed">is succesvol verwijderd.</string>
+	<string name="removed">Hopelijk zijn alle logs verwijderd.</string>
 	<string name="xremoved">kon niet verwijderd worden.</string>
 	<string name="id">id:</string>
 	<string name="time">tijd:</string>
@@ -25,4 +25,5 @@
 
 	<!-- Exception messages -->
 	<string name="MaxPoolSizeReachedException">The ConnectionFactory object pool has reached its maximum size.</string>
+	<string name="NotSupportedQueryTypeException">The given query type is not supported.</string>
 </resources>
