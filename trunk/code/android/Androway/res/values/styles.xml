@@ -3,7 +3,7 @@
     <style name="WindowTint">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">#b4000000</item>
+        <item name="android:background">#64000000</item>
         <item name="android:visibility">visible</item>
         <item name="android:clickable">false</item>
     </style>

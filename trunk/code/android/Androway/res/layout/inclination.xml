@@ -31,7 +31,6 @@
             android:id="@+id/segway_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
             android:src="@drawable/segway_body_inclination" />
 
         <!-- Used to keep the lego_wheel in a static position -->
