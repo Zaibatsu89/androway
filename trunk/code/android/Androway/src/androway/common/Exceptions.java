@@ -29,4 +29,15 @@ public class Exceptions
 			super(message);
 		}
 	}
+
+	/**
+	 * Exception used for checking the contents of a map
+	 */
+	public static class ArrayListIsEmptyException extends Exception
+	{
+		public ArrayListIsEmptyException(String message)
+		{
+			super(message);
+		}
+	}
 }

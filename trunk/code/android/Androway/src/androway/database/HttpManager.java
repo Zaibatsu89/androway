@@ -2,22 +2,29 @@ package androway.database;
 
 import android.content.Context;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
-import java.util.Map;
+import androway.connection.ConnectionManager;
+import java.util.ArrayList;
 
 /**
  * Class HttpManager stores log data on the androway.nl domain.
  * @author Rinse
- * @since 17-02-2011
- * @version 0.3
+ * @since 10-03-2011
+ * @version 0.4
  */
 public class HttpManager implements DatabaseManager {
-	public HttpManager(Context context) {}
+	ConnectionManager _httpManager;
+	String _dbName;
 
-	public void executeNonQuery(String query) throws NotSupportedQueryTypeException {
-		
+	public HttpManager(Context context) {
+		_httpManager = new androway.connection.HttpManager();
+		_dbName = "logs";
 	}
 
-	public Map getData(String query) {
-		return null;
+	public void executeNonQuery(String query) throws NotSupportedQueryTypeException {
+		_httpManager.post("executeNonQuery", _dbName, query);
+	}
+
+	public ArrayList<ArrayList<String>> getData(String query) {
+		return _httpManager.get("getData", _dbName, query);
 	}
 }
