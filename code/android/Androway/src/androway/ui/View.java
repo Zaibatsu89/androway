@@ -1,7 +1,6 @@
 package androway.ui;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import androway.common.Exceptions.ArrayListIsEmptyException;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.logging.LoggingManager;
@@ -25,15 +25,14 @@ import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * The main view of the system
  * @author Tymen en Rinse
- * @since 02-03-2011
- * @version 0.41
+ * @since 09-03-2011
+ * @version 0.42
  */
 public class View extends Activity
 {
@@ -96,24 +95,26 @@ public class View extends Activity
                 public void onClick(android.view.View v)
                 {
                     //Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
-                    Map<String, ContentValues> dataMap = _lm.getLog(0);
-
-                    String message = "";
-
-                    for (String key : dataMap.keySet())
-                    {
-                        ContentValues cv = dataMap.get(key);
-                        message = cv.getAsString(key);
-                    }
-
-                    if (!message.equals(""))
-                    {
-                        Toast.makeText(View.this,
-                        getString(R.string.id) + "\n" + message,
-                        Toast.LENGTH_LONG).show();
-                    }
-                    else
-                        Toast.makeText(View.this, getString(R.string.empty), Toast.LENGTH_LONG).show();
+					if (!_lm.isEmpty())
+					{
+						ArrayList<ArrayList<String>> dataMap;
+						for (int i = 1; i < _lm.count(); i++)
+						{
+							try {
+								dataMap = _lm.getLog(i);
+								Toast.makeText(View.this,
+									"id: " + dataMap.get(0).get(0) +
+									"\ntime: " + dataMap.get(0).get(1) +
+									"\nsubject: " + dataMap.get(0).get(2) +
+									"\nmessage: " + dataMap.get(0).get(3),
+									Toast.LENGTH_LONG).show();
+							} catch (ArrayListIsEmptyException ex) {
+								Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+					}
+					else
+						Toast.makeText(View.this, "Tabel is leeg.", Toast.LENGTH_LONG).show();
                 }
             });
             actionItems.add(disconnect);

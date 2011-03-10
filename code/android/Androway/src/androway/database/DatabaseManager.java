@@ -1,7 +1,7 @@
 package androway.database;
 
 import androway.common.Exceptions.NotSupportedQueryTypeException;
-import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * Interface DatabaseManager is the interface for
@@ -12,5 +12,5 @@ import java.util.Map;
  */
 public interface DatabaseManager {
 	public abstract void executeNonQuery(String query) throws NotSupportedQueryTypeException;
-	public abstract Map getData(String query);
+	public abstract ArrayList<ArrayList<String>> getData(String query);
 }

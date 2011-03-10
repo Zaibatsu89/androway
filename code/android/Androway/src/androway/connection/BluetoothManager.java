@@ -1,6 +1,5 @@
 package androway.connection;
 
-import android.app.Activity;
 import java.util.ArrayList;
 
 /**
@@ -8,17 +7,11 @@ import java.util.ArrayList;
  * connection between the Android device and the
  * mini Segway.
  * @author Rinse
- * @since 18-03-2011
- * @version 0.4
+ * @since 10-03-2011
+ * @version 0.41
  */
 public class BluetoothManager implements ConnectionManager
 {
-	private Activity _mainActivity;
-
-	public BluetoothManager(Activity mainActivity) {
-		_mainActivity = mainActivity;
-	}
-
 	public boolean open(String address) {
 		return true;
 	}
@@ -27,11 +20,11 @@ public class BluetoothManager implements ConnectionManager
 		
 	}
 
-	public void post(ArrayList data) {
-		
+	public void post(String function, String dbName, String query) {
+
 	}
 
-	public ArrayList get() {
+	public ArrayList get(String function, String dbName, String query) {
 		return new ArrayList();
 	}
 }

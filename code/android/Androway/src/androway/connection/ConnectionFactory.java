@@ -50,9 +50,9 @@ public final class ConnectionFactory
 			else
 			{
 				if (managerName.equals("http"))
-					cm = new HttpManager(_mainActivity);
+					cm = new HttpManager();
 				else if (managerName.equals("bluetooth"))
-					cm = new BluetoothManager(_mainActivity);
+					cm = new BluetoothManager();
 
 				_managerCount++;
 			}
