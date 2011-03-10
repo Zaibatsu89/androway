@@ -53,11 +53,15 @@ public class View extends Activity
     {
         super.onCreate(icicle);
         setContentView(R.layout.main);
-		try {
-			_lm = new LoggingManager(this);
-		} catch (MaxPoolSizeReachedException ex) {
-			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-		}
+
+        try
+        {
+            _lm = new LoggingManager(this);
+        }
+        catch (MaxPoolSizeReachedException ex)
+        {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
 
@@ -70,12 +74,15 @@ public class View extends Activity
             {
                 public void onClick(android.view.View v)
                 {
-				try {
-					//Toast.makeText(View.this, "Connecting to the Segway", Toast.LENGTH_SHORT).show();
-					_lm.addLog("NHL Hogeschool", "Minor Androway");
-				} catch (NotSupportedQueryTypeException ex) {
-					Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-				}
+                    try
+                    {
+                        //Toast.makeText(View.this, "Connecting to the Segway", Toast.LENGTH_SHORT).show();
+                        _lm.addLog("NHL Hogeschool", "Minor Androway");
+                    }
+                    catch (NotSupportedQueryTypeException ex)
+                    {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             actionItems.add(connect);
@@ -91,20 +98,22 @@ public class View extends Activity
                     //Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
                     Map<String, ContentValues> dataMap = _lm.getLog(0);
 
-					String message = "";
+                    String message = "";
 
-					for (String key : dataMap.keySet()) {
-						ContentValues cv = dataMap.get(key);
-						message = cv.getAsString(key);
-					}
+                    for (String key : dataMap.keySet())
+                    {
+                        ContentValues cv = dataMap.get(key);
+                        message = cv.getAsString(key);
+                    }
 
-					if (!message.equals("")) {
-						Toast.makeText(View.this,
-						getString(R.string.id) + "\n" + message,
-						Toast.LENGTH_LONG).show();
-					}
-					else
-						Toast.makeText(View.this, getString(R.string.empty), Toast.LENGTH_LONG).show();
+                    if (!message.equals(""))
+                    {
+                        Toast.makeText(View.this,
+                        getString(R.string.id) + "\n" + message,
+                        Toast.LENGTH_LONG).show();
+                    }
+                    else
+                        Toast.makeText(View.this, getString(R.string.empty), Toast.LENGTH_LONG).show();
                 }
             });
             actionItems.add(disconnect);
@@ -117,12 +126,15 @@ public class View extends Activity
             {
                 public void onClick(android.view.View v)
                 {
-				try {
-					//Toast.makeText(View.this, "Go to Bluetooth settings", Toast.LENGTH_SHORT).show();
-					_lm.clearAll();
-				} catch (NotSupportedQueryTypeException ex) {
-					Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-				}
+                    try
+                    {
+                        //Toast.makeText(View.this, "Go to Bluetooth settings", Toast.LENGTH_SHORT).show();
+                        _lm.clearAll();
+                    }
+                    catch (NotSupportedQueryTypeException ex)
+                    {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             actionItems.add(settings);
