@@ -1,6 +1,7 @@
 package androway.connection;
 
 import java.util.ArrayList;
+import org.apache.http.NameValuePair;
 
 /**
  * Class BluetoothManager sets up the bluetooth
@@ -13,18 +14,18 @@ import java.util.ArrayList;
 public class BluetoothManager implements ConnectionManager
 {
 	public boolean open(String address) {
-		return true;
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	public void close() {
-		
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public void post(String function, String dbName, String query) {
-
+	public boolean post(String address, ArrayList<NameValuePair> data) {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public ArrayList get(String function, String dbName, String query) {
-		return new ArrayList();
+	public ArrayList get(String address, ArrayList<NameValuePair> params) {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
