@@ -2,9 +2,9 @@ package androway.common;
 
 /**
  * Exceptions handles all exceptions inside Androway.
- * @author Tymen
- * @since 01-03-2011
- * @version 0.11
+ * @author Tymen en Rinse
+ * @since 10-03-2011
+ * @version 0.12
  */
 public class Exceptions
 {
@@ -31,11 +31,33 @@ public class Exceptions
 	}
 
 	/**
-	 * Exception used for checking the contents of a map
+	 * Exception used for checking the contents of an ArrayList
 	 */
 	public static class ArrayListIsEmptyException extends Exception
 	{
 		public ArrayListIsEmptyException(String message)
+		{
+			super(message);
+		}
+	}
+
+	/**
+	 * Exception used for checking if an HttpPost request failed
+	 */
+	public static class HttpPostRequestFailedException extends Exception
+	{
+		public HttpPostRequestFailedException(String message)
+		{
+			super(message);
+		}
+	}
+
+	/**
+	 * Exception used for checking if an HttpGet request failed
+	 */
+	public static class HttpGetRequestFailedException extends Exception
+	{
+		public HttpGetRequestFailedException(String message)
 		{
 			super(message);
 		}
