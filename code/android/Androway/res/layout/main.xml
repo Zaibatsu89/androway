@@ -30,7 +30,7 @@
                     android:layout_height="fill_parent">
                         
                         <include layout="@layout/inclination" />
-                        <include layout="@layout/phone_balance" />
+                        <include layout="@layout/balance" />
                         
                 </ViewFlipper>
             </android.gesture.GestureOverlayView>

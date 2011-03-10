@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The portrait direction layout -->
+<!-- The portrait balance layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/balance"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:gravity="center">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="50sp"
-	android:textColor="#FFF"
-        android:text="Phone Balance" />
+    android:gravity="center_horizontal">
 
 </LinearLayout>

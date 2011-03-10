@@ -14,11 +14,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.logging.LoggingManager;
+import androway.main.TiltControls;
 import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
@@ -39,6 +41,11 @@ public class View extends Activity
 
     private GestureDetector _gestureDetectorBlock1;
     private GestureDetector _gestureDetectorBlock2;
+
+    private BalanceView _balanceView;
+    
+    public int tempInclinationRotation = 0;
+    private TiltControls _tempTiltControls;
 
     /** Called when the activity is first created. */
     @Override
@@ -145,20 +152,18 @@ public class View extends Activity
                 {
                     Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.segway_body_inclination);
 
-                    // Getting width & height of the given image.
-                    int w = bmp.getWidth();
-                    int h = bmp.getHeight();
-
-                    // Setting post rotate to 90
+                    // Create the matrix for the rotation of the bitmap
                     Matrix mtx = new Matrix();
-                    mtx.postRotate(45);
+                    mtx.postRotate(tempInclinationRotation);
 
                     // Rotating Bitmap
-                    Bitmap rotatedBMP = Bitmap.createBitmap(bmp, 0, 0, w, h, mtx, true);
+                    Bitmap rotatedBMP = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mtx, true);
                     BitmapDrawable bmd = new BitmapDrawable(rotatedBMP);
-
+                    
                     ImageView img = (ImageView)findViewById(R.id.segway_body);
                     img.setImageDrawable(bmd);
+
+                    tempInclinationRotation += 5;
                 }
             });
         /* ---------------------------------- */
@@ -192,5 +197,36 @@ public class View extends Activity
                 }
             });
        /* --------------------------- */
+
+
+
+       // Add the BalanceView to the balance LinearLayout
+       LinearLayout balanceWrapper = (LinearLayout) findViewById(R.id.balance);
+       _balanceView = new BalanceView(View.this);
+       _balanceView.setBackgroundDrawable(getResources().getDrawable(R.drawable.balance_bg));
+
+
+       ImageView balanceScale = new ImageView(View.this);
+       balanceScale.setImageResource(R.drawable.balance_scale);
+       _balanceView.addView(balanceScale);
+
+
+       balanceWrapper.addView(_balanceView);
+
+       _tempTiltControls = new TiltControls(View.this, _balanceView);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        _tempTiltControls.register();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        _tempTiltControls.unregister();
+        super.onStop();
     }
 }
