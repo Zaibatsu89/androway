@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ public class View extends Activity
     private GestureDetector _gestureDetectorBlock1;
     private GestureDetector _gestureDetectorBlock2;
 
-    private BalanceView _balanceView;
+    private BalanceViewHandler _balanceView;
     
     public int tempInclinationRotation = 0;
     private TiltControls _tempTiltControls;
@@ -213,17 +214,10 @@ public class View extends Activity
 
 
 
-       // Add the BalanceView to the balance LinearLayout
+       // Add the actual BalanceViewHandler to the balance LinearLayout
        LinearLayout balanceWrapper = (LinearLayout) findViewById(R.id.balance);
-       _balanceView = new BalanceView(View.this);
-       _balanceView.setBackgroundDrawable(getResources().getDrawable(R.drawable.balance_bg));
-
-
-       ImageView balanceScale = new ImageView(View.this);
-       balanceScale.setImageResource(R.drawable.balance_scale);
-       _balanceView.addView(balanceScale);
-
-
+       _balanceView = new BalanceViewHandler(View.this);
+       _balanceView.setBackgroundColor(Color.parseColor("#00FF99FF"));
        balanceWrapper.addView(_balanceView);
 
        _tempTiltControls = new TiltControls(View.this, _balanceView);

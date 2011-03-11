@@ -5,7 +5,21 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_weight="1"
+    android:layout_weight="1"    
     android:gravity="center_horizontal">
 
+    <LinearLayout
+        android:id="@+id/balance_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/balance_bg">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/balance_scale">
+            </ImageView>
+
+    </LinearLayout>
 </LinearLayout>
