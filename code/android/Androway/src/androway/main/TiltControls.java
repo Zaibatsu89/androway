@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.View;
-import androway.ui.BalanceView;
+import androway.ui.BalanceViewHandler;
 
 /**
  * Class TiltControls connects with class Controller.
@@ -17,10 +17,10 @@ import androway.ui.BalanceView;
 public class TiltControls implements SensorEventListener
 {
     private Context _context = null;
-    private BalanceView _balanceView = null;
+    private BalanceViewHandler _balanceView = null;
     private SensorManager _sensorManager = null;
 
-    public TiltControls(Context context, BalanceView balanceView)
+    public TiltControls(Context context, BalanceViewHandler balanceView)
     {
         _context = context;
         _balanceView = balanceView;

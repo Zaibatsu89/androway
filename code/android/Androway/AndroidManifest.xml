@@ -7,6 +7,7 @@
              android:icon="@drawable/launcher_icon"
              android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
              android:launchMode="singleInstance">
+             <!--android:screenOrientation="portrait"-->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
