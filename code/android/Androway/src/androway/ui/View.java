@@ -12,6 +12,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +50,9 @@ public class View extends Activity
     
     public int tempInclinationRotation = 0;
     private TiltControls _tempTiltControls;
+
+    private float _compDegrees = 0;
+    private float _compPreviousDegrees = 0;
 
     /** Called when the activity is first created. */
     @Override
@@ -220,7 +227,7 @@ public class View extends Activity
        _balanceView.setBackgroundColor(Color.parseColor("#00FF99FF"));
        balanceWrapper.addView(_balanceView);
 
-       _tempTiltControls = new TiltControls(View.this, _balanceView);
+       _tempTiltControls = new TiltControls(View.this, this, _balanceView);
     }
 
     @Override
@@ -235,5 +242,82 @@ public class View extends Activity
     {
         _tempTiltControls.unregister();
         super.onStop();
+    }
+
+    public void updateTiltViews(float azimuth, float pitch, float roll)
+    {
+        // Convert the sensor values to the actual speed and direction values
+        float speed = (pitch * 2.222f) + 200;
+        float direction = roll * -2.222f;
+
+        // Limit the maximum speed value
+        if(speed > 100)
+            speed = 100;
+        else if(speed < -100)
+            speed = -100;
+
+        // Limit the maximum direction value
+        if(direction > 100)
+            direction = 100;
+        else if(direction < -100)
+            direction = -100;
+        
+        // Update the balance view
+        _balanceView.updateBalance(speed, direction);
+
+        // Update the compass view
+        this.updateCompass(azimuth);
+    }
+
+    public void updateCompass(float degrees)
+    {
+        // Store the compas degrees value
+        _compDegrees = 360 - degrees;
+
+        setCompassRotation(_compDegrees, _compPreviousDegrees, 200, new RotationListener());
+    }
+
+    private void setCompassRotation(float degrees, float previousDegrees, int duration, RotationListener rotationListener)
+    {
+        ImageView compassImage = (ImageView)findViewById(R.id.compass);
+
+        if(degrees == previousDegrees)
+            degrees += 0.001f;
+
+        RotateAnimation rotateAnim = new RotateAnimation(previousDegrees, degrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnim.setDuration(duration);
+        rotateAnim.setAnimationListener(new RotationListener());
+
+        compassImage.setAnimation(rotateAnim);
+
+        // Store the current degrees for future use
+        _compPreviousDegrees = degrees;
+    }
+
+    public class RotationListener implements AnimationListener
+    {
+        public void onAnimationStart(Animation a) { }
+
+        public void onAnimationEnd(Animation a)
+        {
+            setCompassRotation(_compDegrees, _compPreviousDegrees, 200, this);
+            /*
+            ImageView compassImage = (ImageView)findViewById(R.id.compass);
+
+            if(_compDegrees == _compPreviousDegrees)
+                _compDegrees += 0.001f;
+
+            RotateAnimation rotateAnim = new RotateAnimation(_compPreviousDegrees, _compDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnim.setDuration(180);
+            rotateAnim.setAnimationListener(new RotationListener());
+
+            compassImage.setAnimation(rotateAnim);
+
+            // Store the current degrees for future use
+            _compPreviousDegrees = _compDegrees;
+            */
+        }
+
+        public void onAnimationRepeat(Animation a) { }
     }
 }

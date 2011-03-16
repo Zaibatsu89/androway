@@ -28,7 +28,7 @@ public class BalanceViewHandler extends LinearLayout
         this.addView(_moveArrow);
     }
 
-    public void setBalance(float speed, float direction)
+    public void updateBalance(float speed, float direction)
     {
         _speed = speed;
         _direction = direction;
