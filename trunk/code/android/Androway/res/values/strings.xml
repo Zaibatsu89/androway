@@ -4,26 +4,23 @@
     <string name="app_label">Androway</string>
 
 	<!-- UI -->
-	<string name="connect">Verbinden</string>
-	<string name="disconnect">Verbreken</string>
-	<string name="settings">Instellingen</string>
+	<string name="connect">Connect</string>
+	<string name="disconnect">Disconnect</string>
+	<string name="settings">Settings</string>
 
 	<!-- Logging -->
-	<string name="add">Toevoegen</string>
-	<string name="get">Bekijken</string>
-	<string name="remove">Verwijderen</string>
+	<string name="add">Add</string>
+	<string name="get">Show All</string>
+	<string name="remove">Remove All</string>
 	<string name="format">dd-MM-yyyy h:mm</string>
-	<string name="added">Log toegevoegd.</string>
-	<string name="empty">Er zijn geen logs.</string>
-	<string name="last">De laatste log met ID:</string>
-	<string name="removed">Hopelijk zijn alle logs verwijderd.</string>
-	<string name="xremoved">kon niet verwijderd worden.</string>
-	<string name="id">id:</string>
-	<string name="time">tijd:</string>
-	<string name="subject">onderwerp:</string>
-	<string name="message">bericht:</string>
+	<string name="added">Log added.</string>
+	<string name="removed">All logs are removed.</string>
+	<string name="empty">There are no logs.</string>
 
 	<!-- Exception messages -->
 	<string name="MaxPoolSizeReachedException">The ConnectionFactory object pool has reached its maximum size.</string>
 	<string name="NotSupportedQueryTypeException">The given query type is not supported.</string>
+	<string name="ArrayListIsEmptyException">The ArrayList is empty.</string>
+	<string name="HttpPostRequestFailedException">Assignment of post data failed.</string>
+	<string name="HttpGetRequestFailedException">Could not fetch the response.</string>
 </resources>

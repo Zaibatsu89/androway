@@ -4,15 +4,15 @@ import android.graphics.drawable.Drawable;
 import android.view.View.OnClickListener;
 
 /**
- * Action item, displayed as menu with icon and text.
+ * Action item, displayed as menu with _icon and text.
  * 
  * @author Lorensius. W. L. T
  *
  */
 public class ActionItem {
-	private Drawable icon;
-	private String title;
-	private OnClickListener listener;
+	private Drawable _icon;
+	private String _title;
+	private OnClickListener _listener;
 	
 	/**
 	 * Constructor
@@ -22,62 +22,62 @@ public class ActionItem {
 	/**
 	 * Constructor
 	 * 
-	 * @param icon {@link Drawable} action icon
+	 * @param _icon {@link Drawable} action _icon
 	 */
 	public ActionItem(Drawable icon) {
-		this.icon = icon;
+		this._icon = icon;
 	}
 	
 	/**
-	 * Set action title
+	 * Set action _title
 	 * 
-	 * @param title action title
+	 * @param _title action _title
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this._title = title;
 	}
 	
 	/**
-	 * Get action title
+	 * Get action _title
 	 * 
-	 * @return action title
+	 * @return action _title
 	 */
 	public String getTitle() {
-		return this.title;
+		return this._title;
 	}
 	
 	/**
-	 * Set action icon
+	 * Set action _icon
 	 * 
-	 * @param icon {@link Drawable} action icon
+	 * @param _icon {@link Drawable} action _icon
 	 */
 	public void setIcon(Drawable icon) {
-		this.icon = icon;
+		this._icon = icon;
 	}
 	
 	/**
-	 * Get action icon
-	 * @return  {@link Drawable} action icon
+	 * Get action _icon
+	 * @return  {@link Drawable} action _icon
 	 */
 	public Drawable getIcon() {
-		return this.icon;
+		return this._icon;
 	}
 	
 	/**
-	 * Set on click listener
+	 * Set on click _listener
 	 * 
-	 * @param listener on click listener {@link View.OnClickListener}
+	 * @param _listener on click _listener {@link View.OnClickListener}
 	 */
 	public void setOnClickListener(OnClickListener listener) {
-		this.listener = listener;
+		this._listener = listener;
 	}
 	
 	/**
-	 * Get on click listener
+	 * Get on click _listener
 	 * 
-	 * @return on click listener {@link View.OnClickListener}
+	 * @return on click _listener {@link View.OnClickListener}
 	 */
 	public OnClickListener getListener() {
-		return this.listener;
+		return this._listener;
 	}
 }

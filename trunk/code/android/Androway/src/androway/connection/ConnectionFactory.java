@@ -1,6 +1,6 @@
 package androway.connection;
 
-import android.app.Activity;
+import android.content.Context;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.ui.R;
 import java.util.HashMap;
@@ -11,48 +11,44 @@ import java.util.Map;
  *		the factory method pattern,
  *		the singleton pattern and
  *		the objectpool pattern.
- * Childclass ConnectionManager is the interface for
+ * Childclass IConnectionManager is the interface for
  * the classes BluetoothManager and HttpManager.
  * @author Rinse
- * @since 17-02-2011
- * @version 0.3
+ * @since 11-03-2011
+ * @version 0.31
  */
 public final class ConnectionFactory
 {
-	private static Activity _mainActivity;
 	private static ConnectionFactory _connectionFactory;
-	private static Map _connectionManagersCollection;
+	private static Map _connectionManagersCollection = new HashMap();
 	private static int _managerCount;
-	private static int _maxPoolSize;
+	private static int _maxPoolSize = 2;
 
-	private ConnectionFactory(Activity mainActivity)
-	{
-		_mainActivity = mainActivity;
-		_connectionManagersCollection = new HashMap();
-	}
+	private ConnectionFactory() {}
 
 	public ConnectionFactory getInstance()
 	{
 		if (_connectionFactory == null)
-			_connectionFactory = new ConnectionFactory(_mainActivity);
+			_connectionFactory = new ConnectionFactory();
 
 		return _connectionFactory;
 	}
 
-	public static ConnectionManager acquireConnectionManager(String managerName) throws MaxPoolSizeReachedException
+	public static IConnectionManager acquireConnectionManager(Context context, String managerName)
+		throws MaxPoolSizeReachedException
 	{
 		if (_managerCount < _maxPoolSize)
 		{
-			ConnectionManager cm = null;
+			IConnectionManager cm = null;
 
 			if (_connectionManagersCollection.containsKey(managerName))
-				cm = (ConnectionManager) _connectionManagersCollection.get(managerName);
+				cm = (IConnectionManager) _connectionManagersCollection.get(managerName);
 			else
 			{
-				if (managerName.equals("http"))
-					cm = new HttpManager();
-				else if (managerName.equals("bluetooth"))
+				if (managerName.equals("bluetooth"))
 					cm = new BluetoothManager();
+				else if (managerName.equals("http"))
+					cm = new HttpManager(context);
 
 				_managerCount++;
 			}
@@ -60,7 +56,7 @@ public final class ConnectionFactory
 			return cm;
 		}
 		else
-			throw new MaxPoolSizeReachedException(_mainActivity.getString(R.string.MaxPoolSizeReachedException));
+			throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
 	}
 
 	public static void releaseConnectionManager(String managerName)

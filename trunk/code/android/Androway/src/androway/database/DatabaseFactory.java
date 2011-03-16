@@ -12,7 +12,7 @@ import java.util.Map;
  *		the factory method pattern,
  *		the singleton pattern and
  *		the objectpool pattern.
- * Childclass DatabaseManager is the interface for
+ * Childclass IDatabaseManager is the interface for
  * the classes LocalManager and HttpManager.
  * @author Rinse
  * @since 02-03-2011
@@ -21,10 +21,11 @@ import java.util.Map;
 public final class DatabaseFactory extends Application
 {
 	private static DatabaseFactory _databaseFactory;
-	private static DatabaseManager _databaseManager;
+	private static IDatabaseManager _databaseManager;
 	private static Map _databaseManagersCollection = new HashMap();
+	private static String[] _dbColumns = {"id", "time", "subject", "message"};
 	private static int _managerCount;
-	private static int _maxPoolSize;
+	private static int _maxPoolSize = 2;
 
 	private DatabaseFactory() {}
 
@@ -36,18 +37,18 @@ public final class DatabaseFactory extends Application
 		return _databaseFactory;
 	}
 
-	public static DatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException
+	public static IDatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException
 	{
 		if (_managerCount < _maxPoolSize)
 		{
 			if (_databaseManagersCollection.containsKey(managerName))
-				_databaseManager = (DatabaseManager) _databaseManagersCollection.get(managerName);
+				_databaseManager = (IDatabaseManager) _databaseManagersCollection.get(managerName);
 			else
 			{
 				if (managerName.equals("http"))
 					_databaseManager = new HttpManager(context);
 				else if (managerName.equals("local"))
-					_databaseManager = new LocalManager(context);
+					_databaseManager = new LocalManager(context, _dbColumns);
 
 				_databaseManagersCollection.put(managerName, null);
 				_managerCount++;

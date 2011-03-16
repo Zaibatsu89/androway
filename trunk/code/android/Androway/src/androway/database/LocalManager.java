@@ -5,8 +5,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import androway.logging.LoggingManager;
-import java.util.ArrayList;
+import androway.common.Constants;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class LocalManager stores log data on the Android device.
@@ -14,25 +15,35 @@ import java.util.ArrayList;
  * @since 09-03-2011
  * @version 0.42
  */
-public class LocalManager implements DatabaseManager {
-	private DatabaseHelper _DBHelper;
+public class LocalManager implements IDatabaseManager {
 	private SQLiteDatabase _db;
+	private DatabaseHelper _dbHelper;
+	private static String[] _dbColumns;
 
-	public LocalManager(Context context) {
-		_DBHelper = new DatabaseHelper(context);
+	public LocalManager(Context context, String[] dbColumns) {
+		_dbHelper = new DatabaseHelper(context);
+		_dbColumns = dbColumns;
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper
     {
         DatabaseHelper(Context context)
         {
-            super(context, LoggingManager.DATABASE_NAME, null, 1);
+            super(context, Constants.DATABASE_NAME, null, 1);
         }
 
         @Override
         public void onCreate(SQLiteDatabase db)
         {
-            db.execSQL(LoggingManager.DATABASE_CREATE);
+			//For developer phone
+			db.execSQL("drop table if exists " + Constants.DATABASE_TABLE);
+
+            db.execSQL("create table " +
+				Constants.DATABASE_TABLE + " (" +
+				_dbColumns[0] + " integer primary key, " +
+				_dbColumns[1] + " text not null, " +
+				_dbColumns[2] + " text not null, " +
+				_dbColumns[3] + " text not null)");
         }
 
 		@Override
@@ -41,46 +52,59 @@ public class LocalManager implements DatabaseManager {
 
 	//---opens the database---
 	private LocalManager open() throws SQLException {
-		_db = _DBHelper.getWritableDatabase();
+		_db = _dbHelper.getWritableDatabase();
 		return this;
 	}
 
 	//---closes the database---
 	private void close() {
-		_DBHelper.close();
+		_dbHelper.close();
 	}
 
-	public void executeNonQuery(String query)
+	public boolean executeNonQuery(String dbName, String query)
 	{
 		open();
 		_db.execSQL(query);
 		close();
+		return true;
 	}
 
 	/**
 	 * apply raw query and return result in list
 	 * @param query
 	 * @param selectionArgs
-	 * @return ArrayList<ArrayList<String>>
+	 * @return Map<String, Object>
 	 */
-	public ArrayList<ArrayList<String>> getData(String query) {
-	      ArrayList<ArrayList<String>> retList = new ArrayList<ArrayList<String>>();
-	      ArrayList<String> list = new ArrayList<String>();
+	public Map<String, Object> getData(String dbName, String query)
+	{
+	      Map<String, Object> retList = new HashMap<String, Object>();
+	      Map<String, Object> list;
+
 		  open();
 	      Cursor cursor = _db.rawQuery(query, null);
-	      if (cursor.moveToFirst()) {
-	         do {
-	        	 list = new ArrayList<String>();
-	        	 for(int i=0; i<cursor.getColumnCount(); i++){
-	        		 list.add( cursor.getString(i) );
-	        	 }
-	        	 retList.add(list);
-	         } while (cursor.moveToNext());
+
+	      if (cursor.moveToFirst())
+		  {
+			  int i = 0;
+			  do
+			  {
+				  list = new HashMap<String, Object>();
+				  
+				  for(int j = 0; j < cursor.getColumnCount(); j++)
+					  list.put(cursor.getColumnName(j),cursor.getString(j));
+				  
+				  retList.put("row" + i, list);
+
+				  i++;
+			  }
+			  while (cursor.moveToNext());
 	      }
-	      if (cursor != null && !cursor.isClosed()) {
+
+	      if (cursor != null && !cursor.isClosed())
 	         cursor.close();
-	      }
+
 		  close();
+
 	      return retList;
 	}
 }

@@ -27,8 +27,8 @@ import androway.ui.R;
 public class CustomPopupWindow {
 	protected final View anchor;
 	protected final PopupWindow window;
-	private View root;
-	private Drawable background = null;
+	private View _root;
+	private Drawable _background = null;
 	protected final WindowManager windowManager;
 	
 	/**
@@ -73,21 +73,21 @@ public class CustomPopupWindow {
 	protected void onShow() {}
 
 	protected void preShow() {
-		if (root == null) {
+		if (_root == null) {
 			throw new IllegalStateException("setContentView was not called with a view to display.");
 		}
 		
 		onShow();
 
-		if (background == null) {
+		if (_background == null) {
 			window.setBackgroundDrawable(new BitmapDrawable());
 		} else {
-			window.setBackgroundDrawable(background);
+			window.setBackgroundDrawable(_background);
 		}
 
 		// if using PopupWindow#setBackgroundDrawable this is the only values of the width and hight that make it work
-		// otherwise you need to set the background of the root viewgroup
-		// and set the popupwindow background to an empty BitmapDrawable
+		// otherwise you need to set the _background of the _root viewgroup
+		// and set the popupwindow _background to an empty BitmapDrawable
 		
 		window.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
 		window.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -95,21 +95,21 @@ public class CustomPopupWindow {
 		window.setFocusable(true);
 		window.setOutsideTouchable(true);
 
-		window.setContentView(root);
+		window.setContentView(_root);
 	}
 
 	public void setBackgroundDrawable(Drawable background) {
-		this.background = background;
+		this._background = background;
 	}
 
 	/**
 	 * Sets the content view. Probably should be called from {@link onCreate}
 	 * 
-	 * @param root
+	 * @param _root
 	 *            the view the popup will display
 	 */
 	public void setContentView(View root) {
-		this.root = root;
+		this._root = root;
 		
 		window.setContentView(root);
 	}
@@ -185,11 +185,11 @@ public class CustomPopupWindow {
 				new Rect(location[0], location[1], location[0] + anchor.getWidth(), location[1]
 					+ anchor.getHeight());
 
-		root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		root.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		_root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		_root.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		
-		int rootWidth 		= root.getMeasuredWidth();
-		int rootHeight 		= root.getMeasuredHeight();
+		int rootWidth 		= _root.getMeasuredWidth();
+		int rootHeight 		= _root.getMeasuredHeight();
 
 		int screenWidth 	= windowManager.getDefaultDisplay().getWidth();
 		//int screenHeight 	= windowManager.getDefaultDisplay().getHeight();

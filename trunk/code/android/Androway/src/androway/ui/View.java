@@ -14,14 +14,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import androway.common.Exceptions.ArrayListIsEmptyException;
+import androway.common.Constants;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.logging.LoggingManager;
@@ -30,6 +29,7 @@ import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +63,7 @@ public class View extends Activity
 
         try
         {
-            _lm = new LoggingManager(this);
+            _lm = new LoggingManager(this.getBaseContext(), Constants.LOG_TYPE);
         }
         catch (MaxPoolSizeReachedException ex)
         {
@@ -105,28 +105,26 @@ public class View extends Activity
                     //Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
 					if (!_lm.isEmpty())
 					{
-						ArrayList<ArrayList<String>> dataMap;
-						for (int i = 1; i < _lm.count(); i++)
+						Map<String, Object> dataMap;
+						int length = _lm.count();
+						for (int i = 0; i < length; i++)
 						{
-							try {
-								dataMap = _lm.getLog(i);
-								Toast.makeText(View.this,
-									"id: " + dataMap.get(0).get(0) +
-									"\ntime: " + dataMap.get(0).get(1) +
-									"\nsubject: " + dataMap.get(0).get(2) +
-									"\nmessage: " + dataMap.get(0).get(3),
-									Toast.LENGTH_LONG).show();
-							} catch (ArrayListIsEmptyException ex) {
-								Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-							}
+							/*dataMap = _lm.getLog(i);
+							Toast.makeText(View.this,
+								"id: " + dataMap.get("row").get("id") +
+								"\ntime: " + dataMap.get(0).get(1) +
+								"\nsubject: " + dataMap.get(0).get(2) +
+								"\nmessage: " + dataMap.get(0).get(3),
+								Toast.LENGTH_LONG).show();
+							*/
 						}
 					}
 					else
-						Toast.makeText(View.this, "Tabel is leeg.", Toast.LENGTH_LONG).show();
+						Toast.makeText(View.this, View.this.getString(R.string.empty), Toast.LENGTH_LONG).show();
                 }
             });
             actionItems.add(disconnect);
-
+			
             ActionItem settings = new ActionItem();
             //settings.setTitle(this.getString(R.string.settings));
             settings.setTitle(this.getString(R.string.remove));
