@@ -16,15 +16,15 @@ import androway.ui.BalanceViewHandler;
  */
 public class TiltControls implements SensorEventListener
 {
-    private Context _context = null;
     private BalanceViewHandler _balanceView = null;
     private SensorManager _sensorManager = null;
+    private androway.ui.View _view = null;
 
-    public TiltControls(Context context, BalanceViewHandler balanceView)
+    public TiltControls(Context context, androway.ui.View view, BalanceViewHandler balanceView)
     {
-        _context = context;
+        _view = view;
         _balanceView = balanceView;
-        _sensorManager = (SensorManager) _context.getSystemService(Context.SENSOR_SERVICE);
+        _sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     public void register()
@@ -47,23 +47,7 @@ public class TiltControls implements SensorEventListener
                 float pitch = sensorEvent.values[1];    // pitch    rotation around the x-axis (-180 to 180)
                 float roll = sensorEvent.values[2];     // roll     rotation around the y-axis (-90 to 90)
 
-                // Convert the sensor values to the actual speed and direction values
-                float speed = (pitch * 2.222f) + 200;
-                float direction = roll * -2.222f;
-
-                // Limit the maximum speed value
-                if(speed > 100)
-                    speed = 100;
-                else if(speed < -100)
-                    speed = -100;
-
-                // Limit the maximum direction value
-                if(direction > 100)
-                    direction = 100;
-                else if(direction < -100)
-                    direction = -100;
-
-                _balanceView.setBalance(speed, direction);
+                _view.updateTiltViews(azimuth, pitch, roll);
             }
         }
     }
