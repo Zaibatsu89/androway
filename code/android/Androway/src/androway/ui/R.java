@@ -116,10 +116,13 @@ public final class R {
         public static final int titlebar=0x7f030009;
     }
     public static final class string {
+        public static final int ArrayListIsEmptyException=0x7f05000e;
+        public static final int HttpGetRequestFailedException=0x7f050010;
+        public static final int HttpPostRequestFailedException=0x7f05000f;
         /**  Exception messages 
          */
-        public static final int MaxPoolSizeReachedException=0x7f050012;
-        public static final int NotSupportedQueryTypeException=0x7f050013;
+        public static final int MaxPoolSizeReachedException=0x7f05000c;
+        public static final int NotSupportedQueryTypeException=0x7f05000d;
         /**  Logging 
          */
         public static final int add=0x7f050005;
@@ -130,18 +133,12 @@ public final class R {
          */
         public static final int connect=0x7f050002;
         public static final int disconnect=0x7f050003;
-        public static final int empty=0x7f05000a;
+        public static final int empty=0x7f05000b;
         public static final int format=0x7f050008;
         public static final int get=0x7f050006;
-        public static final int id=0x7f05000e;
-        public static final int last=0x7f05000b;
-        public static final int message=0x7f050011;
         public static final int remove=0x7f050007;
-        public static final int removed=0x7f05000c;
+        public static final int removed=0x7f05000a;
         public static final int settings=0x7f050004;
-        public static final int subject=0x7f050010;
-        public static final int time=0x7f05000f;
-        public static final int xremoved=0x7f05000d;
     }
     public static final class style {
         public static final int Animations=0x7f060006;

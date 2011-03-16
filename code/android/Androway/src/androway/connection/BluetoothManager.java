@@ -1,6 +1,7 @@
 package androway.connection;
 
 import java.util.ArrayList;
+import java.util.Map;
 import org.apache.http.NameValuePair;
 
 /**
@@ -11,7 +12,7 @@ import org.apache.http.NameValuePair;
  * @since 10-03-2011
  * @version 0.41
  */
-public class BluetoothManager implements ConnectionManager
+public class BluetoothManager implements IConnectionManager
 {
 	public boolean open(String address) {
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -25,7 +26,7 @@ public class BluetoothManager implements ConnectionManager
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public ArrayList get(String address, ArrayList<NameValuePair> params) {
+	public Map<String, Object> get(String address, ArrayList<NameValuePair> params) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

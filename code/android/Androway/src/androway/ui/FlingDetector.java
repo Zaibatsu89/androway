@@ -15,9 +15,9 @@ import android.widget.ViewFlipper;
  */
 public class FlingDetector extends SimpleOnGestureListener
 {
-    private static final int SWIPE_MIN_DISTANCE = 120;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    private static final int _SWIPE_MIN_DISTANCE = 120;
+    private static final int _SWIPE_MAX_OFF_PATH = 250;
+    private static final int _SWIPE_THRESHOLD_VELOCITY = 200;
 
     private Animation _slideLeftIn;
     private Animation _slideLeftOut;
@@ -42,17 +42,17 @@ public class FlingDetector extends SimpleOnGestureListener
     {
         try
         {
-            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+            if (Math.abs(e1.getY() - e2.getY()) > _SWIPE_MAX_OFF_PATH)
                 return false;
 
-            if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
+            if(e1.getX() - e2.getX() > _SWIPE_MIN_DISTANCE && Math.abs(velocityX) > _SWIPE_THRESHOLD_VELOCITY)
             {
                 // right to left swipe
                 _flipper.setInAnimation(_slideLeftIn);
                 _flipper.setOutAnimation(_slideLeftOut);
                 _flipper.showNext();
             }
-            else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
+            else if (e2.getX() - e1.getX() > _SWIPE_MIN_DISTANCE && Math.abs(velocityX) > _SWIPE_THRESHOLD_VELOCITY)
             {
                 // left2to right swipe
                 _flipper.setInAnimation(_slideRightIn);

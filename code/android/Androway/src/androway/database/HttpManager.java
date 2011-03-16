@@ -4,8 +4,9 @@ import android.content.Context;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.connection.ConnectionFactory;
-import androway.connection.ConnectionManager;
+import androway.connection.IConnectionManager;
 import java.util.ArrayList;
+import java.util.Map;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -15,37 +16,34 @@ import org.apache.http.message.BasicNameValuePair;
  * @since 10-03-2011
  * @version 0.4
  */
-public class HttpManager implements DatabaseManager
-{
-	
-	ConnectionManager _httpManager;
-	String _dbName;
-	String _tempWebserviceUrl;
+public class HttpManager implements IDatabaseManager
+{	
+	private IConnectionManager _httpManager;
+	private String _tempWebserviceUrl;
 	
 	public HttpManager(Context context) throws MaxPoolSizeReachedException
 	{
-		_httpManager = ConnectionFactory.acquireConnectionManager("http");
-		_dbName = "logs";
-		_tempWebserviceUrl = "http://www.androway.nl/dev/webservice.php";
+		_httpManager = ConnectionFactory.acquireConnectionManager(context, "http");
+		_tempWebserviceUrl = "http://m.androway.nl/dev/webservice.php";
 	}
 
-	public void executeNonQuery(String query) throws NotSupportedQueryTypeException
+	public boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException
 	{
 		ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();
 
 		data.add(new BasicNameValuePair("function", "executeNonQuery"));
-		data.add(new BasicNameValuePair("dbName", _dbName));
+		data.add(new BasicNameValuePair("dbName", dbName));
 		data.add(new BasicNameValuePair("query", query));
 
-		_httpManager.post(_tempWebserviceUrl, data);
+		return _httpManager.post(_tempWebserviceUrl, data);
 	}
 
-	public ArrayList<ArrayList<String>> getData(String query)
+	public Map<String, Object> getData(String dbName, String query)
 	{
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		params.add(new BasicNameValuePair("function", "getData"));
-		params.add(new BasicNameValuePair("dbName", _dbName));
+		params.add(new BasicNameValuePair("dbName", dbName));
 		params.add(new BasicNameValuePair("query", query));
 
 		return _httpManager.get(_tempWebserviceUrl, params);

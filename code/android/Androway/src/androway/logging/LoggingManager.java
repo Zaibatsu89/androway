@@ -1,16 +1,19 @@
 package androway.logging;
 
-import android.app.Activity;
+import android.content.Context;
 import android.text.format.DateFormat;
 import android.widget.Toast;
+import androway.common.Constants;
 import androway.common.Exceptions.ArrayListIsEmptyException;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.database.DatabaseFactory;
-import androway.database.DatabaseManager;
+import androway.database.IDatabaseManager;
 import androway.ui.R;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Interface LoggingManager is.
@@ -20,56 +23,46 @@ import java.util.Date;
  */
 public class LoggingManager
 {
-	private static Activity _mainActivity;
+	private static Context _context;
 	private static String _strFormat, _strAdded, _strRemoved;
 
-	public static final String KEY_ID = "id";
-	public static final String KEY_TIME = "time";
-	public static final String KEY_SUBJECT = "subject";
-	public static final String KEY_MESSAGE = "message";
-	public static final String DATABASE_NAME = "androway";
-	public static final String DATABASE_TABLE = "logs";
-	public static final String DATABASE_CREATE =
-		"create table " +
-		DATABASE_TABLE + " (" +
-		KEY_ID + " integer primary key, " +
-		KEY_TIME + " text not null, " +
-		KEY_SUBJECT + " text not null, " +
-		KEY_MESSAGE + " text not null);";
-	public static final String DATABASE_DROP = "drop table if exists " + DATABASE_TABLE;
+	private static final String _ID = "id";
+	private static final String _TIME = "time";
+	private static final String _SUBJECT = "subject";
+	private static final String _MESSAGE = "message";
 
-	private DatabaseManager myDbManager;
+	private IDatabaseManager _myDbManager;
 
-	public LoggingManager(Activity mainActivity) throws MaxPoolSizeReachedException
+	public LoggingManager(Context context, String loggingType) throws MaxPoolSizeReachedException
 	{
-		_mainActivity = mainActivity;
+		_context = context;
 
-		DatabaseFactory.setMaxPoolSize(2);
-		myDbManager = DatabaseFactory.acquireDatabaseManager(_mainActivity, "local");
+		_myDbManager = DatabaseFactory.acquireDatabaseManager(_context, loggingType);
 
-		_strFormat = _mainActivity.getString(R.string.format);
-		_strAdded = _mainActivity.getString(R.string.added);
-		_strRemoved = _mainActivity.getString(R.string.removed);
+		_strFormat = _context.getString(R.string.format);
+		_strAdded = _context.getString(R.string.added);
+		_strRemoved = _context.getString(R.string.removed);
 	}
 
 	public void addLog(String subject, String message) throws NotSupportedQueryTypeException
 	{
 		CharSequence formaat = _strFormat;
-        Date date = new Date();
-        CharSequence timeChar = DateFormat.format(formaat, date);
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+1:00"));
+		cal.getTime().getTime();
+        CharSequence timeChar = DateFormat.format(formaat, cal);
         String time = timeChar.toString();
 
 		StringBuilder builder = new StringBuilder();
 		builder.append("insert into ");
-		builder.append(DATABASE_TABLE);
+		builder.append(Constants.DATABASE_TABLE);
 		builder.append(" (");
-		builder.append(KEY_ID);
+		builder.append(_ID);
 		builder.append(",");
-		builder.append(KEY_TIME);
+		builder.append(_TIME);
 		builder.append(",");
-		builder.append(KEY_SUBJECT);
+		builder.append(_SUBJECT);
 		builder.append(",");
-		builder.append(KEY_MESSAGE);
+		builder.append(_MESSAGE);
 		builder.append(") values (null,'");
 		builder.append(time);
 		builder.append("','");
@@ -78,74 +71,81 @@ public class LoggingManager
 		builder.append(message);
 		builder.append("')");
 		String query = builder.toString();
-		System.out.println("addLog query: " + query);
 
-		myDbManager.executeNonQuery(query);
-		Toast.makeText(_mainActivity, _strAdded, Toast.LENGTH_LONG).show();
+		_myDbManager.executeNonQuery(Constants.DATABASE_NAME, query);
+		Toast.makeText(_context, _strAdded, Toast.LENGTH_LONG).show();
 	}
 
-	public ArrayList<ArrayList<String>> getLog(int logId) throws ArrayListIsEmptyException
+	public Map<String, Object> getLog(int logId) throws ArrayListIsEmptyException
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("select * from ");
-		builder.append(DATABASE_TABLE);
+		builder.append(Constants.DATABASE_TABLE);
 		builder.append(" where ");
-		builder.append(KEY_ID);
+		builder.append(_ID);
 		builder.append("=");
 		builder.append(logId);
 		String query = builder.toString();
-		System.out.println("getLog query: " + query);
 
-		ArrayList<ArrayList<String>> data = myDbManager.getData(query);
+		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
 
 		if (!data.isEmpty())
 			return data;
-		else throw new ArrayListIsEmptyException("De ArrayList is leeg!");
+		else throw new ArrayListIsEmptyException(_context.getString(R.string.ArrayListIsEmptyException));
 	}
 
 	public void clearAll() throws NotSupportedQueryTypeException
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("delete from ");
-		builder.append(DATABASE_TABLE);
+		builder.append(Constants.DATABASE_TABLE);
 		String query = builder.toString();
-		System.out.println("clearAll query1: " + query);
+		_myDbManager.executeNonQuery(Constants.DATABASE_NAME, query);
 
-		builder = new StringBuilder();
-		builder.append("delete from sqlite_sequence where name='");
-		builder.append(DATABASE_TABLE);
-		builder.append("'");
-		String query2 = builder.toString();
-		System.out.println("clearAll query2: " + query2);
+		if (!isSQLiteSequenceEmpty()) {
+			builder = new StringBuilder();
+			builder.append("delete from sqlite_sequence where name='");
+			builder.append(Constants.DATABASE_TABLE);
+			builder.append("'");
+			String query2 = builder.toString();
+			_myDbManager.executeNonQuery(Constants.DATABASE_NAME, query2);
+		}
 
-		myDbManager.executeNonQuery(query);
-		myDbManager.executeNonQuery(query2);
-		Toast.makeText(_mainActivity, _strRemoved, Toast.LENGTH_LONG).show();
-	}
-
-	public boolean isEmpty()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("count * from ");
-		builder.append(DATABASE_TABLE);
-		String query = builder.toString();
-		System.out.println("isEmpty query: " + query);
-
-		ArrayList<ArrayList<String>> data = myDbManager.getData(query);
-
-		return Integer.valueOf(data.get(0).get(0)).equals(0);
+		Toast.makeText(_context, _strRemoved, Toast.LENGTH_LONG).show();
 	}
 
 	public int count()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("count * from ");
-		builder.append(DATABASE_TABLE);
+		builder.append("select count(id) from ");
+		builder.append(Constants.DATABASE_TABLE);
 		String query = builder.toString();
-		System.out.println("count query: " + query);
 
-		ArrayList<ArrayList<String>> data = myDbManager.getData(query);
+		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
 
-		return Integer.valueOf(data.get(0).get(0));
+		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("count(id)").toString());
+	}
+
+	public boolean isEmpty()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("select count(id) from ");
+		builder.append(Constants.DATABASE_TABLE);
+		String query = builder.toString();
+
+		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
+
+		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("count(id)").toString()).equals(0);
+	}
+
+	public boolean isSQLiteSequenceEmpty()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("select count(name) from sqlite_master where name='sqlite_sequence'");
+		String query = builder.toString();
+
+		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
+
+		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("count(id)").toString()).equals(0);
 	}
 }
