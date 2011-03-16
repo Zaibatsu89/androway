@@ -1,6 +1,7 @@
 package androway.logging;
 
 import android.content.Context;
+import android.content.ContentValues;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 import androway.common.Constants;
@@ -12,8 +13,8 @@ import androway.database.IDatabaseManager;
 import androway.ui.R;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Map;
 import java.util.TimeZone;
+import java.util.Map;
 
 /**
  * Interface LoggingManager is.
@@ -94,6 +95,15 @@ public class LoggingManager
 		else throw new ArrayListIsEmptyException(_context.getString(R.string.ArrayListIsEmptyException));
 	}
 
+	public Map getLogs()
+	{
+		String query = "SELECT * FROM " + Constants.DATABASE_TABLE;
+
+		Map<String, Object> dataMap = _myDbManager.getData(Constants.DATABASE_NAME, query);
+
+		return dataMap;
+	}
+
 	public void clearAll() throws NotSupportedQueryTypeException
 	{
 		StringBuilder builder = new StringBuilder();
@@ -101,15 +111,6 @@ public class LoggingManager
 		builder.append(Constants.DATABASE_TABLE);
 		String query = builder.toString();
 		_myDbManager.executeNonQuery(Constants.DATABASE_NAME, query);
-
-		if (!isSQLiteSequenceEmpty()) {
-			builder = new StringBuilder();
-			builder.append("delete from sqlite_sequence where name='");
-			builder.append(Constants.DATABASE_TABLE);
-			builder.append("'");
-			String query2 = builder.toString();
-			_myDbManager.executeNonQuery(Constants.DATABASE_NAME, query2);
-		}
 
 		Toast.makeText(_context, _strRemoved, Toast.LENGTH_LONG).show();
 	}
@@ -131,17 +132,6 @@ public class LoggingManager
 		StringBuilder builder = new StringBuilder();
 		builder.append("select count(id) from ");
 		builder.append(Constants.DATABASE_TABLE);
-		String query = builder.toString();
-
-		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
-
-		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("count(id)").toString()).equals(0);
-	}
-
-	public boolean isSQLiteSequenceEmpty()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("select count(name) from sqlite_master where name='sqlite_sequence'");
 		String query = builder.toString();
 
 		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
