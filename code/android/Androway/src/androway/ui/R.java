@@ -116,9 +116,9 @@ public final class R {
         public static final int titlebar=0x7f030009;
     }
     public static final class string {
-        public static final int ArrayListIsEmptyException=0x7f05000e;
         public static final int HttpGetRequestFailedException=0x7f050010;
         public static final int HttpPostRequestFailedException=0x7f05000f;
+        public static final int MapIsEmptyException=0x7f05000e;
         /**  Exception messages 
          */
         public static final int MaxPoolSizeReachedException=0x7f05000c;

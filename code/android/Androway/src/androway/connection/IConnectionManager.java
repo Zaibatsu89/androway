@@ -5,14 +5,14 @@ import java.util.Map;
 import org.apache.http.NameValuePair;
 
 /**
- * Interface IConnectionManager is the interface for
- * the classes BluetoothManager and HttpManager.
+ * IConnectionManager is the interface used to communicate with the different ConnectionManagers
  * @author Rinse
- * @since 10-03-2011
- * @version 0.42
+ * @since 17-03-2011
+ * @version 0.43
  */
 public interface IConnectionManager
 {
+	// Should be all public accessible methods
 	public abstract boolean open(String address);
 	public abstract void close();
 	public abstract boolean post(String address, ArrayList<NameValuePair> data);
