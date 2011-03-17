@@ -1,26 +1,26 @@
 package androway.logging;
 
 import android.content.Context;
-import android.content.ContentValues;
-import android.text.format.DateFormat;
 import android.widget.Toast;
 import androway.common.Constants;
-import androway.common.Exceptions.ArrayListIsEmptyException;
+import androway.common.Exceptions.MapIsEmptyException;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.database.DatabaseFactory;
 import androway.database.IDatabaseManager;
 import androway.ui.R;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.util.Map;
 
 /**
  * Interface LoggingManager is.
  * @author Rinse
- * @since 09-03-2011
- * @version 0.42
+ * @since 17-03-2011
+ * @version 0.43
  */
 public class LoggingManager
 {
@@ -47,14 +47,12 @@ public class LoggingManager
 
 	public void addLog(String subject, String message) throws NotSupportedQueryTypeException
 	{
-		CharSequence formaat = _strFormat;
-        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+1:00"));
-		cal.getTime().getTime();
-        CharSequence timeChar = DateFormat.format(formaat, cal);
-        String time = timeChar.toString();
+		DateFormat dateFormat = new SimpleDateFormat(_strFormat);
+        Date date = new Date();
+        String dateTime = dateFormat.format(date);
 
 		StringBuilder builder = new StringBuilder();
-		builder.append("insert into ");
+		builder.append("INSERT INTO ");
 		builder.append(Constants.DATABASE_TABLE);
 		builder.append(" (");
 		builder.append(_ID);
@@ -64,8 +62,8 @@ public class LoggingManager
 		builder.append(_SUBJECT);
 		builder.append(",");
 		builder.append(_MESSAGE);
-		builder.append(") values (null,'");
-		builder.append(time);
+		builder.append(") VALUES (NULL,'");
+		builder.append(dateTime);
 		builder.append("','");
 		builder.append(subject);
 		builder.append("','");
@@ -77,12 +75,12 @@ public class LoggingManager
 		Toast.makeText(_context, _strAdded, Toast.LENGTH_LONG).show();
 	}
 
-	public Map<String, Object> getLog(int logId) throws ArrayListIsEmptyException
+	public Map<String, Object> getLog(int logId) throws MapIsEmptyException
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("select * from ");
+		builder.append("SELECT * FROM ");
 		builder.append(Constants.DATABASE_TABLE);
-		builder.append(" where ");
+		builder.append(" WHERE ");
 		builder.append(_ID);
 		builder.append("=");
 		builder.append(logId);
@@ -92,22 +90,27 @@ public class LoggingManager
 
 		if (!data.isEmpty())
 			return data;
-		else throw new ArrayListIsEmptyException(_context.getString(R.string.ArrayListIsEmptyException));
+		else throw new MapIsEmptyException(_context.getString(R.string.MapIsEmptyException));
 	}
 
-	public Map getLogs()
+	public Map getLogs() throws MapIsEmptyException
 	{
-		String query = "SELECT * FROM " + Constants.DATABASE_TABLE;
+		StringBuilder builder = new StringBuilder();
+		builder.append("SELECT * FROM ");
+		builder.append(Constants.DATABASE_TABLE);
+		String query = builder.toString();
 
-		Map<String, Object> dataMap = _myDbManager.getData(Constants.DATABASE_NAME, query);
+		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
 
-		return dataMap;
+		if (!data.isEmpty())
+			return data;
+		else throw new MapIsEmptyException(_context.getString(R.string.MapIsEmptyException));
 	}
 
 	public void clearAll() throws NotSupportedQueryTypeException
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("delete from ");
+		builder.append("DELETE FROM ");
 		builder.append(Constants.DATABASE_TABLE);
 		String query = builder.toString();
 		_myDbManager.executeNonQuery(Constants.DATABASE_NAME, query);
@@ -118,24 +121,24 @@ public class LoggingManager
 	public int count()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("select count(id) from ");
+		builder.append("SELECT COUNT(id) FROM ");
 		builder.append(Constants.DATABASE_TABLE);
 		String query = builder.toString();
 
 		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
 
-		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("count(id)").toString());
+		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(id)").toString());
 	}
 
 	public boolean isEmpty()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("select count(id) from ");
+		builder.append("SELECT COUNT(id) FROM ");
 		builder.append(Constants.DATABASE_TABLE);
 		String query = builder.toString();
 
 		Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
 
-		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("count(id)").toString()).equals(0);
+		return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(id)").toString()).equals(0);
 	}
 }

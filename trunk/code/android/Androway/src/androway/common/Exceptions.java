@@ -3,8 +3,8 @@ package androway.common;
 /**
  * Exceptions handles all exceptions inside Androway.
  * @author Tymen en Rinse
- * @since 10-03-2011
- * @version 0.12
+ * @since 17-03-2011
+ * @version 0.13
  */
 public class Exceptions
 {
@@ -33,9 +33,9 @@ public class Exceptions
 	/**
 	 * Exception used for checking the contents of an ArrayList
 	 */
-	public static class ArrayListIsEmptyException extends Exception
+	public static class MapIsEmptyException extends Exception
 	{
-		public ArrayListIsEmptyException(String message)
+		public MapIsEmptyException(String message)
 		{
 			super(message);
 		}

@@ -4,6 +4,7 @@ import android.content.Context;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.connection.ConnectionFactory;
+import androway.connection.ConnectionManagerBase;
 import androway.connection.IConnectionManager;
 import java.util.ArrayList;
 import java.util.Map;
@@ -13,17 +14,17 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * Class HttpManager stores log data on the androway.nl domain.
  * @author Rinse
- * @since 10-03-2011
- * @version 0.4
+ * @since 17-03-2011
+ * @version 0.41
  */
-public class HttpManager implements IDatabaseManager
+public class HttpManager extends DatabaseManagerBase
 {	
 	private IConnectionManager _httpManager;
 	private String _tempWebserviceUrl;
 	
 	public HttpManager(Context context) throws MaxPoolSizeReachedException
 	{
-		_httpManager = ConnectionFactory.acquireConnectionManager(context, "http");
+		_httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
 		_tempWebserviceUrl = "http://m.androway.nl/dev/webservice.php";
 	}
 

@@ -12,10 +12,10 @@ import java.util.Map;
 /**
  * Class LocalManager stores log data on the Android device.
  * @author Rinse
- * @since 09-03-2011
- * @version 0.42
+ * @since 17-03-2011
+ * @version 0.43
  */
-public class LocalManager implements IDatabaseManager {
+public class LocalManager extends DatabaseManagerBase {
 	private SQLiteDatabase _db;
 	private DatabaseHelper _dbHelper;
 	private static String[] _dbColumns;
@@ -35,7 +35,7 @@ public class LocalManager implements IDatabaseManager {
         @Override
         public void onCreate(SQLiteDatabase db)
         {
-			//For developer phone
+			// Temporary: for developer phone
 			db.execSQL("drop table if exists " + Constants.DATABASE_TABLE);
 
             db.execSQL("create table " +

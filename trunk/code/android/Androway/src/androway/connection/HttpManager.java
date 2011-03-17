@@ -27,10 +27,10 @@ import org.json.JSONObject;
  * connection between the Android phone
  * and the androway.nl domain.
  * @author Rinse
- * @since 10-03-2011
- * @version 0.41
+ * @since 17-03-2011
+ * @version 0.42
  */
-public class HttpManager implements IConnectionManager
+public class HttpManager extends ConnectionManagerBase
 {
 	private Context _context;
 
@@ -87,7 +87,7 @@ public class HttpManager implements IConnectionManager
 
         try
         {
-			// Add the given paramaters from the ArrayList to the address (url)
+			// Add the given parameters from the ArrayList to the address (url)
 			int i = 0;
 			for(NameValuePair nameValuePair : params)
 			{
@@ -95,7 +95,16 @@ public class HttpManager implements IConnectionManager
 				if(i == 0)
 					splitter = '?';
 
-				address += splitter + nameValuePair.getName() + "=" + URLEncoder.encode(nameValuePair.getValue().toString());
+				if(nameValuePair.getName().equalsIgnoreCase("query"))
+				{
+					String value = URLEncoder.encode(nameValuePair.getValue().toString());
+					int index = value.toLowerCase().indexOf("from");
+
+					address += splitter + nameValuePair.getName() + "1=" + value.substring(0, index);
+					address += splitter + nameValuePair.getName() + "2=" + value.substring(index);
+				}
+				else
+					address += splitter + nameValuePair.getName() + "=" + URLEncoder.encode(nameValuePair.getValue().toString());
 
 				i++;
 			}
@@ -110,7 +119,6 @@ public class HttpManager implements IConnectionManager
 			JSONArray jsonItems = new JSONArray(response);
 
 			result = deserializeJson(new HashMap<String, Object>(), jsonItems);
-
 		} catch (JSONException ex)
 		{
 			Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex);

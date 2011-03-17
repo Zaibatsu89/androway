@@ -14,8 +14,8 @@ import java.util.Map;
  * Childclass IConnectionManager is the interface for
  * the classes BluetoothManager and HttpManager.
  * @author Rinse
- * @since 11-03-2011
- * @version 0.31
+ * @since 17-03-2011
+ * @version 0.32
  */
 public final class ConnectionFactory
 {
@@ -45,9 +45,9 @@ public final class ConnectionFactory
 				cm = (IConnectionManager) _connectionManagersCollection.get(managerName);
 			else
 			{
-				if (managerName.equals("bluetooth"))
+				if (managerName.equals(ConnectionManagerBase.TYPE_BLUETOOTH))
 					cm = new BluetoothManager();
-				else if (managerName.equals("http"))
+				else if (managerName.equals(ConnectionManagerBase.TYPE_HTTP))
 					cm = new HttpManager(context);
 
 				_managerCount++;

@@ -15,8 +15,8 @@ import java.util.Map;
  * Childclass IDatabaseManager is the interface for
  * the classes LocalManager and HttpManager.
  * @author Rinse
- * @since 02-03-2011
- * @version 0.4
+ * @since 17-03-2011
+ * @version 0.41
  */
 public final class DatabaseFactory extends Application
 {
@@ -45,9 +45,9 @@ public final class DatabaseFactory extends Application
 				_databaseManager = (IDatabaseManager) _databaseManagersCollection.get(managerName);
 			else
 			{
-				if (managerName.equals("http"))
+				if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
 					_databaseManager = new HttpManager(context);
-				else if (managerName.equals("local"))
+				else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
 					_databaseManager = new LocalManager(context, _dbColumns);
 
 				_databaseManagersCollection.put(managerName, null);

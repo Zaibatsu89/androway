@@ -20,14 +20,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import androway.common.Constants;
+import androway.common.Exceptions.MapIsEmptyException;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
+import androway.common.Settings;
 import androway.logging.LoggingManager;
 import androway.main.TiltControls;
 import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -36,8 +38,8 @@ import java.util.logging.Logger;
 /**
  * The main view of the system
  * @author Tymen en Rinse
- * @since 09-03-2011
- * @version 0.42
+ * @since 17-03-2011
+ * @version 0.43
  */
 public class View extends Activity
 {
@@ -63,7 +65,7 @@ public class View extends Activity
 
         try
         {
-            _lm = new LoggingManager(this.getBaseContext(), Constants.LOG_TYPE);
+            _lm = new LoggingManager(this.getBaseContext(), Settings.LOG_TYPE);
         }
         catch (MaxPoolSizeReachedException ex)
         {
@@ -103,24 +105,33 @@ public class View extends Activity
                 public void onClick(android.view.View v)
                 {
                     //Toast.makeText(View.this, "Disconnecting from the Segway", Toast.LENGTH_SHORT).show();
-					if (!_lm.isEmpty())
+					Map<String, Object> dataMap = new HashMap<String, Object>();
+					try {
+						dataMap = _lm.getLogs();
+					} catch (MapIsEmptyException ex) {
+						Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+					}
+
+					if(dataMap.isEmpty())
 					{
-						Map<String, Object> dataMap;
-						int length = _lm.count();
-						for (int i = 0; i < length; i++)
-						{
-							/*dataMap = _lm.getLog(i);
-							Toast.makeText(View.this,
-								"id: " + dataMap.get("row").get("id") +
-								"\ntime: " + dataMap.get(0).get(1) +
-								"\nsubject: " + dataMap.get(0).get(2) +
-								"\nmessage: " + dataMap.get(0).get(3),
-								Toast.LENGTH_LONG).show();
-							*/
-						}
+						// Show empty toast
+						Toast.makeText(View.this, getResources().getString(R.string.empty), Toast.LENGTH_LONG).show();
 					}
 					else
-						Toast.makeText(View.this, View.this.getString(R.string.empty), Toast.LENGTH_LONG).show();
+					{
+						// Loop dataMap
+						for (int i = 0; i < dataMap.size(); i++)
+						{
+							Map<String, Object> rowMap = (Map<String, Object>) dataMap.get("row" + i);
+
+							Toast.makeText(View.this,
+							"id: " + rowMap.get("id") +
+							"\ntime: " + rowMap.get("time") +
+							"\nsubject: " + rowMap.get("subject") +
+							"\nmessage: " + rowMap.get("message"),
+							Toast.LENGTH_LONG).show();
+							}
+					}
                 }
             });
             actionItems.add(disconnect);
