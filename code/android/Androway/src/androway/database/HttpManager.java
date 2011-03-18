@@ -1,6 +1,7 @@
 package androway.database;
 
 import android.content.Context;
+import androway.common.Constants;
 import androway.common.Exceptions.MaxPoolSizeReachedException;
 import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.connection.ConnectionFactory;
@@ -20,12 +21,10 @@ import org.apache.http.message.BasicNameValuePair;
 public class HttpManager extends DatabaseManagerBase
 {	
 	private IConnectionManager _httpManager;
-	private String _tempWebserviceUrl;
 	
 	public HttpManager(Context context) throws MaxPoolSizeReachedException
 	{
 		_httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
-		_tempWebserviceUrl = "http://m.androway.nl/dev/webservice.php";
 	}
 
 	public boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException
@@ -36,7 +35,7 @@ public class HttpManager extends DatabaseManagerBase
 		data.add(new BasicNameValuePair("dbName", dbName));
 		data.add(new BasicNameValuePair("query", query));
 
-		return _httpManager.post(_tempWebserviceUrl, data);
+		return _httpManager.post(Constants.WEBSERVICE_URL, data);
 	}
 
 	public Map<String, Object> getData(String dbName, String query)
@@ -47,6 +46,6 @@ public class HttpManager extends DatabaseManagerBase
 		params.add(new BasicNameValuePair("dbName", dbName));
 		params.add(new BasicNameValuePair("query", query));
 
-		return _httpManager.get(_tempWebserviceUrl, params);
+		return _httpManager.get(Constants.WEBSERVICE_URL, params);
 	}
 }

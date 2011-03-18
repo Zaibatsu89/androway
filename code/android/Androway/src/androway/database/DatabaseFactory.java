@@ -23,7 +23,6 @@ public final class DatabaseFactory extends Application
 	private static DatabaseFactory _databaseFactory;
 	private static IDatabaseManager _databaseManager;
 	private static Map _databaseManagersCollection = new HashMap();
-	private static String[] _dbColumns = {"id", "time", "subject", "message"};
 	private static int _managerCount;
 	private static int _maxPoolSize = 2;
 
@@ -48,7 +47,7 @@ public final class DatabaseFactory extends Application
 				if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
 					_databaseManager = new HttpManager(context);
 				else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
-					_databaseManager = new LocalManager(context, _dbColumns);
+					_databaseManager = new LocalManager(context);
 
 				_databaseManagersCollection.put(managerName, null);
 				_managerCount++;
