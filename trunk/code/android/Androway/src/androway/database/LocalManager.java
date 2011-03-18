@@ -18,11 +18,10 @@ import java.util.Map;
 public class LocalManager extends DatabaseManagerBase {
 	private SQLiteDatabase _db;
 	private DatabaseHelper _dbHelper;
-	private static String[] _dbColumns;
 
-	public LocalManager(Context context, String[] dbColumns) {
+	public LocalManager(Context context)
+	{
 		_dbHelper = new DatabaseHelper(context);
-		_dbColumns = dbColumns;
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper
@@ -36,14 +35,14 @@ public class LocalManager extends DatabaseManagerBase {
         public void onCreate(SQLiteDatabase db)
         {
 			// Temporary: for developer phone
-			db.execSQL("drop table if exists " + Constants.DATABASE_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + Constants.DATABASE_TABLE);
 
-            db.execSQL("create table " +
+            db.execSQL("CREATE TABLE " +
 				Constants.DATABASE_TABLE + " (" +
-				_dbColumns[0] + " integer primary key, " +
-				_dbColumns[1] + " text not null, " +
-				_dbColumns[2] + " text not null, " +
-				_dbColumns[3] + " text not null)");
+				"id INTEGER PRIMARY KEY, " +
+				"time TEXT NOT NULL, " +
+				"subject TEXT NOT NULL, " +
+				"message TEXT NOT NULL)");
         }
 
 		@Override
