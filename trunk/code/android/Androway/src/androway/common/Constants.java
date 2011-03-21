@@ -1,5 +1,7 @@
 package androway.common;
 
+import androway.ui.block_component.BlockComponent;
+
 /**
  * Class Constants stores and saves the used constants.
  * @author Rinse

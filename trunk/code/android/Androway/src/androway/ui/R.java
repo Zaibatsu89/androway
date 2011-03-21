@@ -141,23 +141,24 @@ public final class R {
         public static final int settings=0x7f050004;
     }
     public static final class style {
-        public static final int Animations=0x7f060006;
+        public static final int Animations=0x7f060007;
         /**  PopDownMenu 
          */
-        public static final int Animations_PopDownMenu=0x7f060007;
-        public static final int Animations_PopDownMenu_Center=0x7f06000a;
-        public static final int Animations_PopDownMenu_Left=0x7f060008;
-        public static final int Animations_PopDownMenu_Right=0x7f060009;
+        public static final int Animations_PopDownMenu=0x7f060008;
+        public static final int Animations_PopDownMenu_Center=0x7f06000b;
+        public static final int Animations_PopDownMenu_Left=0x7f060009;
+        public static final int Animations_PopDownMenu_Right=0x7f06000a;
         /**  PopUpMenu 
          */
-        public static final int Animations_PopUpMenu=0x7f06000b;
-        public static final int Animations_PopUpMenu_Center=0x7f06000e;
-        public static final int Animations_PopUpMenu_Left=0x7f06000c;
-        public static final int Animations_PopUpMenu_Right=0x7f06000d;
+        public static final int Animations_PopUpMenu=0x7f06000c;
+        public static final int Animations_PopUpMenu_Center=0x7f06000f;
+        public static final int Animations_PopUpMenu_Left=0x7f06000d;
+        public static final int Animations_PopUpMenu_Right=0x7f06000e;
+        public static final int BlockComponent=0x7f060003;
         public static final int GestureOverlay=0x7f060002;
-        public static final int StatusBarLeft=0x7f060003;
-        public static final int StatusBarMiddle=0x7f060004;
-        public static final int StatusBarRight=0x7f060005;
+        public static final int StatusBarLeft=0x7f060004;
+        public static final int StatusBarMiddle=0x7f060005;
+        public static final int StatusBarRight=0x7f060006;
         public static final int TitleBar=0x7f060001;
         public static final int WindowTint=0x7f060000;
     }
