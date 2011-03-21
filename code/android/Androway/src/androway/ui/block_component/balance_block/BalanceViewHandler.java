@@ -1,5 +1,6 @@
-package androway.ui;
+package androway.ui.block_component.balance_block;
 
+import androway.ui.*;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -10,8 +11,8 @@ import android.widget.LinearLayout;
 /**
  * Class View for drawing the balance in the UI.
  * @author Tymen
- * @since 02-03-2011
- * @version 0.2
+ * @since 21-03-2011
+ * @version 0.5
  */
 public class BalanceViewHandler extends LinearLayout
 {
@@ -22,13 +23,17 @@ public class BalanceViewHandler extends LinearLayout
 
     public BalanceViewHandler(Context context)
     {
-        super(context);        
+        super(context);
+
+        // This background color is necessary, otherwise the element will not be visible
+        this.setBackgroundColor(Color.parseColor("#00FF99FF"));
+
         _moveArrow = new LinearLayout(context);
         _moveArrow.setBackgroundResource(R.drawable.arrow_move);
         this.addView(_moveArrow);
     }
 
-    public void updateBalance(float speed, float direction)
+    public void updateView(float speed, float direction)
     {
         _speed = speed;
         _direction = direction;
@@ -125,11 +130,5 @@ public class BalanceViewHandler extends LinearLayout
         newLayoutParams.setMargins(0, (int)rectMargin, 0, 0);        
         balanceBg.setLayoutParams(newLayoutParams);
         balanceBg.requestLayout();
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b)
-    {
-        super.onLayout(changed,l, t, r, b);
     }
 }

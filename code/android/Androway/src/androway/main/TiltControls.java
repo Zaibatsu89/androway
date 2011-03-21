@@ -5,25 +5,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.view.View;
-import androway.ui.BalanceViewHandler;
+import androway.ui.View;
 
 /**
  * Class TiltControls connects with class Controller.
  * @author Tymen
- * @since 02-03-2011
- * @version 0.2
+ * @since 16-03-2011
+ * @version 0.3
  */
 public class TiltControls implements SensorEventListener
 {
-    private BalanceViewHandler _balanceView = null;
     private SensorManager _sensorManager = null;
-    private androway.ui.View _view = null;
+    private View _view = null;
 
-    public TiltControls(Context context, androway.ui.View view, BalanceViewHandler balanceView)
+    public TiltControls(Context context, View view)
     {
         _view = view;
-        _balanceView = balanceView;
         _sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 

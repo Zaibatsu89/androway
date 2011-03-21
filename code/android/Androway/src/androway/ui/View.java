@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -12,12 +11,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import androway.common.Exceptions.MapIsEmptyException;
@@ -26,6 +21,10 @@ import androway.common.Exceptions.NotSupportedQueryTypeException;
 import androway.common.Settings;
 import androway.logging.LoggingManager;
 import androway.main.TiltControls;
+import androway.ui.block_component.balance_block.BalanceBlock;
+import androway.ui.block_component.BlockComponent;
+import androway.ui.block_component.CompassBlock;
+import androway.ui.block_component.InclinationBlock;
 import androway.ui.quick_action.ActionItem;
 import androway.ui.quick_action.QuickAction;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ import java.util.logging.Logger;
 /**
  * The main view of the system
  * @author Tymen en Rinse
- * @since 17-03-2011
+ * @since 21-03-2011
  * @version 0.43
  */
 public class View extends Activity
@@ -48,13 +47,10 @@ public class View extends Activity
     private GestureDetector _gestureDetectorBlock1;
     private GestureDetector _gestureDetectorBlock2;
 
-    private BalanceViewHandler _balanceView;
+    private Map<String, BlockComponent> _blockComponents = new HashMap<String, BlockComponent>();
     
     public int tempInclinationRotation = 0;
     private TiltControls _tempTiltControls;
-
-    private float _compDegrees = 0;
-    private float _compPreviousDegrees = 0;
 
     /** Called when the activity is first created. */
     @Override
@@ -62,6 +58,9 @@ public class View extends Activity
     {
         super.onCreate(icicle);
         setContentView(R.layout.main);
+
+        // Set the block components
+        this.setBlockComponents();
 
         try
         {
@@ -228,15 +227,8 @@ public class View extends Activity
             });
        /* --------------------------- */
 
-
-
-       // Add the actual BalanceViewHandler to the balance LinearLayout
-       LinearLayout balanceWrapper = (LinearLayout) findViewById(R.id.balance);
-       _balanceView = new BalanceViewHandler(View.this);
-       _balanceView.setBackgroundColor(Color.parseColor("#00FF99FF"));
-       balanceWrapper.addView(_balanceView);
-
-       _tempTiltControls = new TiltControls(View.this, this, _balanceView);
+       // Bind the tilt controls
+       _tempTiltControls = new TiltControls(View.this, this);
     }
 
     @Override
@@ -251,6 +243,29 @@ public class View extends Activity
     {
         _tempTiltControls.unregister();
         super.onStop();
+    }
+
+    private void setBlockComponents()
+    {
+        if(_blockComponents.isEmpty())
+        {
+            // Add all wanted BlockComponents
+            _blockComponents.put(InclinationBlock.BLOCK_NAME, new InclinationBlock(View.this, R.layout.inclination));
+            _blockComponents.put(BalanceBlock.BLOCK_NAME, new BalanceBlock(View.this, R.layout.balance));
+            _blockComponents.put(CompassBlock.BLOCK_NAME, new CompassBlock(View.this, R.layout.compass));
+
+            ViewFlipper block_1 = (ViewFlipper)findViewById(BlockComponent.ID_BLOCK_1);
+            ViewFlipper block_2 = (ViewFlipper)findViewById(BlockComponent.ID_BLOCK_2);
+
+            // Loop the components and add each component as view to the according block
+            for(BlockComponent component : _blockComponents.values())
+            {
+                if(component.blockId == BlockComponent.ID_BLOCK_1)
+                    block_1.addView(component);
+                else if(component.blockId == BlockComponent.ID_BLOCK_2)
+                    block_2.addView(component);
+            }
+        }
     }
 
     public void updateTiltViews(float azimuth, float pitch, float roll)
@@ -270,63 +285,15 @@ public class View extends Activity
             direction = 100;
         else if(direction < -100)
             direction = -100;
-        
-        // Update the balance view
-        _balanceView.updateBalance(speed, direction);
 
-        // Update the compass view
-        this.updateCompass(azimuth);
-    }
+        // Set the new values
+        Map<String, Object> values = new HashMap<String, Object>();
+        values.put("speed", speed);
+        values.put("direction", direction);
+        values.put("heading", azimuth);
 
-    public void updateCompass(float degrees)
-    {
-        // Store the compas degrees value
-        _compDegrees = 360 - degrees;
-
-        setCompassRotation(_compDegrees, _compPreviousDegrees, 200, new RotationListener());
-    }
-
-    private void setCompassRotation(float degrees, float previousDegrees, int duration, RotationListener rotationListener)
-    {
-        ImageView compassImage = (ImageView)findViewById(R.id.compass);
-
-        if(degrees == previousDegrees)
-            degrees += 0.001f;
-
-        RotateAnimation rotateAnim = new RotateAnimation(previousDegrees, degrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateAnim.setDuration(duration);
-        rotateAnim.setAnimationListener(new RotationListener());
-
-        compassImage.setAnimation(rotateAnim);
-
-        // Store the current degrees for future use
-        _compPreviousDegrees = degrees;
-    }
-
-    public class RotationListener implements AnimationListener
-    {
-        public void onAnimationStart(Animation a) { }
-
-        public void onAnimationEnd(Animation a)
-        {
-            setCompassRotation(_compDegrees, _compPreviousDegrees, 200, this);
-            /*
-            ImageView compassImage = (ImageView)findViewById(R.id.compass);
-
-            if(_compDegrees == _compPreviousDegrees)
-                _compDegrees += 0.001f;
-
-            RotateAnimation rotateAnim = new RotateAnimation(_compPreviousDegrees, _compDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            rotateAnim.setDuration(180);
-            rotateAnim.setAnimationListener(new RotationListener());
-
-            compassImage.setAnimation(rotateAnim);
-
-            // Store the current degrees for future use
-            _compPreviousDegrees = _compDegrees;
-            */
-        }
-
-        public void onAnimationRepeat(Animation a) { }
+        // Call the updateView function for all block components
+        for(BlockComponent component : _blockComponents.values())
+            component.updateView(BlockComponent.UPDATE_TYPE_TILT, values);
     }
 }

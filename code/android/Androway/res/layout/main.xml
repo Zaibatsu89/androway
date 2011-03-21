@@ -29,9 +29,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
                         
-                        <include layout="@layout/inclination" />
-                        <include layout="@layout/balance" />
-                        <include layout="@layout/compass" />
+                        <!--<include layout="@layout/inclination" />-->
+                        <!--<include layout="@layout/balance" />-->
+                        <!--<include layout="@layout/compass" />-->
                         
                 </ViewFlipper>
             </android.gesture.GestureOverlayView>
