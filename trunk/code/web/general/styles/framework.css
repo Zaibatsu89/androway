@@ -1,0 +1,47 @@
+html, body
+{
+	padding: 0;
+	margin: 0;
+	font-family: sans-serif;
+}
+
+.message_box
+{
+	width: auto;
+	padding: 7px;
+	display: none;
+}
+
+.message_box.auth_normal
+{
+	border: 1px solid #0080FF;
+	background: #9AC8F7;
+	color: #fff;
+}
+
+.message_box.auth_valid
+{
+	border: 1px solid #349534;
+	background: #C9FFCA;
+	color: #008000;	
+}
+
+.message_box.auth_error
+{
+	border: 1px solid #CC0000;
+	background: #F7CBCA;
+	color: #CC0000;
+}
+
+.ui-dialog
+{
+	background: #CCC;
+}
+.ui-icon
+{
+	background: #FFF;
+}
+.ui-icon-closethick
+{
+	background: #AAA;
+}
