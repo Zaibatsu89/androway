@@ -11,17 +11,25 @@ abstract class Model
 {
 	// The database manager to use
 	protected static $db;
+	protected static $dbAlternative;
 	
+	protected $useAlternative;
 	protected $dbTable;
 	public $data;
 
-	protected function __construct($id = null, $dbTable)
+	protected function __construct($id = null, $dbTable, $useAlternative = false)
 	{
 		$this->dbTable = $dbTable;
+		$this->useAlternative = $useAlternative;
 		
 		if($id != null)
 		{
-			$dbData = self::$db->getData("SELECT * FROM $dbTable WHERE id = $id;");
+			$managerToUse = self::$db;
+			
+			if($useAlternative)
+				$managerToUse = self::$dbAlternative;
+				
+			$dbData = $managerToUse->getData("SELECT * FROM $dbTable WHERE id = $id;");
 			
 			if (!empty($dbData))
 				$this->data = $dbData[0];
@@ -30,9 +38,12 @@ abstract class Model
 			$this->data = array();
 	}
 	
-	public function init(DatabaseManager $db)
+	public function init(DatabaseManager $db, DatabaseManager $alternativeDb = null)
 	{
 		Model::$db = $db;
+		
+		if($alternativeDb != null)
+			Model::$dbAlternative = $alternativeDb;
 	}
 }
 

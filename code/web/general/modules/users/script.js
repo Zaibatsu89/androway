@@ -8,7 +8,7 @@ function initUsersModule()
 		[
 			{display: 'Name', name : 'name', width : 140, sortable : true, align: 'left'},
 			{display: 'Email', name : 'email', width : 160, sortable : true, align: 'left'},
-			{display: 'Date time', name : 'date_time', width : 140, sortable : true, align: 'left'},
+			{display: 'Date Time', name : 'date_time', width : 140, sortable : true, align: 'left'},
 			/*DEZE REGEL MOEST ER NOG BIJ :D*/{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],

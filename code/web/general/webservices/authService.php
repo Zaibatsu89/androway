@@ -1,7 +1,7 @@
 <?php
 
 require_once("../init.php");
-init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "********");
+init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "hz7bkaxw");
 
 /*
  * Name: Tymen Steur

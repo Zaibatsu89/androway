@@ -2,17 +2,18 @@
 
 require_once("../../init.php");
 
-init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "hz7bkaxw");
+$alternativeDb = new DatabaseManager("androway_logging", "androway_logging", "hz7bkaxw");
+init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "hz7bkaxw", true, $alternativeDb);
 handleAuth(true);
 
-require_once("../../engine/lib/user.php");
+require_once("../../engine/lib/session.php");
 
 /*
- * Name: Tymen Steur
- * Date: 29-03-2011
- * Version: 0.1
+ * Name: Rinse Cramer
+ * Date: 30-03-2011
+ * Version: 0.11
  * 
- * Class to serve the user
+ * Class to serve the session
  */
 if(isset($_REQUEST["action"]))
 {
@@ -20,20 +21,20 @@ if(isset($_REQUEST["action"]))
 	{
 		case "getGridData":
 		{
-			function getRows($users)
-			{
+			function getRows($sessions)
+			{			
 				$rows = array();
 				
-				foreach ($users as $user)
-				{	
+				foreach ($sessions as $session)
+				{
 					$rows[] = array
 					(
-						"id" => $user->data["id"],
+						"id" => $session->data["id"],
 						"cell" => array
 						(
-							$user->data["name"],
-							$user->data["email"],
-							date("d-m-y",$user->data["date_time"])." ".date("G:i",$user->data["date_time"]),
+							$session->data["name"],
+							date("d-m-y",$session->data["date_time"])." ".date("G:i",$session->data["date_time"]),
+							$session->data["user_id"],
 							'edit',
 							'remove'
 						)
@@ -63,8 +64,8 @@ if(isset($_REQUEST["action"]))
 			$json = array
 			(
 				"page" => $page,
-				"total" => User::total($qtype, $query, $sortname, $sortorder),
-				"rows" => getRows(User::loadSorted($qtype, $query, $sortname, $sortorder, $start, $rp))
+				"total" => Session::total($qtype, $query, $sortname, $sortorder),
+				"rows" => getRows(Session::loadSorted($qtype, $query, $sortname, $sortorder, $start, $rp))
 			);
 			
 			echo json_encode($json);
@@ -74,42 +75,37 @@ if(isset($_REQUEST["action"]))
 		{
 			if (isset($_REQUEST["id"]) && !empty($_REQUEST["id"]))
 			{
-				$user = new User($_REQUEST["id"]);
+				$session = new Session($_REQUEST["id"]);
 				
-				$user->removeUser();
+				$session->removeSession();
 			}
 		
 			break;	
 		}
-		case "getUser":
+		case "getSession":
 		{
 			$json = array();
 			
 			if(isset($_REQUEST["id"]))
 			{
-				$user = new User($_REQUEST["id"]);				
-				$json = $user->data;
+				$session = new Session($_REQUEST["id"]);				
+				$json = $session->data;
 			}
 			
 			echo json_encode($json);
 			
 			break;
 		}
-		case "editUser":
+		case "editSession":
 		{
 			if(isset($_REQUEST["id"]))
 			{
-				$user = null;
+				$session = null;
 				
-				if($_REQUEST["id"] == "")
+				if($_REQUEST["id"] != "")
 				{
-					$user = new User();
-					$user->createUser($_REQUEST["name"], $_REQUEST["email"], $_REQUEST["password"], $_REQUEST["level"]);
-				}
-				else
-				{
-					$user = new User($_REQUEST["id"]);
-					$user->editUser($_REQUEST["name"], $_REQUEST["email"], $_REQUEST["password"], $_REQUEST["level"]);
+					$session = new Session($_REQUEST["id"]);
+					$session->editSession($_REQUEST["name"]);
 				}
 			}
 			
