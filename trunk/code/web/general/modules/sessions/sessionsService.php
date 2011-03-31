@@ -2,8 +2,8 @@
 
 require_once("../../init.php");
 
-$alternativeDb = new DatabaseManager("androway_logging", "androway_logging", "hz7bkaxw");
-init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "hz7bkaxw", true, $alternativeDb);
+$alternativeDb = new DatabaseManager("androway_logging", "androway_logging", "********");
+init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "********", true, $alternativeDb);
 handleAuth(true);
 
 require_once("../../engine/lib/session.php");
