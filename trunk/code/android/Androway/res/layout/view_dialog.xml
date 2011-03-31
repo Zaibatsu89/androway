@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dip"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:text="@string/choose_action"/>
+
+        <!-- Horizontal ruler -->
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:scaleType="fitXY"
+            android:gravity="fill_horizontal"
+            android:layout_marginTop="10dip"
+            android:src="@drawable/dialog_devider_h"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:id="@+id/start_session"
+                android:clickable="true"
+                android:selectable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dip"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/start_session_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/start_session_icon"/>
+
+                <TextView
+                    android:id="@+id/start_session_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:textSize="18sp"
+                    android:textColor="#FFF"
+                    android:text="@string/start_new_session"/>
+
+            </LinearLayout>
+
+            <!-- The vertical devider image -->
+            <ImageView
+                android:layout_width="1dip"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:gravity="fill_vertical"
+                android:layout_marginTop="10dip"
+                android:src="@drawable/dialog_devider_v"/>
+
+            <LinearLayout
+                android:id="@+id/view_old_session"
+                android:clickable="true"
+                android:selectable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dip"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/view_old_session_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/view_old_session_icon"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:textSize="18sp"
+                    android:textColor="#FFF"
+                    android:text="@string/view_old_session"/>
+
+            </LinearLayout>
+            
+        </LinearLayout>
+
+        <!-- Horizontal ruler -->
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:scaleType="fitXY"
+            android:gravity="fill_horizontal"
+            android:layout_marginTop="10dip"
+            android:src="@drawable/dialog_devider_h"/>
+
+        <LinearLayout
+            android:id="@+id/view_settings"
+            android:clickable="true"
+            android:selectable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:layout_margin="10dip"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/view_settings_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_menu_settings"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="3dip"
+                android:textSize="14sp"
+                android:textColor="#FFF"
+                android:text="@string/view_settings"/>
+
+        </LinearLayout>
+
+</LinearLayout>

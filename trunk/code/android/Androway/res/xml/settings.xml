@@ -1,0 +1,68 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/accountSettings">
+        <EditTextPreference
+            android:name="@string/emailTitle"
+            android:summary="@string/emailSummary"
+            android:title="@string/emailTitle"
+            android:key="userEmail"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"/>
+
+        <EditTextPreference
+            android:name="@string/passwordTitle"
+            android:summary="@string/passwordSummary"
+            android:title="@string/passwordTitle"
+            android:key="userPassword"
+            android:password="true"/>
+    </PreferenceCategory>
+
+    <EditTextPreference
+        android:name="Encrypted Password"
+        android:password="true"
+        android:key="encryptedPassword"/>
+    
+    <PreferenceCategory android:title="@string/systemSettings">
+        <EditTextPreference
+            android:name="@string/bluetoothTitle"
+            android:summary="@string/bluetoothSummary"
+            android:title="@string/bluetoothTitle"
+            android:key="bluetoothAddress"/>
+
+        <CheckBoxPreference
+            android:name="@string/logOnlineTitle"
+            android:summary="@string/logOnlineSummary"
+            android:title="@string/logOnlineTitle"
+            android:key="httpLogging"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="UI Settings">
+        <CheckBoxPreference
+            android:name="@string/block1LockedTitle"
+            android:summary="@string/block1LockedSummary"
+            android:title="@string/block1LockedTitle"
+            android:key="block1Locked"/>
+
+        <CheckBoxPreference
+            android:name="@string/block2LockedTitle"
+            android:summary="@string/block2LockedSummary"
+            android:title="@string/block2LockedTitle"
+            android:key="block2Locked"/>
+
+        <ListPreference
+            android:name="@string/orientationTitle"
+            android:summary="@string/orientationSummary"
+            android:title="@string/orientationTitle"
+            android:key="deviceOrientation"
+            android:entries="@array/orientation_names"
+            android:entryValues="@array/orientation_values"/>
+
+        <ListPreference
+            android:name="@string/languageTitle"
+            android:summary="@string/languageSummary"
+            android:title="@string/languageTitle"
+            android:key="appLanguage"
+            android:entries="@array/language_names"
+            android:entryValues="@array/language_values"/>
+    </PreferenceCategory>
+</PreferenceScreen>

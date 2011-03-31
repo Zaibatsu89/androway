@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="proj.androway">
+    <application
+        android:label="@string/app_label"
+        android:icon="@drawable/launcher_icon"
+        android:name=".common.SharedObjects">
+
+        <activity
+             android:name=".main.Controller"             
+             android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
+
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+         </activity>
+
+         <activity
+             android:name=".ui.View"
+             android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
+        </activity>
+
+        <activity
+            android:name=".ui.RunningSessionView"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:launchMode="singleTask">
+        </activity>
+
+        <activity
+            android:name=".ui.ViewOldSessionView"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
+        </activity>
+
+        <activity
+            android:name=".ui.SettingsView"
+            android:label="@string/settings"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
+        </activity>
+
+    </application>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+</manifest>
