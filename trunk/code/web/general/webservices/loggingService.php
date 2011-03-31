@@ -2,7 +2,7 @@
 
 require_once("init.php");
 
-init("http://m.androway.nl/", "http://www.androway.nl/", $_REQUEST["dbName"], "androway_logging", "hz7bkaxw");
+init("http://m.androway.nl/", "http://www.androway.nl/", $_REQUEST["dbName"], "androway_logging", "********");
 handleAuth(false);
 
 /*
