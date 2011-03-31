@@ -2,7 +2,7 @@
 
 require_once("../../init.php");
 
-init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "hz7bkaxw");
+init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "********");
 handleAuth(true);
 
 require_once("../../engine/lib/user.php");
