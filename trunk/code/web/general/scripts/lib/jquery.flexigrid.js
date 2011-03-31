@@ -428,7 +428,6 @@
 							(
 							 	function ()
 									{
-										
 										var td = document.createElement('td');
 										var idx = $(this).attr('axis').substr(3);
 										td.align = this.align;
@@ -436,12 +435,10 @@
 										$(tr).append(td);
 										td = null;
 									}
-							); 
-							
+							);
 							
 							if ($('thead',this.gDiv).length<1) //handle if grid has no headers
 							{
-
 									for (idx=0;idx<cell.length;idx++)
 										{
 										var td = document.createElement('td');
@@ -449,7 +446,7 @@
 										$(tr).append(td);
 										td = null;
 										}
-							}							
+							}
 							
 							$(tbody).append(tr);
 							tr = null;
@@ -462,10 +459,8 @@
 
 				$("rows row",data).each
 				(
-				 
 				 	function ()
 						{
-							
 							i++;
 							
 							var tr = document.createElement('tr');
@@ -477,8 +472,6 @@
 							nid = null;
 							
 							var robj = this;
-
-							
 							
 							$('thead tr:first th',g.hDiv).each
 							(

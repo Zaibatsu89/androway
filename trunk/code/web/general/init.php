@@ -2,8 +2,8 @@
 
 /*
  * Name: Rinse Cramer
- * Date: 23-03-2011
- * Version: 0.21
+ * Date: 30-03-2011
+ * Version: 0.22
  * 
  * Initialization script.
  */
@@ -11,6 +11,7 @@ require_once("engine/lib/authentication.php");
 require_once("engine/lib/databaseManager.php");
 require_once("engine/lib/model.php");
 require_once("engine/lib/redirect.php");
+require_once("engine/lib/session.php");
 require_once("engine/lib/sessionHandler.php");
 require_once("engine/lib/user.php");
 
@@ -24,7 +25,7 @@ $loggedIn = false;
 $sessionHandler = new SessionHandler();
 $sessionHandler->start();
 
-function init($mobileRedirectUrl, $generalRedirectUrl, $dbName, $dbUser, $dbPassword, $authenticate = true)
+function init($mobileRedirectUrl, $generalRedirectUrl, $dbName, $dbUser, $dbPassword, $authenticate = true, $alternativeDbManager = null)
 {
 	global $sessionHandler, $dbManager, $loggedIn;
 	
@@ -32,7 +33,7 @@ function init($mobileRedirectUrl, $generalRedirectUrl, $dbName, $dbUser, $dbPass
 	
 	$dbManager = new DatabaseManager($dbName, $dbUser, $dbPassword);
 	
-	Model::init($dbManager);
+	Model::init($dbManager, $alternativeDbManager);
 	
 	$loggedIn = $sessionHandler->authenticate($authenticate);
 }

@@ -45,3 +45,27 @@ html, body
 {
 	background: #AAA;
 }
+
+#main_menu
+{
+	width: auto;
+	height: 31px;
+	background-color: #666;
+	display: none;
+}
+
+#main_menu .menu_item
+{
+	float: left;
+	padding: 5px 15px;
+	color: #FFF;
+	font-weight: bold;
+	cursor: pointer;	
+}
+
+#main_menu .menu_item:hover
+{
+	text-decoration: underline;
+	background-color: #CCC;
+	color: #000;
+}

@@ -9,12 +9,7 @@ $.fn.fillForm = function(formData)
 	
 	$.each(formData, function(item)
 	{
-		var element = self.find('#val_' + item);
-		
-		if (element.is('select'))
-			element.find('option[@value=' + formData[item] + ']').attr('selected', 'selected');		
-		else
-			element.val(formData[item]);
+		self.find('#val_' + item).val(formData[item]);
 	});
 }
 

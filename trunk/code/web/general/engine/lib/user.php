@@ -4,8 +4,8 @@ require_once("model.php");
 
 /*
  * Name: Rinse Cramer & Tymen Steur
- * Date: 29-03-2011
- * Version: 0.13
+ * Date: 30-03-2011
+ * Version: 0.14
  * 
  * Class for user registration
  */
@@ -65,7 +65,7 @@ class User extends Model
 				$passwordQuery = ", $this->userPasswordClmn = '".md5($password)."'";
 			
 			// Update the user in the database
-			self::$db->executeNonQuery("UPDATE ".$this->dbTable." SET $this->userNameClmn = '$name', $this->userEmailClmn = '$email', $this->userLevelClmn = $level $passwordQuery WHERE id = $id;");
+			self::$db->executeNonQuery("UPDATE ".$this->dbTable." SET $this->userNameClmn = '$name', $this->userEmailClmn = '$email', $this->userLevelClmn = $level, $this->userDateTimeClmn = $dateTime $passwordQuery WHERE id = $id;");
 			
 			// Store the new user data in the objects data variable
 			$dbData = self::$db->getData("SELECT * FROM ".$this->dbTable." WHERE $this->userEmailClmn = '$email'");
@@ -84,21 +84,12 @@ class User extends Model
 	
 	public function removeUser()
 	{
-		var_dump($this->data);
-		echo "<hr>";
-	
 		if(!empty($this->data))
 		{
-			echo "Query: SELECT * FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";";
-			echo "<hr>";
-		
 			$userExists = self::$db->getData("SELECT * FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";");
 			
 			if (!empty($userExists))
 			{
-				echo "Query: DELETE FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";";
-				echo "<hr>";
-				
 				// Remove the user from the database
 				self::$db->executeNonQuery("DELETE FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";");
 			

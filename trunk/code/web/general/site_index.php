@@ -1,7 +1,7 @@
 <?php
 	require_once("init.php");
 	
-	init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "********");
+	init("http://m.androway.nl/", "http://www.androway.nl/", "androway_framework", "androway", "hz7bkaxw");
 ?>
 <html> 
 	<head>
@@ -16,6 +16,7 @@
 		
 		<script type="text/javascript" src="scripts/framework.functions.js"></script>
 		<script type="text/javascript" src="scripts/framework.protected_functions.js"></script>
+		<script type="text/javascript" src="modules/sessions/script.js"></script>
 		<script type="text/javascript" src="modules/users/script.js"></script>
 		
 		<script type="text/javascript"> 
@@ -40,7 +41,7 @@
 								loginForm.find('.message_box').removeClass('auth_valid').hide();
 						  		$('#loginDialog').dialog('close');
 
-						  		startModule('users', 'dialog');
+						  		$('#main_menu').show();
 							});
 						});
 					}
@@ -56,12 +57,20 @@
 		</script> 
 	</head>
 	<body>
+		<div id="main_menu">
+			<div class="menu_item" onClick="startModule('users', 'dialog');">
+				Users
+			</div>
+			<div class="menu_item" onClick="startModule('sessions', 'dialog');">
+				Sessions
+			</div>
+		</div>
 		<div id="loginDialog" title="Authentication">
 			<form id="loginForm">
 			<fieldset>
 				<input type="hidden" name="authType" value="login"/>
-				E-mail: <input type="email" name="email" />
-				Wachtwoord: <input type="password" name="password" />
+				Email: <input type="email" name="email" />
+				Password: <input type="password" name="password" />
 				<input type="button" value="Login" onclick="login('loginForm');"/>
 				<div class="message_box auth_normal"></div>
 			</fieldset>

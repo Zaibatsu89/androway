@@ -1,3 +1,5 @@
+<?php
+
 /*
  * Name: Tymen Steur
  * Date: 29-03-2011
@@ -5,8 +7,6 @@
  * 
  * Temporary class for redirecting to the blog, for the mortals! 
  */
-<?php
-
 header("location: /blog");
 die();
 
