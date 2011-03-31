@@ -10,65 +10,132 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 
 /**
  *
  * @author Rinse
  */
-public class DrawDemo extends Activity implements SensorEventListener {
-	DemoView demoview;
-	SensorManager sensorManager = null;
-	SensorEvent sensorEvent;
-	float sensorX;
-	float sensorY;
-	float sensorZ;
+public class DrawDemo extends Activity {
+	private DemoView mDemoView;
+	private SensorManager mSensorManager = null;
+	private SensorEvent sensorEvent;
+	private WindowManager mWindowManager;
+	private Display mDisplay;
+	private long mSensorTimeStamp;
+    private long mCpuTimeStamp;
+	private float mSensorX;
+	private float mSensorY;
+	private float mSensorZ;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Get a reference to a SensorManager
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-	}
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
-	public void onSensorChanged(SensorEvent sensorEvent) {
-		synchronized (this) {
-			if (sensorEvent.sensor.getType() == Sensor.TYPE_ORIENTATION) {
-				sensorX = sensorEvent.values[0];
-				sensorY = sensorEvent.values[1];
-				sensorZ = sensorEvent.values[2];
-				demoview = new DemoView(this);
-				setContentView(demoview);
-			}
-		}
-	}
+		// Get an instance of the WindowManager
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        mDisplay = mWindowManager.getDefaultDisplay();
 
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		mDemoView = new DemoView(this);
+		setContentView(mDemoView);
 	}
 
 	@Override
     protected void onResume() {
-    super.onResume();
-    sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+		super.onResume();
+
+		mDemoView.startSimulation();
     }
 
     @Override
-    protected void onStop() {
-    // Unregister the listener
-    sensorManager.unregisterListener(this);
-    super.onStop();
+    protected void onPause() {
+		super.onPause();
+
+		mDemoView.stopSimulation();
     }
 
-	private class DemoView extends View {
-		Paint paint;
-		Canvas canvas;
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		
+	}
 
-		public DemoView(Context context){
-			super(context);
+	private class DemoView extends View implements SensorEventListener {
+		private Paint paint;
+		private Canvas canvas;
+		private Sensor mAccelerometer;
+		private long mLastT;
+        private float mLastDeltaT;
+
+		public void startSimulation() {
+            /*
+             * It is not necessary to get accelerometer events at a very high
+             * rate, by using a slower rate (SENSOR_DELAY_UI), we get an
+             * automatic low-pass filter, which "extracts" the gravity component
+             * of the acceleration. As an added benefit, we use less power and
+             * CPU resources.
+             */
+            mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        }
+
+        public void stopSimulation() {
+            mSensorManager.unregisterListener(this);
+        }
+
+		public DemoView(Context context) {
+            super(context);
+            mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		}
 
-		@Override protected void onDraw(Canvas canvas) {
+		public void onSensorChanged(SensorEvent event) {
+			if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
+				return;
+			/*
+			 * record the accelerometer data, the event's timestamp as well as
+			 * the current time. The latter is needed so we can calculate the
+			 * "present" time during rendering. In this application, we need to
+			 * take into account how the screen is rotated with respect to the
+			 * sensors (which always return data in a coordinate space aligned
+			 * to with the screen in its native orientation).
+			 */
+
+			switch (mDisplay.getRotation()) {
+				case Surface.ROTATION_0:
+					mSensorX = event.values[0];
+					mSensorY = -event.values[2];
+					mSensorZ = event.values[1];
+					break;
+				case Surface.ROTATION_90:
+					mSensorX = -event.values[2];
+					mSensorY = -event.values[0];
+					mSensorZ = event.values[1];
+					break;
+				case Surface.ROTATION_180:
+					mSensorX = -event.values[0];
+					mSensorY = event.values[2];
+					mSensorZ = -event.values[1];
+					break;
+				case Surface.ROTATION_270:
+					mSensorX = event.values[2];
+					mSensorY = event.values[0];
+					mSensorZ = event.values[1];
+					break;
+			}
+
+			mSensorTimeStamp = event.timestamp;
+			mCpuTimeStamp = System.nanoTime();
+		}
+
+		public void onAccuracyChanged(Sensor arg0, int arg1) {
+
+		}
+
+		@Override
+		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
 
 			// initiate paint
@@ -86,18 +153,44 @@ public class DrawDemo extends Activity implements SensorEventListener {
 			canvas.drawRect(300, 132, 30, 402, paint);
 			canvas.drawLine(105, 267, 225, 267, paint);
 
-			canvas.drawText("Sensor X: " + String.valueOf(sensorX), 10, 30, paint);
-			canvas.drawText("Sensor Y: " + String.valueOf(sensorY), 10, 40, paint);
-			canvas.drawText("Sensor Z: " + String.valueOf(sensorZ), 10, 50, paint);
+			canvas.drawText("Sensor X: " + String.valueOf(mSensorX), 10, 30, paint);
+			canvas.drawText("Sensor Y: " + String.valueOf(mSensorY), 10, 40, paint);
+			canvas.drawText("Sensor Z: " + String.valueOf(mSensorZ), 10, 50, paint);
 
-			int tempX = (int)(sensorZ * -1.111f);
-			int tempY = (int)(sensorY * 1.111f) + 100;
+			int tempX = (int)(mSensorX * -10.02f * 1.4142135623730950488016887242097f);
+			int tempY = (int)(mSensorY * -10.82f * 1.4142135623730950488016887242097f);
+			int tempZ = (int)mSensorZ;
 
 			canvas.drawText("Grid X: " + String.valueOf(tempX), 10, 70, paint);
 			canvas.drawText("Grid Y: " + String.valueOf(tempY), 10, 80, paint);
 
-			if (tempX > -100 && tempX < 100 && tempY > -100 && tempY < 100)
-				setRichting((int)(sensorZ * -1.111f), (int)(sensorY * 1.111f) + 100);
+			if (tempX >= -100 && tempX <= 100 && tempY >= -100 && tempY <= 100 && tempZ >= 0)
+				setRichting(tempX, tempY);
+
+			final long now = mSensorTimeStamp + (System.nanoTime() - mCpuTimeStamp);
+            final float sx = mSensorX;
+            final float sy = mSensorY;
+
+			updatePositions(sx, sy, now);
+
+			// and make sure to redraw asap
+            invalidate();
+		}
+
+		/*
+		 * Update the position of each particle in the system using the
+		 * Verlet integrator.
+		 */
+		private void updatePositions(float sx, float sy, long timestamp) {
+			final long t = timestamp;
+			if (mLastT != 0) {
+				final float dT = (float) (t - mLastT) * (1.0f / 1000000000.0f);
+				if (mLastDeltaT != 0) {
+					final float dTC = dT / mLastDeltaT;
+				}
+				mLastDeltaT = dT;
+			}
+			mLastT = t;
 		}
 
 		private void setRichting(int x, int y) {
@@ -133,5 +226,7 @@ public class DrawDemo extends Activity implements SensorEventListener {
 			paint.setColor(Color.BLACK);
 			canvas.drawCircle(x + 30, y + 132, 3, paint);
 		}
+
+		
 	}
 }
