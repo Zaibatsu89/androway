@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="0.0">
+
+    <FrameLayout
+        android:id="@+id/titlebar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ProgressBar
+            android:id="@+id/main_progress_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:minHeight="20dip"
+            android:maxHeight="20dip"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@drawable/progress_bar"
+            android:max="100"/>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/title_text"
+            style="@style/TitleBar"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/blocked_block"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@drawable/transparent"/>
+
+        </LinearLayout>            
+    </FrameLayout>
+</LinearLayout>
