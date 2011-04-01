@@ -157,14 +157,13 @@ public class DrawDemo extends Activity {
 			canvas.drawText("Sensor Y: " + String.valueOf(mSensorY), 10, 40, paint);
 			canvas.drawText("Sensor Z: " + String.valueOf(mSensorZ), 10, 50, paint);
 
-			int tempX = (int)(mSensorX * -10.02f * 1.4142135623730950488016887242097f);
-			int tempY = (int)(mSensorY * -10.82f * 1.4142135623730950488016887242097f);
-			int tempZ = (int)mSensorZ;
+			int tempX = (int)(getAnswer(mSensorX, mSensorY, 0) * -9.8f);
+			int tempY = (int)(getAnswer(mSensorX, mSensorY, 1) * -10.4f);
 
 			canvas.drawText("Grid X: " + String.valueOf(tempX), 10, 70, paint);
 			canvas.drawText("Grid Y: " + String.valueOf(tempY), 10, 80, paint);
 
-			if (tempX >= -100 && tempX <= 100 && tempY >= -100 && tempY <= 100 && tempZ >= 0)
+			if (tempX >= -100 && tempX <= 100 && tempY >= -100 && tempY <= 100 && mSensorZ >= 0f)
 				setRichting(tempX, tempY);
 
 			final long now = mSensorTimeStamp + (System.nanoTime() - mCpuTimeStamp);
@@ -175,6 +174,25 @@ public class DrawDemo extends Activity {
 
 			// and make sure to redraw asap
             invalidate();
+		}
+
+		private float getAnswer(float value1, float value2, int which)
+		{
+			float diff = Math.abs(Math.abs(value1) - Math.abs(value2));
+			float power = 1.45f - (0.045f * diff);
+			float value = 0f;
+
+			switch (which)
+			{
+				case 0:
+					value = value1 * power;
+					break;
+				case 1:
+					value = value2 * power;
+					break;
+			}
+
+			return value;
 		}
 
 		/*
