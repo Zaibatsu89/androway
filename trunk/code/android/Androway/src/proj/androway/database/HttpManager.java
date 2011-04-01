@@ -20,32 +20,32 @@ import org.apache.http.message.BasicNameValuePair;
  */
 public class HttpManager extends DatabaseManagerBase
 {	
-	private IConnectionManager _httpManager;
-	
-	public HttpManager(Context context) throws MaxPoolSizeReachedException
-	{
-		_httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
-	}
+    private IConnectionManager _httpManager;
 
-	public boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException
-	{
-		ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();
+    public HttpManager(Context context) throws MaxPoolSizeReachedException
+    {
+        _httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
+    }
 
-		data.add(new BasicNameValuePair("function", "executeNonQuery"));
-		data.add(new BasicNameValuePair("dbName", dbName));
-		data.add(new BasicNameValuePair("query", query));
+    public boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException
+    {
+        ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();
 
-		return _httpManager.post(Constants.WEBSERVICE_URL, data);
-	}
+        data.add(new BasicNameValuePair("function", "executeNonQuery"));
+        data.add(new BasicNameValuePair("dbName", dbName));
+        data.add(new BasicNameValuePair("query", query));
 
-	public Map<String, Object> getData(String dbName, String query)
-	{
-		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        return _httpManager.post(Constants.WEBSERVICE_URL, data);
+    }
 
-		params.add(new BasicNameValuePair("function", "getData"));
-		params.add(new BasicNameValuePair("dbName", dbName));
-		params.add(new BasicNameValuePair("query", query));
+    public Map<String, Object> getData(String dbName, String query)
+    {
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 
-		return _httpManager.get(Constants.WEBSERVICE_URL, params);
-	}
+        params.add(new BasicNameValuePair("function", "getData"));
+        params.add(new BasicNameValuePair("dbName", dbName));
+        params.add(new BasicNameValuePair("query", query));
+
+        return _httpManager.get(Constants.WEBSERVICE_URL, params);
+    }
 }

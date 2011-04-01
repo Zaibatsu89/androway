@@ -82,7 +82,7 @@ public class View extends ActivityBase
         {
             public void onClick(android.view.View v)
             {
-                _sharedObjects.controller.startSession();
+                _sharedObjects.controller.runSession();
                 startActivity(new Intent(v.getContext(), RunningSessionView.class));
             }
         };

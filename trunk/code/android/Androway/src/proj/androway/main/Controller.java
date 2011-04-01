@@ -65,7 +65,7 @@ public class Controller extends Activity
     public void setNotification(int id, String title, String message)
     {
         // Get the notification manager
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // Create the notification intent
         Intent notificationIntent = new Intent(this, Controller.class);
@@ -78,20 +78,20 @@ public class Controller extends Activity
         notification.flags += Notification.FLAG_ONGOING_EVENT;
 
         // Attach/launch the notification
-        mNotificationManager.notify(id, notification);
+        notificationManager.notify(id, notification);
     }
 
     public void removeNotification(int id)
     {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(id);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(id);
     }
 
-    public void startSession()
+    public void runSession()
     {
-        if(!Settings.SESSION_RUNNING || _sharedObjects.session == null)
+        if(!Settings.SESSION_RUNNING)
         {
-            Session session = new Session(_sharedObjects);
+            Session session = new Session(_sharedObjects, Controller.this);
             session.start();
             _sharedObjects.session = session;
         }
@@ -99,8 +99,11 @@ public class Controller extends Activity
 
     public void stopSession()
     {
-        if(Settings.SESSION_RUNNING && _sharedObjects.session != null)
+        if(_sharedObjects.session != null)
             _sharedObjects.session.stop();
+
+        // TEMPORARY, SHOULD BE HANDLED BY SESSION STOP
+        Settings.putSetting("sessionRunning", false);
 
         startActivity(new Intent(Controller.this, View.class));
     }
