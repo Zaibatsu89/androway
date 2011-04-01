@@ -32,136 +32,144 @@ import org.json.JSONObject;
  */
 public class HttpManager extends ConnectionManagerBase
 {
-	private Context _context;
+    private Context _context;
 
-	public HttpManager(Context context)
-	{
-		_context = context;
-	}
+    public HttpManager(Context context)
+    {
+        _context = context;
+    }
 
-	// Not needed for the http manager
-	public boolean open(String address)
-	{
+    // Not needed for the http manager
+    public boolean open(String address)
+    {
         return true;
-	}
+    }
 
-	// Not needed for the http manager
-	public void close() { }
+    // Not needed for the http manager
+    public void close() { }
 
-	public boolean post(String address, ArrayList<NameValuePair> data)
-	{
-		boolean success = false;
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(address);
+    public boolean post(String address, ArrayList<NameValuePair> data)
+    {
+        boolean success = false;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(address);
 
         try
         {
             // Assign post data
             httpPost.setEntity(new UrlEncodedFormEntity(data));
 
-			// Execute the HttpPost request with the client and pass the response handler for the result
-			httpClient.execute(httpPost);
+            // Execute the HttpPost request with the client and pass the response handler for the result
+            httpClient.execute(httpPost);
 
-			success = true;
+            success = true;
         }
         catch(IOException ex)
         {
-			try {
-				throw new HttpPostRequestFailedException(_context.getString(R.string.HttpPostRequestFailedException));
-			} catch (HttpPostRequestFailedException ex1) {
-				Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex1);
-			}
+            try
+            {
+                throw new HttpPostRequestFailedException(_context.getString(R.string.HttpPostRequestFailedException));
+            }
+            catch (HttpPostRequestFailedException ex1)
+            {
+                Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         // Return the result
-		return success;
-	}
+        return success;
+    }
 
-	public Map<String, Object> get(String address, ArrayList<NameValuePair> params)
-	{
-		Map result = null;
+    public Map<String, Object> get(String address, ArrayList<NameValuePair> params)
+    {
+        Map result = null;
 
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet;
-		BasicResponseHandler responseHandler = new BasicResponseHandler();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet;
+        BasicResponseHandler responseHandler = new BasicResponseHandler();
 
         try
         {
-			// Add the given parameters from the ArrayList to the address (url)
-			int i = 0;
-			for(NameValuePair nameValuePair : params)
-			{
-				char splitter = '&';
-				if(i == 0)
-					splitter = '?';
+            // Add the given parameters from the ArrayList to the address (url)
+            int i = 0;
+            for(NameValuePair nameValuePair : params)
+            {
+                char splitter = '&';
+                if(i == 0)
+                    splitter = '?';
 
-				if(nameValuePair.getName().equalsIgnoreCase("query"))
-				{
-					String value = URLEncoder.encode(nameValuePair.getValue().toString());
-					int index = value.toLowerCase().indexOf("from");
+                if(nameValuePair.getName().equalsIgnoreCase("query"))
+                {
+                    String value = URLEncoder.encode(nameValuePair.getValue().toString());
+                    int index = value.toLowerCase().indexOf("from");
 
-					address += splitter + nameValuePair.getName() + "1=" + value.substring(0, index);
-					address += splitter + nameValuePair.getName() + "2=" + value.substring(index);
-				}
-				else
-					address += splitter + nameValuePair.getName() + "=" + URLEncoder.encode(nameValuePair.getValue().toString());
+                    address += splitter + nameValuePair.getName() + "1=" + value.substring(0, index);
+                    address += splitter + nameValuePair.getName() + "2=" + value.substring(index);
+                }
+                else
+                    address += splitter + nameValuePair.getName() + "=" + URLEncoder.encode(nameValuePair.getValue().toString());
 
-				i++;
-			}
+                i++;
+            }
 
-			// Assign the created url to the HttpGet object
-			httpGet = new HttpGet(address);
+            // Assign the created url to the HttpGet object
+            httpGet = new HttpGet(address);
 
-			// Execute the Http request and store the response
-			String response = httpClient.execute(httpGet, responseHandler);
+            // Execute the Http request and store the response
+            String response = httpClient.execute(httpGet, responseHandler);
 
-			// Assign the response to a JSONArray
-			JSONArray jsonItems = new JSONArray(response);
+            // Assign the response to a JSONArray
+            JSONArray jsonItems = new JSONArray(response);
 
-			result = deserializeJson(new HashMap<String, Object>(), jsonItems);
-		} catch (JSONException ex)
-		{
-			Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (IOException ex)
-		{
-			try {
-				throw new HttpGetRequestFailedException(_context.getString(R.string.HttpGetRequestFailedException));
-			} catch (HttpGetRequestFailedException ex1) {
-				Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex1);
-			}
+            result = deserializeJson(new HashMap<String, Object>(), jsonItems);
+        }
+        catch (JSONException ex)
+        {
+            Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (IOException ex)
+        {
+            try
+            {
+                throw new HttpGetRequestFailedException(_context.getString(R.string.HttpGetRequestFailedException));
+            }
+            catch (HttpGetRequestFailedException ex1)
+            {
+                Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
 
-		return result;
-	}
+        return result;
+    }
 
-	public Map<String, Object> deserializeJson(Map<String, Object> resultHolder, JSONArray jsonArray) throws JSONException
-	{
-		int length = jsonArray.length();
+    public Map<String, Object> deserializeJson(Map<String, Object> resultHolder, JSONArray jsonArray) throws JSONException
+    {
+        int length = jsonArray.length();
 
-		for(int i = length - 1; i > -1; i--)
-		{
-			Map<String, Object> elementHolder = new HashMap<String, Object>();
+        for(int i = length - 1; i > -1; i--)
+        {
+                Map<String, Object> elementHolder = new HashMap<String, Object>();
 
-			// Retrieve the data of the JSON item and parse it
-			JSONObject jsonElement = (JSONObject)jsonArray.get(i);
+                // Retrieve the data of the JSON item and parse it
+                JSONObject jsonElement = (JSONObject)jsonArray.get(i);
 
-			JSONArray children = jsonElement.names();
-			int childrenLength = children.length();
+                JSONArray children = jsonElement.names();
+                int childrenLength = children.length();
 
-			for(int j = 0; j < childrenLength; j++)
-			{
-				String name = children.getString(j);
-				String value = jsonElement.getString(name);
+                for(int j = 0; j < childrenLength; j++)
+                {
+                        String name = children.getString(j);
+                        String value = jsonElement.getString(name);
 
-				if(value.indexOf("{") == 1 && value.lastIndexOf("}") == value.length() - 1)
-					elementHolder.put(name, deserializeJson(new HashMap<String, Object>(), jsonElement.getJSONArray(name)));
-				else
-					elementHolder.put(name, value);
-			}
+                        if(value.indexOf("{") == 1 && value.lastIndexOf("}") == value.length() - 1)
+                                elementHolder.put(name, deserializeJson(new HashMap<String, Object>(), jsonElement.getJSONArray(name)));
+                        else
+                                elementHolder.put(name, value);
+                }
 
-			resultHolder.put("row" + i, elementHolder);
-		}
+                resultHolder.put("row" + i, elementHolder);
+        }
 
-		return resultHolder;
-	}
+        return resultHolder;
+    }
 }

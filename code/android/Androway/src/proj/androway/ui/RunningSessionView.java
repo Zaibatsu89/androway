@@ -17,13 +17,8 @@ import android.view.View.OnTouchListener;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
-import proj.androway.common.Exceptions.MapIsEmptyException;
-import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
-import proj.androway.common.Exceptions.NotSupportedQueryTypeException;
 import proj.androway.common.Settings;
-import proj.androway.logging.LoggingManager;
 import proj.androway.main.ActivityBase;
 import proj.androway.main.TiltControls;
 import proj.androway.ui.block_component.balance_block.BalanceBlock;
@@ -35,8 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import proj.androway.R;
 import proj.androway.common.SharedObjects;
 import proj.androway.main.Controller;
@@ -58,7 +51,6 @@ public class RunningSessionView extends ActivityBase
     private Map<String, BlockComponent> _blockComponents = new HashMap<String, BlockComponent>();
 
     public int tempInclinationRotation = 0;
-    private LoggingManager _lm;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -85,172 +77,119 @@ public class RunningSessionView extends ActivityBase
         // Bind the tilt controls, MOVE TO CONTROLLER
         _tiltControls = new TiltControls(RunningSessionView.this, this);
 
-        // Create the logging manager, MOVE TO CONTROLLER
-        try
-        {
-            _lm = new LoggingManager(this.getBaseContext(), Settings.LOG_TYPE);
-        }
-        catch (MaxPoolSizeReachedException ex)
-        {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
 
         // EXAMPLE QUICK ACTION ITEMS WITH TEMP LOGGING AS ACTION
-            ActionItem connect = new ActionItem();
-            //connect.setTitle(this.getString(R.string.connect));
-            connect.setTitle(getString(R.string.add));
-            connect.setIcon(getResources().getDrawable(R.drawable.bt_connect_icon));
-            connect.setOnClickListener(new OnClickListener()
+        ActionItem connect = new ActionItem();
+        //connect.setTitle(this.getString(R.string.connect));
+        connect.setTitle(getString(R.string.add));
+        connect.setIcon(getResources().getDrawable(R.drawable.bt_connect_icon));
+        connect.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(android.view.View v)
             {
-                public void onClick(android.view.View v)
-                {
-                    try
-                    {
-                        _lm.addLog("NHL Hogeschool", "Minor Androway");
-                    }
-                    catch (NotSupportedQueryTypeException ex)
-                    {
-                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            actionItems.add(connect);
+                _sharedObjects.session.tempAddLog();
+            }
+        });
+        actionItems.add(connect);
 
-            ActionItem disconnect = new ActionItem();
-            //disconnect.setTitle(this.getString(R.string.disconnect));
-            disconnect.setTitle(this.getString(R.string.get));
-            disconnect.setIcon(getResources().getDrawable(R.drawable.bt_disconnect_icon));
-            disconnect.setOnClickListener(new OnClickListener()
+        ActionItem disconnect = new ActionItem();
+        //disconnect.setTitle(this.getString(R.string.disconnect));
+        disconnect.setTitle(this.getString(R.string.get));
+        disconnect.setIcon(getResources().getDrawable(R.drawable.bt_disconnect_icon));
+        disconnect.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(android.view.View v)
             {
-                public void onClick(android.view.View v)
-                {
-                    Map<String, Object> dataMap = new HashMap<String, Object>();
+                _sharedObjects.session.tempGetLogs();
+            }
+        });
+        actionItems.add(disconnect);
 
-                    try
-                    {
-                        dataMap = _lm.getLogs();
-                    }
-                    catch (MapIsEmptyException ex)
-                    {
-                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                    if(dataMap.isEmpty())
-                    {
-                        // Show empty toast
-                        Toast.makeText(RunningSessionView.this, getResources().getString(R.string.empty), Toast.LENGTH_LONG).show();
-                    }
-                    else
-                    {
-                        // Loop dataMap
-                        for (int i = 0; i < dataMap.size(); i++)
-                        {
-                            Map<String, Object> rowMap = (Map<String, Object>) dataMap.get("row" + i);
-
-                            Toast.makeText(RunningSessionView.this,
-                            "id: " + rowMap.get("id") +
-                            "\ntime: " + rowMap.get("time") +
-                            "\nsubject: " + rowMap.get("subject") +
-                            "\nmessage: " + rowMap.get("message"),
-                            Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-            });
-            actionItems.add(disconnect);
-
-            ActionItem settings = new ActionItem();
-            //settings.setTitle(this.getString(R.string.settings));
-            settings.setTitle(this.getString(R.string.remove));
-            settings.setIcon(getResources().getDrawable(R.drawable.settings_icon));
-            settings.setOnClickListener(new OnClickListener()
+        ActionItem settings = new ActionItem();
+        //settings.setTitle(this.getString(R.string.settings));
+        settings.setTitle(this.getString(R.string.remove));
+        settings.setIcon(getResources().getDrawable(R.drawable.settings_icon));
+        settings.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(android.view.View v)
             {
-                public void onClick(android.view.View v)
-                {
-                    try
-                    {
-                        _lm.clearAll();
-                    }
-                    catch (NotSupportedQueryTypeException ex)
-                    {
-                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            actionItems.add(settings);
+                _sharedObjects.session.tempClearLogs();
+            }
+        });
+        actionItems.add(settings);
         // ------------------------------------------------------
 
         // STATUSBAR BUTTON ONCLICK LISTENERS
-            ImageButton btButton = (ImageButton) this.findViewById(R.id.bluetooth_button);
-            btButton.setOnClickListener(new android.view.View.OnClickListener()
+        ImageButton btButton = (ImageButton) this.findViewById(R.id.bluetooth_button);
+        btButton.setOnClickListener(new android.view.View.OnClickListener()
+        {
+            public void onClick(android.view.View v)
             {
-                public void onClick(android.view.View v)
-                {
-                    QuickAction quickAction = new QuickAction(v);
-                    quickAction.setAnimStyle(QuickAction.ANIM_AUTO);
+                QuickAction quickAction = new QuickAction(v);
+                quickAction.setAnimStyle(QuickAction.ANIM_AUTO);
 
-                    // Bind the action items to the QuickAction
-                    for(ActionItem actionItem : actionItems)
-                        quickAction.addActionItem(actionItem);
+                // Bind the action items to the QuickAction
+                for(ActionItem actionItem : actionItems)
+                    quickAction.addActionItem(actionItem);
 
-                    quickAction.show();
-                }
-            });
-
-            ImageButton logWebButton = (ImageButton) this.findViewById(R.id.log_web_button);
-            logWebButton.setOnClickListener(new android.view.View.OnClickListener()
+                quickAction.show();
+            }
+        });
+        ImageButton logWebButton = (ImageButton) this.findViewById(R.id.log_web_button);
+        logWebButton.setOnClickListener(new android.view.View.OnClickListener()
+        {
+            public void onClick(android.view.View v)
             {
-                public void onClick(android.view.View v)
-                {
-                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.segway_body_inclination);
+                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.segway_body_inclination);
 
-                    // Create the matrix for the rotation of the bitmap
-                    Matrix mtx = new Matrix();
-                    mtx.postRotate(tempInclinationRotation);
+                // Create the matrix for the rotation of the bitmap
+                Matrix mtx = new Matrix();
+                mtx.postRotate(tempInclinationRotation);
 
-                    // Rotating Bitmap
-                    Bitmap rotatedBMP = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mtx, true);
-                    BitmapDrawable bmd = new BitmapDrawable(rotatedBMP);
+                // Rotating Bitmap
+                Bitmap rotatedBMP = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mtx, true);
+                BitmapDrawable bmd = new BitmapDrawable(rotatedBMP);
 
-                    ImageView img = (ImageView)findViewById(R.id.segway_body);
-                    img.setImageDrawable(bmd);
+                ImageView img = (ImageView)findViewById(R.id.segway_body);
+                img.setImageDrawable(bmd);
 
-                    tempInclinationRotation += 5;
-                }
-            });
+                tempInclinationRotation += 5;
+            }
+        });
         // ----------------------------------
 
 
-        // ATTACHTING THE FLING BLOCKS
-            // Initialize the fling gesture detectors
-            _gestureDetectorBlock1 = new GestureDetector(new FlingDetector(RunningSessionView.this, BlockComponent.ID_BLOCK_1, (ViewFlipper)findViewById(R.id.block1_flipper)));
-            _gestureDetectorBlock2 = new GestureDetector(new FlingDetector(RunningSessionView.this, BlockComponent.ID_BLOCK_2, (ViewFlipper)findViewById(R.id.block2_flipper)));
 
-            // Bind the gesture detectors to the on touch events of the gesture overlays
-            ((GestureOverlayView)findViewById(R.id.block1)).setOnTouchListener(new OnTouchListener()
-            {
-                public boolean onTouch(android.view.View v, MotionEvent event)
-                {
-                    if (_gestureDetectorBlock1.onTouchEvent(event))
-                        return true;
-                    else
-                        return false;
-                }
-            });
 
-            ((GestureOverlayView)findViewById(R.id.block2)).setOnTouchListener(new OnTouchListener()
+
+
+
+        // Initialize the fling gesture detectors
+        _gestureDetectorBlock1 = new GestureDetector(new FlingDetector(RunningSessionView.this, BlockComponent.ID_BLOCK_1, (ViewFlipper)findViewById(R.id.block1_flipper)));
+        _gestureDetectorBlock2 = new GestureDetector(new FlingDetector(RunningSessionView.this, BlockComponent.ID_BLOCK_2, (ViewFlipper)findViewById(R.id.block2_flipper)));
+
+        // Bind the gesture detectors to the on touch events of the gesture overlays
+        ((GestureOverlayView)findViewById(R.id.block1)).setOnTouchListener(new OnTouchListener()
+        {
+            public boolean onTouch(android.view.View v, MotionEvent event)
             {
-                public boolean onTouch(android.view.View v, MotionEvent event)
-                {
-                    if (_gestureDetectorBlock2.onTouchEvent(event))
-                        return true;
-                    else
-                        return false;
-                }
-            });
-       // ---------------------------
+                if (_gestureDetectorBlock1.onTouchEvent(event))
+                    return true;
+                else
+                    return false;
+            }
+        });
+        ((GestureOverlayView)findViewById(R.id.block2)).setOnTouchListener(new OnTouchListener()
+        {
+            public boolean onTouch(android.view.View v, MotionEvent event)
+            {
+                if (_gestureDetectorBlock2.onTouchEvent(event))
+                    return true;
+                else
+                    return false;
+            }
+        });
     }
 
     @Override
@@ -274,15 +213,16 @@ public class RunningSessionView extends ActivityBase
     @Override
     protected void onPause()
     {
-        super.onPause();
-
         // Release the wake-lock
         _wakeLock.release();
 
         if(_tiltControls != null)
             _tiltControls.unregister();
 
+        // Update the notification, whith the message that the session is on hold
         _sharedObjects.controller.setNotification(Controller.NOTIFICATION_ID, "Session on hold", "Select to continue the running session.");
+
+        super.onPause();
     }
 
     @Override
