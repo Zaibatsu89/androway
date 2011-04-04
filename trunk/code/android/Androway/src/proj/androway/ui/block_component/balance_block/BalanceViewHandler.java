@@ -5,19 +5,25 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import java.util.Map;
 import proj.androway.R;
+import proj.androway.main.TiltControls;
 
 /**
  * Class View for drawing the balance in the UI.
- * @author Tymen
- * @since 21-03-2011
- * @version 0.5
+ * @author Tymen en Rinse
+ * @since 04-04-2011
+ * @version 0.51
  */
 public class BalanceViewHandler extends LinearLayout
 {
     private float _speed;
     private float _direction;
+	private Display _display;
     private LinearLayout _moveArrow;
     private static final int _imgBgMargin = 5;
 
@@ -28,17 +34,88 @@ public class BalanceViewHandler extends LinearLayout
         // This background color is necessary, otherwise the element will not be visible
         this.setBackgroundColor(Color.parseColor("#00FF99FF"));
 
+		_display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		
         _moveArrow = new LinearLayout(context);
         _moveArrow.setBackgroundResource(R.drawable.arrow_move);
         this.addView(_moveArrow);
     }
 
-    public void updateView(float speed, float direction)
+    public void updateView(Map params)
     {
-        _speed = speed;
-        _direction = direction;
-        this.invalidate();
+		float azimuth = (Float)params.get(TiltControls.UPDATE_AZIMUTH);
+		float roll = (Float)params.get(TiltControls.UPDATE_ROLL);
+		float pitch = (Float)params.get(TiltControls.UPDATE_PITCH);
+		float sensorA = 0f, sensorB = 0f, sensorC = 0f;
+
+		switch (_display.getRotation())
+		{
+			case Surface.ROTATION_0:
+				sensorA = azimuth;
+				sensorB = -roll;
+				sensorC = pitch;
+				break;
+			case Surface.ROTATION_90:
+				sensorA = -roll;
+				sensorB = -azimuth;
+				sensorC = pitch;
+				break;
+			case Surface.ROTATION_180:
+				sensorA = -azimuth;
+				sensorB = roll;
+				sensorC = -pitch;
+				break;
+			case Surface.ROTATION_270:
+				sensorA = roll;
+				sensorB = azimuth;
+				sensorC = pitch;
+				break;
+		}
+
+		
+		// Convert the sensor values to the actual speed and direction values
+		float direction = getAnswer(sensorA, sensorB, 0) * -9.8f;
+		float speed = getAnswer(sensorA, sensorB, 1) * -10.4f;
+
+		// Limit the maximum direction value
+		if(direction > 100)
+			direction = 100;
+		else if(direction < -100)
+			direction = -100;
+
+		// Limit the maximum speed value
+		if(speed > 100)
+			speed = 100;
+		else if(speed < -100)
+			speed = -100;
+
+		_direction = direction;
+
+		if (sensorC > 0 && direction != -100 && direction != 100)
+			_speed = speed;
+
+		this.invalidate();
+
     }
+
+	private float getAnswer(float value1, float value2, int which)
+	{
+		float diff = Math.abs(Math.abs(value1) - Math.abs(value2));
+		float power = 1.45f - (0.045f * diff);
+		float value = 0f;
+
+		switch (which)
+		{
+			case 0:
+				value = value1 * power;
+				break;
+			case 1:
+				value = value2 * power;
+				break;
+		}
+
+		return value;
+	}
 
     @Override
     protected void onDraw(Canvas canvas)
