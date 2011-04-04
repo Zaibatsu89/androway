@@ -8,6 +8,7 @@ package proj.androway.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Display;
 import proj.androway.common.Settings;
 import proj.androway.ui.View;
 

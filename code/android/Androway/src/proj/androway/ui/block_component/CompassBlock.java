@@ -1,12 +1,14 @@
 package proj.androway.ui.block_component;
 
 import android.content.Context;
+import android.hardware.Sensor;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import proj.androway.R;
 import java.util.Map;
+import proj.androway.main.TiltControls;
 
 /**
  * The compass block
@@ -29,10 +31,11 @@ public class CompassBlock extends BlockComponent
     @Override
     public void updateView(String updateType, Map<String, Object> params)
     {
-        if(updateType.equals(BlockComponent.UPDATE_TYPE_TILT))
+        int sensorType = (Integer)params.get(TiltControls.UPDATE_SENSOR_TYPE);
+        if(updateType.equals(BlockComponent.UPDATE_TYPE_TILT) && sensorType == Sensor.TYPE_ORIENTATION)
         {
             // Store the compas degrees value
-            _compDegrees = 360 - (Float)params.get("heading");
+            _compDegrees = 360 - (Float)params.get(TiltControls.UPDATE_AZIMUTH);
 
             setCompassRotation(_compDegrees, _compPreviousDegrees, 200, new RotationListener());
         }

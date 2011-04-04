@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Sensor;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -37,9 +38,9 @@ import proj.androway.ui.quick_action.ActionItem;
 
 /**
  * The view for a running session
- * @author Tymen
- * @since 29-03-2011
- * @version 0.2
+ * @author Tymen en Rinse
+ * @since 04-04-2011
+ * @version 0.21
  */
 public class RunningSessionView extends ActivityBase
 {
@@ -47,7 +48,8 @@ public class RunningSessionView extends ActivityBase
     private WakeLock _wakeLock;
     private GestureDetector _gestureDetectorBlock1;
     private GestureDetector _gestureDetectorBlock2;
-    private TiltControls _tiltControls;
+    private TiltControls _accTiltControls;
+	private TiltControls _oriTiltControls;
     private Map<String, BlockComponent> _blockComponents = new HashMap<String, BlockComponent>();
 
     public int tempInclinationRotation = 0;
@@ -75,7 +77,8 @@ public class RunningSessionView extends ActivityBase
         this.setBlockComponents();
 
         // Bind the tilt controls, MOVE TO CONTROLLER
-        _tiltControls = new TiltControls(RunningSessionView.this, this);
+        _accTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ACCELEROMETER);
+		_oriTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ORIENTATION);
 
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
 
@@ -197,8 +200,11 @@ public class RunningSessionView extends ActivityBase
     {
         super.onResume();
 
-        if(_tiltControls != null)
-            _tiltControls.register();
+        if(_accTiltControls != null)
+            _accTiltControls.register();
+
+		if(_oriTiltControls != null)
+			_oriTiltControls.register();
 
         // When resuming the activity, acquire a wake-lock again
         _wakeLock.acquire();
@@ -216,8 +222,11 @@ public class RunningSessionView extends ActivityBase
         // Release the wake-lock
         _wakeLock.release();
 
-        if(_tiltControls != null)
-            _tiltControls.unregister();
+        if(_accTiltControls != null)
+            _accTiltControls.unregister();
+
+		if(_oriTiltControls != null)
+            _oriTiltControls.unregister();
 
         // Update the notification, whith the message that the session is on hold
         _sharedObjects.controller.setNotification(Controller.NOTIFICATION_ID, "Session on hold", "Select to continue the running session.");
@@ -227,9 +236,12 @@ public class RunningSessionView extends ActivityBase
 
     @Override
     protected void onStop()
-    {
-        if(_tiltControls != null)
-            _tiltControls.unregister();
+	{
+        if(_accTiltControls != null)
+            _accTiltControls.unregister();
+
+		if(_oriTiltControls != null)
+            _oriTiltControls.unregister();
 
         super.onStop();
     }
@@ -320,36 +332,18 @@ public class RunningSessionView extends ActivityBase
 
     /*
      * Updates the block components with the new data from the tilt conroller
-     * @param azimuth The orientation azimuth value
-     * @param pitch The orientation pitch value
-     * @param roll The orientation roll value
      */
-    public void updateTiltViews(float azimuth, float pitch, float roll)
+    public void updateTiltViews(float azimuth, float pitch, float roll, int sensorType)
     {
-        // Convert the sensor values to the actual speed and direction values
-        float speed = (pitch * 2.222f) + 200;
-        float direction = roll * -2.222f;
+		// Set the new values
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put(TiltControls.UPDATE_AZIMUTH, azimuth);
+		values.put(TiltControls.UPDATE_PITCH, pitch);
+		values.put(TiltControls.UPDATE_ROLL, roll);
+		values.put(TiltControls.UPDATE_SENSOR_TYPE, sensorType);
 
-        // Limit the maximum speed value
-        if(speed > 100)
-            speed = 100;
-        else if(speed < -100)
-            speed = -100;
-
-        // Limit the maximum direction value
-        if(direction > 100)
-            direction = 100;
-        else if(direction < -100)
-            direction = -100;
-
-        // Set the new values
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put("speed", speed);
-        values.put("direction", direction);
-        values.put("heading", azimuth);
-
-        // Call the updateView function for all block components
-        for(BlockComponent component : _blockComponents.values())
-            component.updateView(BlockComponent.UPDATE_TYPE_TILT, values);
+		// Call the updateView function for all block components
+		for(BlockComponent component : _blockComponents.values())
+			component.updateView(BlockComponent.UPDATE_TYPE_TILT, values);
     }
 }
