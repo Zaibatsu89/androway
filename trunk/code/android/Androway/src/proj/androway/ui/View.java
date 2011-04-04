@@ -7,6 +7,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import proj.androway.R;
 import proj.androway.common.Settings;
 import proj.androway.common.SharedObjects;
@@ -60,7 +61,7 @@ public class View extends ActivityBase
         // The 'view settings' layout and icon button with their onclick listeners
         LinearLayout viewSettingsButton = (LinearLayout) dialog.findViewById(R.id.view_settings);
         ImageButton viewSettingsIcon = (ImageButton) viewSettingsButton.findViewById(R.id.view_settings_icon);
-        viewSettingsIcon.setOnFocusChangeListener(new android.view.View.OnFocusChangeListener()
+        viewSettingsButton.setOnFocusChangeListener(new android.view.View.OnFocusChangeListener()
         {
             public void onFocusChange(android.view.View v, boolean hasFocus){((ImageButton)v.findViewById(R.id.view_settings_icon)).requestFocus();}
         });
