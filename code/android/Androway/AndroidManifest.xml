@@ -27,7 +27,7 @@
             android:name=".ui.RunningSessionView"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:launchMode="singleTask">
+            android:launchMode="singleInstance">
         </activity>
 
         <activity

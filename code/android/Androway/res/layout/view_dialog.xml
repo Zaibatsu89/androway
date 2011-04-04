@@ -24,7 +24,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:id="@+id/start_session"
@@ -61,7 +62,6 @@
             <ImageView
                 android:layout_width="1dip"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
                 android:gravity="fill_vertical"
                 android:layout_marginTop="10dip"
                 android:src="@drawable/dialog_devider_v"/>
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:src="@drawable/ic_menu_settings"/>
+                android:src="@drawable/settings_icon"/>
 
             <TextView
                 android:layout_width="fill_parent"
