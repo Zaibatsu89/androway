@@ -33,10 +33,12 @@ import org.json.JSONObject;
 public class HttpManager extends ConnectionManagerBase
 {
     private Context _context;
+    private HttpClient _httpClient;
 
     public HttpManager(Context context)
     {
         _context = context;
+        _httpClient = new DefaultHttpClient();
     }
 
     // Not needed for the http manager
@@ -51,7 +53,6 @@ public class HttpManager extends ConnectionManagerBase
     public boolean post(String address, ArrayList<NameValuePair> data)
     {
         boolean success = false;
-        HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(address);
 
         try
@@ -60,7 +61,7 @@ public class HttpManager extends ConnectionManagerBase
             httpPost.setEntity(new UrlEncodedFormEntity(data));
 
             // Execute the HttpPost request with the client and pass the response handler for the result
-            httpClient.execute(httpPost);
+            _httpClient.execute(httpPost);
 
             success = true;
         }
@@ -84,7 +85,6 @@ public class HttpManager extends ConnectionManagerBase
     {
         Map result = null;
 
-        HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet;
         BasicResponseHandler responseHandler = new BasicResponseHandler();
 
@@ -116,11 +116,12 @@ public class HttpManager extends ConnectionManagerBase
             httpGet = new HttpGet(address);
 
             // Execute the Http request and store the response
-            String response = httpClient.execute(httpGet, responseHandler);
+            String response = _httpClient.execute(httpGet, responseHandler);
 
             // Assign the response to a JSONArray
             JSONArray jsonItems = new JSONArray(response);
 
+            // Deserialize the received json string and assign the result to result;
             result = deserializeJson(new HashMap<String, Object>(), jsonItems);
         }
         catch (JSONException ex)
@@ -148,26 +149,26 @@ public class HttpManager extends ConnectionManagerBase
 
         for(int i = length - 1; i > -1; i--)
         {
-                Map<String, Object> elementHolder = new HashMap<String, Object>();
+            Map<String, Object> elementHolder = new HashMap<String, Object>();
 
-                // Retrieve the data of the JSON item and parse it
-                JSONObject jsonElement = (JSONObject)jsonArray.get(i);
+            // Retrieve the data of the JSON item and parse it
+            JSONObject jsonElement = (JSONObject)jsonArray.get(i);
 
-                JSONArray children = jsonElement.names();
-                int childrenLength = children.length();
+            JSONArray children = jsonElement.names();
+            int childrenLength = children.length();
 
-                for(int j = 0; j < childrenLength; j++)
-                {
-                        String name = children.getString(j);
-                        String value = jsonElement.getString(name);
+            for(int j = 0; j < childrenLength; j++)
+            {
+                String name = children.getString(j);
+                String value = jsonElement.getString(name);
 
-                        if(value.indexOf("{") == 1 && value.lastIndexOf("}") == value.length() - 1)
-                                elementHolder.put(name, deserializeJson(new HashMap<String, Object>(), jsonElement.getJSONArray(name)));
-                        else
-                                elementHolder.put(name, value);
-                }
+                if(value.indexOf("{") == 1 && value.lastIndexOf("}") == value.length() - 1)
+                    elementHolder.put(name, deserializeJson(new HashMap<String, Object>(), jsonElement.getJSONArray(name)));
+                else
+                    elementHolder.put(name, value);
+            }
 
-                resultHolder.put("row" + i, elementHolder);
+            resultHolder.put("row" + i, elementHolder);
         }
 
         return resultHolder;
