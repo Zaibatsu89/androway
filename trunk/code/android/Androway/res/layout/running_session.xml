@@ -42,9 +42,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                        <include layout="@layout/direction" />
-                        <include layout="@layout/temperature" />
-
                 </ViewFlipper>
             </android.gesture.GestureOverlayView>
 

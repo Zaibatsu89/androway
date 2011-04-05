@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,13 +42,35 @@ public class HttpManager extends ConnectionManagerBase
         _httpClient = new DefaultHttpClient();
     }
 
-    // Not needed for the http manager
-    public boolean open(String address)
+    // When opening the connection, to login to the remote site
+    public boolean open(String address, ArrayList<NameValuePair> data)
     {
-        return true;
+        boolean emailAvailable = false;
+        boolean passwordAvailable = false;
+
+        // Check if the email and password are set
+        for(NameValuePair nameValue : data)
+        {
+            if(nameValue.getName().equals("email"))
+                emailAvailable = true;
+            else if(nameValue.getName().equals("password"))
+                passwordAvailable = true;
+        }
+
+        // If the email and password are set, send a login http request
+        if(emailAvailable && passwordAvailable)
+        {
+            data.add(new BasicNameValuePair("authType", "login"));
+            Map result = this.get(address, data);
+
+            // Return whether the login succeeded or not
+            return Boolean.parseBoolean((String)result.get("success"));
+        }
+        else
+            return false;
     }
 
-    // Not needed for the http manager
+    // When closing the connection, logout from the remote site
     public void close() { }
 
     public boolean post(String address, ArrayList<NameValuePair> data)
@@ -116,13 +139,10 @@ public class HttpManager extends ConnectionManagerBase
             httpGet = new HttpGet(address);
 
             // Execute the Http request and store the response
-            String response = _httpClient.execute(httpGet, responseHandler);
-
-            // Assign the response to a JSONArray
-            JSONArray jsonItems = new JSONArray(response);
+            String response = _httpClient.execute(httpGet, responseHandler);            
 
             // Deserialize the received json string and assign the result to result;
-            result = deserializeJson(new HashMap<String, Object>(), jsonItems);
+            result = deserializeJson(new HashMap<String, Object>(), response);
         }
         catch (JSONException ex)
         {
@@ -141,6 +161,58 @@ public class HttpManager extends ConnectionManagerBase
         }
 
         return result;
+    }
+
+    public Map<String, Object> deserializeJson(Map<String, Object> resultHolder, String jsonString) throws JSONException
+    {
+        if(!jsonString.isEmpty())
+        {
+            // Try to assign the response to a JSONArray,
+            // if it fails it is not an array, so assign it to a JSONObject.
+            JSONArray jsonItems = null;
+            JSONObject jsonItem = null;
+            try
+            {
+                // Try to parse the string to a JSONArray
+                jsonItems = new JSONArray(jsonString);
+            }
+            catch (JSONException ex)
+            {
+                try
+                {
+                    // The parsing to JSONArray failed, handle as JSONObject in stead.
+                    jsonItem = new JSONObject(jsonString);
+                }
+                catch (JSONException ex1)
+                {
+                    Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            }
+
+            // If jsonItems is null, it means the json string is not a JSONArray but
+            // a single level JSONObject. Process the single level JSONObject,
+            // else process as a JSONArray.
+            if(jsonItems == null)
+            {
+                JSONArray children = jsonItem.names();
+                int childrenLength = children.length();
+
+                for(int j = 0; j < childrenLength; j++)
+                {
+                    String name = children.getString(j);
+                    String value = jsonItem.getString(name);
+
+                    if(value.indexOf("{") == 1 && value.lastIndexOf("}") == value.length() - 1)
+                        resultHolder.put(name, deserializeJson(new HashMap<String, Object>(), jsonItem.getJSONArray(name)));
+                    else
+                        resultHolder.put(name, value);
+                }
+            }
+            else
+                resultHolder = deserializeJson(resultHolder, jsonItems);
+        }
+
+        return resultHolder;
     }
 
     public Map<String, Object> deserializeJson(Map<String, Object> resultHolder, JSONArray jsonArray) throws JSONException

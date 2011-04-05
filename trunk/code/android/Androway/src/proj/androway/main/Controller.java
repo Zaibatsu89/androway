@@ -6,9 +6,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import proj.androway.common.Settings;
 import proj.androway.R;
+import proj.androway.common.Constants;
 import proj.androway.common.SharedObjects;
+import proj.androway.ui.RunningSessionView;
 import proj.androway.ui.View;
 
 /**
@@ -20,8 +24,6 @@ import proj.androway.ui.View;
  */
 public class Controller extends Activity
 {
-    public static final int NOTIFICATION_ID = 1;
-
     private SharedObjects _sharedObjects;
 
     @Override
@@ -31,7 +33,7 @@ public class Controller extends Activity
         this.setContentView(R.layout.main);
 
         _sharedObjects = (SharedObjects)this.getApplication();
-        _sharedObjects.controller = this;        
+        _sharedObjects.controller = this;
     }
 
     @Override
@@ -39,12 +41,12 @@ public class Controller extends Activity
     {
         // Load the application settings and put them in the variables
         Settings.initSettings(Controller.this);
-        this.launchLastStoredActivity();
+        _launchLastStoredActivity();
         
         super.onStart();
     }
 
-    private void launchLastStoredActivity()
+    private void _launchLastStoredActivity()
     {
         Class<?> activityClass;
 
@@ -62,49 +64,40 @@ public class Controller extends Activity
         startActivity(new Intent(this, activityClass));
     }
 
-    public void setNotification(int id, String title, String message)
+    /*
+     * Update the existing session notification
+     */
+    public void updateNotification(String ticker, String title, String message)
     {
-        // Get the notification manager
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         // Create the notification intent
         Intent notificationIntent = new Intent(this, Controller.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         // Set the RunningSessionView activity notification
-        Notification notification = new Notification(R.drawable.notification_icon, title, System.currentTimeMillis());
+        Notification notification = new Notification(R.drawable.notification_icon, ticker, System.currentTimeMillis());
         notification.setLatestEventInfo(Controller.this, title, message, contentIntent);
-        notification.flags += Notification.FLAG_NO_CLEAR;
-        notification.flags += Notification.FLAG_ONGOING_EVENT;
-
-        // Attach/launch the notification
-        notificationManager.notify(id, notification);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID, notification);
     }
 
-    public void removeNotification(int id)
+    public void removeNotification()
     {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel(id);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(Constants.NOTIFICATION_ID);
     }
 
     public void runSession()
     {
+        // Start the activity before the session is started!
+        // Needed because of interaction from session with the RunningSessionView
+        startActivity(new Intent(Controller.this, RunningSessionView.class));
+
         if(!Settings.SESSION_RUNNING)
-        {
-            Session session = new Session(_sharedObjects, Controller.this);
-            session.start();
-            _sharedObjects.session = session;
-        }
+            this.startService(new Intent(this, Session.class));
     }
 
     public void stopSession()
     {
-        if(_sharedObjects.session != null)
-            _sharedObjects.session.stop();
-
-        // TEMPORARY, SHOULD BE HANDLED BY SESSION STOP
-        Settings.putSetting("sessionRunning", false);
-
-        startActivity(new Intent(Controller.this, View.class));
+        // Stop the session service and return to the main view
+        this.stopService(new Intent(this, Session.class));
+        this.startActivity(new Intent(Controller.this, View.class));
     }
 }

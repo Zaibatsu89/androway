@@ -9,11 +9,11 @@ import java.util.Map;
  * @since 17-03-2011
  * @version 0.1
  */
-public class InclinationBlock extends BlockComponent
+public class DirectionBlock extends BlockComponent
 {
-    public InclinationBlock(Context context, int layoutId)
+    public DirectionBlock(Context context, int layoutId)
     {
-        super(context, layoutId, BlockComponent.ID_BLOCK_1);
+        super(context, layoutId, BlockComponent.ID_BLOCK_2);
     }
 
     @Override

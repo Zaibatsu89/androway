@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import proj.androway.common.Exceptions.ConstructingLoggingManagerFailedException;
 
 /**
  * Interface LoggingManager is.
@@ -32,11 +33,16 @@ public class LoggingManager
 
     private IDatabaseManager _myDbManager;
 
-    public LoggingManager(Context context, String loggingType) throws MaxPoolSizeReachedException
+    public LoggingManager(Context context, String loggingType) throws MaxPoolSizeReachedException, ConstructingLoggingManagerFailedException
     {
         _context = context;
 
         _myDbManager = DatabaseFactory.acquireDatabaseManager(_context, loggingType);
+
+        // If initializing the database manager fails throw an exception.
+        // This operation is mainly aimed at the login proces for the HttpManager.
+        if(!_myDbManager.init())
+            throw new ConstructingLoggingManagerFailedException(context.getString(R.string.ConstructingLoggingManagerFailedException));
 
         _strFormat = _context.getString(R.string.format);
         _strAdded = _context.getString(R.string.added);

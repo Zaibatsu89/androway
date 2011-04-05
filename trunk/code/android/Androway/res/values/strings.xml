@@ -16,6 +16,20 @@
         <string name="ok">Ok</string>
         <string name="invalid">invalid!</string>
 
+        <!-- Progress dialog string values (on session start) -->
+        <string name="login_title">Logging in...</string>
+        <string name="login_message">Logging into the remote Androway site.</string>
+        <string name="bluetooth_title">Connecting bluetooth...</string>
+        <string name="bluetooth_message">Connecting with the Segway through bluetooth.</string>
+
+        <!-- Notification string values -->
+        <string name="start_session_ticker">A new session started</string>
+        <string name="start_session_title">Running session</string>
+        <string name="start_session_message">Select to view the running session.</string>
+        <string name="session_hold_ticker">The session is put on hold</string>
+        <string name="session_hold_title">Session on hold</string>
+        <string name="session_hold_message">Select to continue the running session.</string>
+
         <!-- UI Settings View -->
         <string name="accountSettings">Account Settings</string>
         <string name="systemSettings">System Settings</string>
@@ -49,9 +63,10 @@
 	<string name="empty">There are no logs.</string>
 
 	<!-- Exception messages -->
-	<string name="MaxPoolSizeReachedException">The ConnectionFactory object pool has reached its maximum size.</string>
+	<string name="MaxPoolSizeReachedException">The Factory object pool has reached its maximum size.</string>
 	<string name="NotSupportedQueryTypeException">The given query type is not supported.</string>
 	<string name="MapIsEmptyException">The Map is empty.</string>
 	<string name="HttpPostRequestFailedException">Assignment of post data failed.</string>
 	<string name="HttpGetRequestFailedException">Could not fetch the response.</string>
+        <string name="ConstructingLoggingManagerFailedException">The login process of the HttpManager failed.</string>
 </resources>
