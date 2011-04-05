@@ -18,8 +18,6 @@ public class BalanceBlock extends BlockComponent
 {
     private BalanceViewHandler _balanceViewHandler;
 
-    public static String BLOCK_NAME = "balance";
-
     public BalanceBlock(Context context, int layoutId)
     {
         super(context, layoutId, BlockComponent.ID_BLOCK_1);

@@ -13,10 +13,10 @@ import proj.androway.R;
  */
 public abstract class BlockComponent extends LinearLayout
 {
-    public static final String UPDATE_TYPE_TILT = "tilt";    
+    public static final String UPDATE_TYPE_TILT = "tilt";
+    public static final String UPDATE_TYPE_SESSION_DATA = "sessionData";
     public static final int ID_BLOCK_1 = R.id.block1_flipper;
     public static final int ID_BLOCK_2 = R.id.block2_flipper;
-    public static String BLOCK_NAME = "noUniqueBlockName";
 
     public final int blockId;
 

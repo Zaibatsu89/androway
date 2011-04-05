@@ -30,10 +30,10 @@ public final class DatabaseFactory extends Application
 
 	public static DatabaseFactory getInstance()
 	{
-		if (_databaseFactory == null)
-			_databaseFactory = new DatabaseFactory();
+            if (_databaseFactory == null)
+                _databaseFactory = new DatabaseFactory();
 
-		return _databaseFactory;
+            return _databaseFactory;
 	}
 
 	public static IDatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException

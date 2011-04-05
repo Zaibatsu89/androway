@@ -15,14 +15,18 @@ import java.util.Map;
  * @since 17-03-2011
  * @version 0.43
  */
-public class LocalManager extends DatabaseManagerBase {
+public class LocalManager extends DatabaseManagerBase
+{
 	private SQLiteDatabase _db;
 	private DatabaseHelper _dbHelper;
 
 	public LocalManager(Context context)
 	{
-		_dbHelper = new DatabaseHelper(context);
+            _dbHelper = new DatabaseHelper(context);
 	}
+
+        // Simply return true, there is noting to initialize for the local manager
+        public boolean init() { return true; }
 
 	private static class DatabaseHelper extends SQLiteOpenHelper
     {

@@ -14,7 +14,7 @@ import org.apache.http.NameValuePair;
  */
 public class BluetoothManager implements IConnectionManager
 {
-	public boolean open(String address) {
+	public boolean open(String address, ArrayList<NameValuePair> data) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

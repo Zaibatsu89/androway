@@ -1,8 +1,10 @@
 package proj.androway.common;
 
 import android.app.Application;
+import java.util.Map;
+import java.util.Timer;
 import proj.androway.main.Controller;
-import proj.androway.main.Session;
+import proj.androway.ui.RunningSessionView;
 
 /**
  *
@@ -11,7 +13,9 @@ import proj.androway.main.Session;
 public class SharedObjects extends Application
 {
     public Controller controller;
-    public Session session;
+    public RunningSessionView runningSessionView;
+    public Timer updateTimer;
+    public Map<String, Object> updatedData;
 
     public SharedObjects()
     {

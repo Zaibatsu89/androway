@@ -62,6 +62,7 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
                 Editor e = _encryptedPasswordPreference.getEditor();
                 e.putString("encryptedPassword", Utilities.encodeString((String)newValue));
                 e.commit();
+                result = true;
             }
             else
                 this.showInvalidAlert(R.string.passwordTitle, R.string.passwordInvalid);

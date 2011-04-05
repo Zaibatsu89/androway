@@ -1,13 +1,15 @@
 package proj.androway.ui;
 
+import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.gesture.GestureOverlayView;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Path.Direction;
 import android.hardware.Sensor;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.view.GestureDetector;
@@ -33,7 +35,10 @@ import java.util.List;
 import java.util.Map;
 import proj.androway.R;
 import proj.androway.common.SharedObjects;
-import proj.androway.main.Controller;
+import proj.androway.database.DatabaseManagerBase;
+import proj.androway.main.Session;
+import proj.androway.main.Session.SessionBinder;
+import proj.androway.ui.block_component.DirectionBlock;
 import proj.androway.ui.quick_action.ActionItem;
 
 /**
@@ -44,15 +49,21 @@ import proj.androway.ui.quick_action.ActionItem;
  */
 public class RunningSessionView extends ActivityBase
 {
+    public static final int DIALOG_TYPE_START = 0;
+    public static final int DIALOG_TYPE_BLUETOOTH = 1;
+    public static final int DIALOG_TYPE_DONE = 2;
+    public static final int DIALOG_TYPE_FAILED = 3;
+
     private SharedObjects _sharedObjects;
     private WakeLock _wakeLock;
     private GestureDetector _gestureDetectorBlock1;
     private GestureDetector _gestureDetectorBlock2;
     private TiltControls _accTiltControls;
-	private TiltControls _oriTiltControls;
+    private TiltControls _oriTiltControls;
     private Map<String, BlockComponent> _blockComponents = new HashMap<String, BlockComponent>();
-
-    public int tempInclinationRotation = 0;
+    private Session _session;
+    private ProgressDialog _progressDialog = null;
+    private RunningSessionView _self = this;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -60,6 +71,7 @@ public class RunningSessionView extends ActivityBase
         super.onCreate(savedInstanceState);
 
         _sharedObjects = (SharedObjects)this.getApplication();
+        _sharedObjects.runningSessionView = this;
 
         /*
          * Create a screen bright wake-lock so that the screen stays on,
@@ -73,54 +85,162 @@ public class RunningSessionView extends ActivityBase
         // Set the content for the view
         this.setContentView(R.layout.running_session);
 
+        // Show the session startup dialog
+        this.updateProcessDialog(DIALOG_TYPE_START);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        
+        // Bind to Session service
+        bindService(new Intent(this, Session.class), _sessionConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        if(_accTiltControls != null)
+            _accTiltControls.register();
+
+        if(_oriTiltControls != null)
+            _oriTiltControls.register();
+
+        // When resuming the activity, acquire a wake-lock again
+        _wakeLock.acquire();
+
+        // Check and set the block status
+        _setBlockStatus();
+
+        // Update the notification, whith the message that the session is running
+        _sharedObjects.controller.updateNotification
+        (
+            getString(R.string.start_session_ticker),
+            getString(R.string.start_session_title),
+            getString(R.string.start_session_message)
+        );
+    }
+
+    @Override
+    protected void onPause()
+    {
+        // Release the wake-lock
+        _wakeLock.release();
+
+        if(_accTiltControls != null)
+            _accTiltControls.unregister();
+
+        if(_oriTiltControls != null)
+            _oriTiltControls.unregister();
+
+        // Update the notification, whith the message that the session is on hold
+        _sharedObjects.controller.updateNotification
+        (
+            getString(R.string.session_hold_ticker),
+            getString(R.string.session_hold_title),
+            getString(R.string.session_hold_message)
+        );
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        if(_accTiltControls != null)
+            _accTiltControls.unregister();
+
+        if(_oriTiltControls != null)
+            _oriTiltControls.unregister();
+
+        // Unbind from the Session service
+        unbindService(_sessionConnection);
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        // Stop the notification for the running session
+        _sharedObjects.controller.removeNotification();
+        _sharedObjects.runningSessionView = null;
+        super.onDestroy();
+    }
+
+    public void updateProcessDialog(int processDialogType)
+    {
+        if(_progressDialog == null)
+            _progressDialog = new ProgressDialog(RunningSessionView.this);
+
+        _progressDialog.setCancelable(false);
+
+        switch(processDialogType)
+        {
+            case DIALOG_TYPE_START:
+            {
+                // If LOG_TYPE is http logging in is required, so show that message.
+                // Otherwise continue with the bluetooth message.
+                if(Settings.LOG_TYPE.equals(DatabaseManagerBase.TYPE_HTTP))
+                {
+                    _progressDialog.setTitle(R.string.login_title);
+                    _progressDialog.setMessage(getString(R.string.login_message));
+                    _progressDialog.setIcon(R.drawable.ic_dialog_login);
+                    _progressDialog.show();
+                    break;
+                }
+                else
+                {
+                    // Change the progressDialogType to proceed to the bluetooth case
+                    processDialogType = DIALOG_TYPE_BLUETOOTH;
+                }
+            }
+            case DIALOG_TYPE_BLUETOOTH:
+            {
+                _progressDialog.setTitle(R.string.bluetooth_title);
+                _progressDialog.setMessage(getString(R.string.bluetooth_message));
+                _progressDialog.setIcon(R.drawable.ic_dialog_bluetooth);
+                _progressDialog.show();
+                break;
+            }
+            case DIALOG_TYPE_DONE:
+            {
+                this.initView();
+                _progressDialog.dismiss();
+                break;
+            }
+            case DIALOG_TYPE_FAILED:
+            {
+                break;
+            }
+        }
+    }
+
+    public void initView()
+    {
         // Set the block components
-        this.setBlockComponents();
+        _setBlockComponents();
 
-        // Bind the tilt controls, MOVE TO CONTROLLER
+        // Bind the tilt controls for both the accelerometer and the orientation sensor
         _accTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ACCELEROMETER);
-		_oriTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ORIENTATION);
+        _oriTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ORIENTATION);
 
+        // EXAMPLE QUICK ACTION ITEMS
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
-
-        // EXAMPLE QUICK ACTION ITEMS WITH TEMP LOGGING AS ACTION
         ActionItem connect = new ActionItem();
-        //connect.setTitle(this.getString(R.string.connect));
         connect.setTitle(getString(R.string.add));
         connect.setIcon(getResources().getDrawable(R.drawable.bt_connect_icon));
         connect.setOnClickListener(new OnClickListener()
         {
             public void onClick(android.view.View v)
             {
-                _sharedObjects.session.tempAddLog();
+                _session.tempAddLog();
             }
         });
         actionItems.add(connect);
-
-        ActionItem disconnect = new ActionItem();
-        //disconnect.setTitle(this.getString(R.string.disconnect));
-        disconnect.setTitle(this.getString(R.string.get));
-        disconnect.setIcon(getResources().getDrawable(R.drawable.bt_disconnect_icon));
-        disconnect.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(android.view.View v)
-            {
-                _sharedObjects.session.tempGetLogs();
-            }
-        });
-        actionItems.add(disconnect);
-
-        ActionItem settings = new ActionItem();
-        //settings.setTitle(this.getString(R.string.settings));
-        settings.setTitle(this.getString(R.string.remove));
-        settings.setIcon(getResources().getDrawable(R.drawable.settings_icon));
-        settings.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(android.view.View v)
-            {
-                _sharedObjects.session.tempClearLogs();
-            }
-        });
-        actionItems.add(settings);
         // ------------------------------------------------------
 
         // STATUSBAR BUTTON ONCLICK LISTENERS
@@ -137,27 +257,6 @@ public class RunningSessionView extends ActivityBase
                     quickAction.addActionItem(actionItem);
 
                 quickAction.show();
-            }
-        });
-        ImageButton logWebButton = (ImageButton) this.findViewById(R.id.log_web_button);
-        logWebButton.setOnClickListener(new android.view.View.OnClickListener()
-        {
-            public void onClick(android.view.View v)
-            {
-                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.segway_body_inclination);
-
-                // Create the matrix for the rotation of the bitmap
-                Matrix mtx = new Matrix();
-                mtx.postRotate(tempInclinationRotation);
-
-                // Rotating Bitmap
-                Bitmap rotatedBMP = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mtx, true);
-                BitmapDrawable bmd = new BitmapDrawable(rotatedBMP);
-
-                ImageView img = (ImageView)findViewById(R.id.segway_body);
-                img.setImageDrawable(bmd);
-
-                tempInclinationRotation += 5;
             }
         });
         // ----------------------------------
@@ -195,64 +294,19 @@ public class RunningSessionView extends ActivityBase
         });
     }
 
-    @Override
-    protected void onResume()
+    // Defines callbacks for service binding, passed to the service
+    private ServiceConnection _sessionConnection = new ServiceConnection()
     {
-        super.onResume();
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service)
+        {
+            // We've bound to the Session service, cast the IBinder and get the Session instance
+            SessionBinder binder = (SessionBinder) service;
+            _session = binder.getService(_self);
+        }
 
-        if(_accTiltControls != null)
-            _accTiltControls.register();
-
-		if(_oriTiltControls != null)
-			_oriTiltControls.register();
-
-        // When resuming the activity, acquire a wake-lock again
-        _wakeLock.acquire();
-
-        // Check and set the block status
-        this.setBlockStatus();
-
-        // Update the notification, whith the message that the session is running
-        _sharedObjects.controller.setNotification(Controller.NOTIFICATION_ID, "Running session", "Select to view the running session.");
-    }
-
-    @Override
-    protected void onPause()
-    {
-        // Release the wake-lock
-        _wakeLock.release();
-
-        if(_accTiltControls != null)
-            _accTiltControls.unregister();
-
-		if(_oriTiltControls != null)
-            _oriTiltControls.unregister();
-
-        // Update the notification, whith the message that the session is on hold
-        _sharedObjects.controller.setNotification(Controller.NOTIFICATION_ID, "Session on hold", "Select to continue the running session.");
-
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop()
-	{
-        if(_accTiltControls != null)
-            _accTiltControls.unregister();
-
-		if(_oriTiltControls != null)
-            _oriTiltControls.unregister();
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        _sharedObjects.controller.removeNotification(Controller.NOTIFICATION_ID);
-
-        super.onDestroy();
-    }
+        public void onServiceDisconnected(ComponentName arg0) { }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -288,14 +342,15 @@ public class RunningSessionView extends ActivityBase
     /*
      * Add the block components to their appropriate holder
      */
-    private void setBlockComponents()
+    private void _setBlockComponents()
     {
         if(_blockComponents.isEmpty())
         {
             // Add all wanted BlockComponents
-            _blockComponents.put(InclinationBlock.BLOCK_NAME, new InclinationBlock(RunningSessionView.this, R.layout.inclination));
-            _blockComponents.put(BalanceBlock.BLOCK_NAME, new BalanceBlock(RunningSessionView.this, R.layout.balance));
-            _blockComponents.put(CompassBlock.BLOCK_NAME, new CompassBlock(RunningSessionView.this, R.layout.compass));
+            _blockComponents.put(InclinationBlock.class.getName(), new InclinationBlock(RunningSessionView.this, R.layout.inclination));
+            _blockComponents.put(BalanceBlock.class.getName(), new BalanceBlock(RunningSessionView.this, R.layout.balance));
+            _blockComponents.put(CompassBlock.class.getName(), new CompassBlock(RunningSessionView.this, R.layout.compass));
+            _blockComponents.put(Direction.class.getName(), new DirectionBlock(RunningSessionView.this, R.layout.direction));
 
             ViewFlipper block_1 = (ViewFlipper)findViewById(BlockComponent.ID_BLOCK_1);
             ViewFlipper block_2 = (ViewFlipper)findViewById(BlockComponent.ID_BLOCK_2);
@@ -311,10 +366,17 @@ public class RunningSessionView extends ActivityBase
         }
     }
 
+    private void _updateBlockComponents(String updateType, Map<String, Object> data)
+    {
+        // Call the updateView function for all block components and pass the data
+        for(BlockComponent component : _blockComponents.values())
+            component.updateView(updateType, data);
+    }
+
     /*
      * Update the status of the block locked: true/false by changing the icon
      */
-    private void setBlockStatus()
+    private void _setBlockStatus()
     {
         // The block icon ImageView
         ImageView blockStatusImg = (ImageView) findViewById(R.id.blocked_block);
@@ -335,15 +397,28 @@ public class RunningSessionView extends ActivityBase
      */
     public void updateTiltViews(float azimuth, float pitch, float roll, int sensorType)
     {
-		// Set the new values
-		Map<String, Object> values = new HashMap<String, Object>();
-		values.put(TiltControls.UPDATE_AZIMUTH, azimuth);
-		values.put(TiltControls.UPDATE_PITCH, pitch);
-		values.put(TiltControls.UPDATE_ROLL, roll);
-		values.put(TiltControls.UPDATE_SENSOR_TYPE, sensorType);
+        // Set the new values
+        Map<String, Object> values = new HashMap<String, Object>();
+        values.put(TiltControls.UPDATE_AZIMUTH, azimuth);
+        values.put(TiltControls.UPDATE_PITCH, pitch);
+        values.put(TiltControls.UPDATE_ROLL, roll);
+        values.put(TiltControls.UPDATE_SENSOR_TYPE, sensorType);
 
-		// Call the updateView function for all block components
-		for(BlockComponent component : _blockComponents.values())
-			component.updateView(BlockComponent.UPDATE_TYPE_TILT, values);
+        // Update all block components with the new data
+        _updateBlockComponents(BlockComponent.UPDATE_TYPE_TILT, values);
+    }
+
+    /*
+     * Update the block components that require data from the current running session
+     * with the connected Segway.
+     */
+    public void updateSessionDataRelatedViews()
+    {
+        // If the updatedData map does not exist yet, create it.
+        if(_sharedObjects.updatedData == null)
+            _sharedObjects.updatedData = new HashMap<String, Object>();
+
+        // Update all block components with the new data
+        _updateBlockComponents(BlockComponent.UPDATE_TYPE_SESSION_DATA, _sharedObjects.updatedData);
     }
 }

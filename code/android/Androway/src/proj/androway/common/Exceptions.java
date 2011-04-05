@@ -13,10 +13,10 @@ public class Exceptions
 	 */
 	public static class MaxPoolSizeReachedException extends Exception
 	{
-		public MaxPoolSizeReachedException(String message)
-		{
-			super(message);
-		}
+            public MaxPoolSizeReachedException(String message)
+            {
+                super(message);
+            }
 	}
 
 	/**
@@ -24,10 +24,10 @@ public class Exceptions
 	 */
 	public static class NotSupportedQueryTypeException extends Exception
 	{
-		public NotSupportedQueryTypeException(String message)
-		{
-			super(message);
-		}
+            public NotSupportedQueryTypeException(String message)
+            {
+                super(message);
+            }
 	}
 
 	/**
@@ -35,21 +35,21 @@ public class Exceptions
 	 */
 	public static class MapIsEmptyException extends Exception
 	{
-		public MapIsEmptyException(String message)
-		{
-			super(message);
-		}
+            public MapIsEmptyException(String message)
+            {
+                super(message);
+            }
 	}
 
 	/**
-	 * Exception used for checking if an HttpPost request failed
+	 * Exception used for checking if a HttpPost request failed
 	 */
 	public static class HttpPostRequestFailedException extends Exception
 	{
-		public HttpPostRequestFailedException(String message)
-		{
-			super(message);
-		}
+            public HttpPostRequestFailedException(String message)
+            {
+                super(message);
+            }
 	}
 
 	/**
@@ -57,9 +57,20 @@ public class Exceptions
 	 */
 	public static class HttpGetRequestFailedException extends Exception
 	{
-		public HttpGetRequestFailedException(String message)
-		{
-			super(message);
-		}
+            public HttpGetRequestFailedException(String message)
+            {
+                super(message);
+            }
+	}
+
+        /**
+	 * Exception used when the the constructing of the logging manager fails
+	 */
+	public static class ConstructingLoggingManagerFailedException extends Exception
+	{
+            public ConstructingLoggingManagerFailedException(String message)
+            {
+                super(message);
+            }
 	}
 }

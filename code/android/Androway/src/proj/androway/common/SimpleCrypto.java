@@ -27,10 +27,16 @@ public class SimpleCrypto
 
     public static String decrypt(String seed, String encrypted) throws Exception
     {
-        byte[] rawKey = getRawKey(seed.getBytes());
-        byte[] enc = toByte(encrypted);
-        byte[] result = decrypt(rawKey, enc);
-        return new String(result);
+        if(!encrypted.isEmpty())
+        {
+            byte[] rawKey = getRawKey(seed.getBytes());
+            byte[] enc = toByte(encrypted);
+            byte[] result = decrypt(rawKey, enc);
+
+            return new String(result);
+        }
+        else
+            return "";
     }
 
     private static byte[] getRawKey(byte[] seed) throws Exception

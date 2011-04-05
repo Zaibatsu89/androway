@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import proj.androway.common.Settings;
 
 /**
  * Class HttpManager stores log data on the androway.nl domain.
@@ -19,12 +20,26 @@ import org.apache.http.message.BasicNameValuePair;
  * @version 0.41
  */
 public class HttpManager extends DatabaseManagerBase
-{	
+{
     private IConnectionManager _httpManager;
 
     public HttpManager(Context context) throws MaxPoolSizeReachedException
     {
         _httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
+    }
+
+    /*
+     * Initialize the http database manager by logging in to the remote server first.
+     */
+    public boolean init()
+    {
+        // Get the login credentials from the settings
+        ArrayList<NameValuePair> loginData = new ArrayList<NameValuePair>();
+        loginData.add(new BasicNameValuePair("email", Settings.USER_EMAIL));
+        loginData.add(new BasicNameValuePair("password", Settings.USER_PASSWORD));
+        
+        // Open the http connection (login) with the login url and login credentials.
+        return _httpManager.open(Constants.LOGIN_WEBSERVICE_URL, loginData);
     }
 
     public boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException

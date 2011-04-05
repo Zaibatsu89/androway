@@ -7,7 +7,6 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import proj.androway.R;
 import proj.androway.common.Settings;
 import proj.androway.common.SharedObjects;
@@ -84,7 +83,6 @@ public class View extends ActivityBase
             public void onClick(android.view.View v)
             {
                 _sharedObjects.controller.runSession();
-                startActivity(new Intent(v.getContext(), RunningSessionView.class));
             }
         };
         newSessionIcon.setOnClickListener(newSessionClick);

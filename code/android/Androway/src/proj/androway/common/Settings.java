@@ -44,7 +44,7 @@ public class Settings
         BLUETOOTH_ADDRESS   = settings.getString("bluetoothAddress", "00:00:00:00:00:00");
         APP_LANGUAGE        = settings.getString("appLanguage", "gb");
         LAST_ACTIVITY       = settings.getString("lastActivity", View.class.getName());
-        USER_EMAIL          = Utilities.decodeString(settings.getString("userEmail", ""));
+        USER_EMAIL          = settings.getString("userEmail", "");
         USER_PASSWORD       = Utilities.decodeString(settings.getString("encryptedPassword", ""));
 
         // Set the DEVICE_ORIENTATION based on the orientation setting

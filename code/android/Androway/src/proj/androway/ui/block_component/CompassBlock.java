@@ -21,8 +21,6 @@ public class CompassBlock extends BlockComponent
     private float _compDegrees = 0;
     private float _compPreviousDegrees = 0;
 
-    public static String BLOCK_NAME = "compass";
-
     public CompassBlock(Context context, int layoutId)
     {
         super(context, layoutId, BlockComponent.ID_BLOCK_1);

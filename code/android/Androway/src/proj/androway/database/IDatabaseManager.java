@@ -10,7 +10,9 @@ import java.util.Map;
  * @since 28-02-2011
  * @version 0.3
  */
-public interface IDatabaseManager {
-	public abstract boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException;
-	public abstract Map<String, Object> getData(String dbName, String query);
+public interface IDatabaseManager
+{
+    public abstract boolean init();
+    public abstract boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException;
+    public abstract Map<String, Object> getData(String dbName, String query);
 }
