@@ -1,17 +1,23 @@
 package proj.androway.ui;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.gesture.GestureOverlayView;
 import android.graphics.Path.Direction;
 import android.hardware.Sensor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.RemoteException;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +27,8 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import proj.androway.common.Settings;
 import proj.androway.main.ActivityBase;
 import proj.androway.main.TiltControls;
@@ -37,7 +45,6 @@ import proj.androway.R;
 import proj.androway.common.SharedObjects;
 import proj.androway.database.DatabaseManagerBase;
 import proj.androway.main.Session;
-import proj.androway.main.Session.SessionBinder;
 import proj.androway.ui.block_component.DirectionBlock;
 import proj.androway.ui.quick_action.ActionItem;
 
@@ -61,9 +68,9 @@ public class RunningSessionView extends ActivityBase
     private TiltControls _accTiltControls;
     private TiltControls _oriTiltControls;
     private Map<String, BlockComponent> _blockComponents = new HashMap<String, BlockComponent>();
-    private Session _session;
     private ProgressDialog _progressDialog = null;
-    private RunningSessionView _self = this;
+    private Messenger _sessionConnection = null;
+    private final Messenger _messenger = new Messenger(new IncomingHandler());
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -86,7 +93,10 @@ public class RunningSessionView extends ActivityBase
         this.setContentView(R.layout.running_session);
 
         // Show the session startup dialog
-        this.updateProcessDialog(DIALOG_TYPE_START);
+        if(!Settings.SESSION_RUNNING)
+            this.updateProcessDialog(DIALOG_TYPE_START, 0);
+        else
+            this.initView();
     }
 
     @Override
@@ -95,7 +105,7 @@ public class RunningSessionView extends ActivityBase
         super.onStart();
         
         // Bind to Session service
-        bindService(new Intent(this, Session.class), _sessionConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, Session.class), _serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -157,7 +167,7 @@ public class RunningSessionView extends ActivityBase
             _oriTiltControls.unregister();
 
         // Unbind from the Session service
-        unbindService(_sessionConnection);
+        unbindService(_serviceConnection);
 
         super.onStop();
     }
@@ -169,9 +179,55 @@ public class RunningSessionView extends ActivityBase
         _sharedObjects.controller.removeNotification();
         _sharedObjects.runningSessionView = null;
         super.onDestroy();
+    }    
+
+    // Defines callbacks for service binding, passed to the service
+    private ServiceConnection _serviceConnection = new ServiceConnection()
+    {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service)
+        {
+            try
+            {
+                // We've bound to the Session service, create a new messenger with the service.
+                _sessionConnection = new Messenger(service);
+                
+                // Send a message to link this view to the session service.
+                Message msg = Message.obtain(null, Session.MSG_SET_VIEW);
+                msg.replyTo = _messenger;
+                _sessionConnection.send(msg);
+            }
+            catch (RemoteException ex)
+            {
+                Logger.getLogger(RunningSessionView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName arg0) { }
+    };
+
+    /**
+     * Handler of incoming messages from service.
+     */
+    class IncomingHandler extends Handler
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
+                case Session.MSG_UPDATE_DIALOG:
+                {
+                    updateProcessDialog(msg.arg1, msg.arg2);
+                    break;
+                }
+                default:
+                    super.handleMessage(msg);
+            }
+        }
     }
 
-    public void updateProcessDialog(int processDialogType)
+    public void updateProcessDialog(int processDialogType, int messageId)
     {
         if(_progressDialog == null)
             _progressDialog = new ProgressDialog(RunningSessionView.this);
@@ -214,6 +270,28 @@ public class RunningSessionView extends ActivityBase
             }
             case DIALOG_TYPE_FAILED:
             {
+                _progressDialog.dismiss();
+
+                int message = R.string.error_message;
+
+                if(messageId > 0)
+                    message = messageId;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.error_title)
+                       .setMessage(message)
+                       .setCancelable(false)
+                       .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
+                       {
+                           public void onClick(DialogInterface dialog, int id)
+                           {
+                               _sharedObjects.controller.stopSession();
+                           }
+                       });
+
+                AlertDialog failedAlert = builder.create();
+                failedAlert.show();
+
                 break;
             }
         }
@@ -228,6 +306,10 @@ public class RunningSessionView extends ActivityBase
         _accTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ACCELEROMETER);
         _oriTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ORIENTATION);
 
+        // Register the actual sensor
+        _accTiltControls.register();
+        _oriTiltControls.register();
+
         // EXAMPLE QUICK ACTION ITEMS
         final List<ActionItem> actionItems = new ArrayList<ActionItem>();
         ActionItem connect = new ActionItem();
@@ -237,7 +319,6 @@ public class RunningSessionView extends ActivityBase
         {
             public void onClick(android.view.View v)
             {
-                _session.tempAddLog();
             }
         });
         actionItems.add(connect);
@@ -293,20 +374,6 @@ public class RunningSessionView extends ActivityBase
             }
         });
     }
-
-    // Defines callbacks for service binding, passed to the service
-    private ServiceConnection _sessionConnection = new ServiceConnection()
-    {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service)
-        {
-            // We've bound to the Session service, cast the IBinder and get the Session instance
-            SessionBinder binder = (SessionBinder) service;
-            _session = binder.getService(_self);
-        }
-
-        public void onServiceDisconnected(ComponentName arg0) { }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

@@ -16,11 +16,15 @@
         <string name="ok">Ok</string>
         <string name="invalid">invalid!</string>
 
-        <!-- Progress dialog string values (on session start) -->
+        <!-- Dialog string values (on session start) -->
         <string name="login_title">Logging in...</string>
         <string name="login_message">Logging into the remote Androway site.</string>
         <string name="bluetooth_title">Connecting bluetooth...</string>
         <string name="bluetooth_message">Connecting with the Segway through bluetooth.</string>
+        <string name="error_title">A problem occured</string>
+        <string name="error_message">An error occured during the starting of the session.</string>
+        <string name="login_failed_message">The login process failed. Please check your credentials.</string>
+
 
         <!-- Notification string values -->
         <string name="start_session_ticker">A new session started</string>
