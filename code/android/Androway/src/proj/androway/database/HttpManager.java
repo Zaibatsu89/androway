@@ -22,10 +22,12 @@ import proj.androway.common.Settings;
 public class HttpManager extends DatabaseManagerBase
 {
     private IConnectionManager _httpManager;
+	private Thread _connectionThread;
 
     public HttpManager(Context context) throws MaxPoolSizeReachedException
     {
         _httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
+		_connectionThread = new Thread(_httpManager);
     }
 
     /*
@@ -33,6 +35,8 @@ public class HttpManager extends DatabaseManagerBase
      */
     public boolean init()
     {
+		_connectionThread.start();
+
         // Get the login credentials from the settings
         ArrayList<NameValuePair> loginData = new ArrayList<NameValuePair>();
         loginData.add(new BasicNameValuePair("email", Settings.USER_EMAIL));

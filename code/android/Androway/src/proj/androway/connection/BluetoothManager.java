@@ -12,21 +12,33 @@ import org.apache.http.NameValuePair;
  * @since 10-03-2011
  * @version 0.41
  */
-public class BluetoothManager implements IConnectionManager
+public class BluetoothManager extends ConnectionManagerBase
 {
-	public boolean open(String address, ArrayList<NameValuePair> data) {
+	public void run() {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean open(String address, ArrayList<NameValuePair> data) {
+		synchronized(this) {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 
 	public void close() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		synchronized(this) {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 
 	public boolean post(String address, ArrayList<NameValuePair> data) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		synchronized(this) {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 
 	public Map<String, Object> get(String address, ArrayList<NameValuePair> params) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		synchronized(this) {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 }
