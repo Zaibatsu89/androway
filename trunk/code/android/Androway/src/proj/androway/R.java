@@ -165,30 +165,30 @@ public final class R {
         public static final int running_session_menu=0x7f090000;
     }
     public static final class string {
-        public static final int ConstructingLoggingManagerFailedException=0x7f070038;
-        public static final int HttpGetRequestFailedException=0x7f070037;
-        public static final int HttpPostRequestFailedException=0x7f070036;
-        public static final int MapIsEmptyException=0x7f070035;
+        public static final int ConstructingLoggingManagerFailedException=0x7f07003b;
+        public static final int HttpGetRequestFailedException=0x7f07003a;
+        public static final int HttpPostRequestFailedException=0x7f070039;
+        public static final int MapIsEmptyException=0x7f070038;
         /**  Exception messages 
          */
-        public static final int MaxPoolSizeReachedException=0x7f070033;
-        public static final int NotSupportedQueryTypeException=0x7f070034;
+        public static final int MaxPoolSizeReachedException=0x7f070036;
+        public static final int NotSupportedQueryTypeException=0x7f070037;
         /**  UI Settings View 
          */
-        public static final int accountSettings=0x7f070017;
+        public static final int accountSettings=0x7f07001a;
         /**  Logging 
          */
-        public static final int add=0x7f07002c;
-        public static final int added=0x7f070030;
+        public static final int add=0x7f07002f;
+        public static final int added=0x7f070033;
         public static final int app_label=0x7f070001;
         public static final int app_name=0x7f070000;
-        public static final int block1LockedSummary=0x7f070025;
-        public static final int block1LockedTitle=0x7f070024;
-        public static final int block2LockedSummary=0x7f070027;
-        public static final int block2LockedTitle=0x7f070026;
-        public static final int bluetoothInvalid=0x7f070021;
-        public static final int bluetoothSummary=0x7f070020;
-        public static final int bluetoothTitle=0x7f07001f;
+        public static final int block1LockedSummary=0x7f070028;
+        public static final int block1LockedTitle=0x7f070027;
+        public static final int block2LockedSummary=0x7f07002a;
+        public static final int block2LockedTitle=0x7f070029;
+        public static final int bluetoothInvalid=0x7f070024;
+        public static final int bluetoothSummary=0x7f070023;
+        public static final int bluetoothTitle=0x7f070022;
         public static final int bluetooth_message=0x7f070010;
         public static final int bluetooth_title=0x7f07000f;
         /**  UI 
@@ -196,42 +196,45 @@ public final class R {
         public static final int choose_action=0x7f070002;
         public static final int connect=0x7f070006;
         public static final int disconnect=0x7f070007;
-        public static final int emailInvalid=0x7f07001b;
-        public static final int emailSummary=0x7f07001a;
-        public static final int emailTitle=0x7f070019;
-        public static final int empty=0x7f070032;
+        public static final int emailInvalid=0x7f07001e;
+        public static final int emailSummary=0x7f07001d;
+        public static final int emailTitle=0x7f07001c;
+        public static final int empty=0x7f070035;
+        public static final int error_message=0x7f070012;
+        public static final int error_title=0x7f070011;
         public static final int exit_app=0x7f07000a;
-        public static final int format=0x7f07002f;
-        public static final int get=0x7f07002d;
+        public static final int format=0x7f070032;
+        public static final int get=0x7f070030;
         public static final int invalid=0x7f07000c;
-        public static final int languageSummary=0x7f07002b;
-        public static final int languageTitle=0x7f07002a;
-        public static final int logOnlineSummary=0x7f070023;
-        public static final int logOnlineTitle=0x7f070022;
+        public static final int languageSummary=0x7f07002e;
+        public static final int languageTitle=0x7f07002d;
+        public static final int logOnlineSummary=0x7f070026;
+        public static final int logOnlineTitle=0x7f070025;
+        public static final int login_failed_message=0x7f070013;
         public static final int login_message=0x7f07000e;
-        /**  Progress dialog string values (on session start) 
+        /**  Dialog string values (on session start) 
          */
         public static final int login_title=0x7f07000d;
         public static final int ok=0x7f07000b;
-        public static final int orientationSummary=0x7f070029;
-        public static final int orientationTitle=0x7f070028;
-        public static final int passwordInvalid=0x7f07001e;
-        public static final int passwordSummary=0x7f07001d;
-        public static final int passwordTitle=0x7f07001c;
-        public static final int remove=0x7f07002e;
-        public static final int removed=0x7f070031;
-        public static final int session_hold_message=0x7f070016;
-        public static final int session_hold_ticker=0x7f070014;
-        public static final int session_hold_title=0x7f070015;
+        public static final int orientationSummary=0x7f07002c;
+        public static final int orientationTitle=0x7f07002b;
+        public static final int passwordInvalid=0x7f070021;
+        public static final int passwordSummary=0x7f070020;
+        public static final int passwordTitle=0x7f07001f;
+        public static final int remove=0x7f070031;
+        public static final int removed=0x7f070034;
+        public static final int session_hold_message=0x7f070019;
+        public static final int session_hold_ticker=0x7f070017;
+        public static final int session_hold_title=0x7f070018;
         public static final int settings=0x7f070008;
         public static final int show_running_session=0x7f070004;
         public static final int start_new_session=0x7f070003;
-        public static final int start_session_message=0x7f070013;
+        public static final int start_session_message=0x7f070016;
         /**  Notification string values 
          */
-        public static final int start_session_ticker=0x7f070011;
-        public static final int start_session_title=0x7f070012;
-        public static final int systemSettings=0x7f070018;
+        public static final int start_session_ticker=0x7f070014;
+        public static final int start_session_title=0x7f070015;
+        public static final int systemSettings=0x7f07001b;
         public static final int view_old_session=0x7f070005;
         public static final int view_settings=0x7f070009;
     }
