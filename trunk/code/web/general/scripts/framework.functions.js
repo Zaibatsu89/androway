@@ -40,8 +40,13 @@ function loadDialog(dialogId, dialogWidth, dialogHeight, callback)
 	callback();
 }
 
-function loadModuleDialog(url, dialogId, dialogWidth, dialogHeight, callback)
+function loadModuleDialog(url, dialogId, dialogWidth, dialogHeight, callback, moduleId)
 {
+	if(!isDefined(moduleId))
+		moduleId = '';
+	else
+		moduleId = (url.indexOf('?') > -1 ? '&' : '?') + 'module_id=' + moduleId;
+	
 	if(!isDefined(callback))
 		callback = function(){};
 	
@@ -49,8 +54,8 @@ function loadModuleDialog(url, dialogId, dialogWidth, dialogHeight, callback)
 		$('body').append('<div id="' + dialogId + '"></div>');
 
 	var dialogElement = $('#' + dialogId);
-
-	dialogElement.load(url, function()
+	
+	dialogElement.load(url + moduleId, function()
 	{
 		dialogElement.dialog
 		({

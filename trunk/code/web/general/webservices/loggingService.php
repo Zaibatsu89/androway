@@ -1,8 +1,8 @@
 <?php
 
-require_once("init.php");
+require_once("../init.php");
 
-init("http://m.androway.nl/", "http://www.androway.nl/", $_REQUEST["dbName"], "androway_logging", "********");
+init(false);
 handleAuth(false);
 
 /*

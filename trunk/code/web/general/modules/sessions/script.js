@@ -4,29 +4,36 @@ function initSessionsModule()
 	({
 		moduleName: 'sessions',
 		url: 'modules/sessions/sessionsService.php',
+		showLogsRow: true,
+		editRow: true,
+		removeRow: true,
 		colModel:
 		[
-			{display: 'Name', name : 'name', width : 140, sortable : true, align: 'left'},
-			{display: 'Date Time', name : 'date_time', width : 140, sortable : true, align: 'left'},
-			{display: 'User ID', name : 'user_id', width : 140, sortable : true, align: 'left'},
+			{display: 'name', name : 'name', width : 140, sortable : true, align: 'left'},
+			{display: 'date/time', name : 'date_time', width : 140, sortable : true, align: 'left'},
+			{display: 'user id', name : 'user_id', width : 80, sortable : true, align: 'left'},
+			{display: '', name : 'show_module', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],
 		searchitems :
 		[
-			{display: 'Name', name : 'name'}
+			{display: 'name', name : 'name'}
 		],
-		sortname: "date_time",
-		sortorder: "asc",
-		width: '100%',
+		sortname: 'date_time',
+		sortorder: 'desc',
 		onSuccess: function(){ },
+		onShowLogs: function(scope)
+		{
+			onShowSessionLogs($(scope).attr('id'));
+		},
 		onEdit: function(scope)
 		{
 			onEditSession($(scope).attr('id'));
 		},
 		onRemove: function(scope)
 		{
-			if(confirm('Are you sure you want to perminantly delete this session?'))
+			if(confirm('Are you sure you want to permanently delete this session?'))
 			{
 				var rowId = $(scope).attr('id');
 				
@@ -73,4 +80,9 @@ function onEditSession(sessionId)
 			$('#editSession').dialog('destroy');
 		});
 	});
+}
+
+function onShowSessionLogs(sessionId)
+{
+	startModule('logs', 'dialog', sessionId);
 }

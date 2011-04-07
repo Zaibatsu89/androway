@@ -12,9 +12,9 @@ require_once("model.php");
 class Session extends Model
 {
 	private $sessionTable = "sessions";
-	private $sessionNameClmn= "name";
-	private $sessionDateTimeClmn= "date_time";
-	private $sessionUserClmn= "user_id";
+	private $sessionNameClmn = "name";
+	private $sessionDateTimeClmn = "date_time";
+	private $sessionUserClmn = "user_id";
 	
 	public function __construct($id = null)
 	{
@@ -69,12 +69,20 @@ class Session extends Model
 			return false;
 	}
 	
-	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit)
+	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit, User $user)
 	{
 		$sqlQuery = "";
 		
 		if($query != "" && $qtype != "")
 			$sqlQuery = "WHERE $qtype LIKE '%$query%'";
+			
+		if($user->data["level"] > 0)
+		{
+			if(empty($sqlQuery))
+				$sqlQuery = "WHERE user_id = " . $user->data["id"];
+			else
+				$sqlQuery .= " AND user_id = " . $user->data["id"];
+		}
 		
 		$rows = self::$dbAlternative->getData("SELECT * FROM sessions $sqlQuery ORDER BY $sortname $sortorder LIMIT $start, $limit");
 		
@@ -88,12 +96,20 @@ class Session extends Model
 		return $sessions;
 	}
 		
-	public static function total($qtype, $query, $sortname, $sortorder)
+	public static function total($qtype, $query, $sortname, $sortorder, User $user)
 	{
 		$sqlQuery = "";
 		
 		if($query != "" && $qtype != "")
 			$sqlQuery = "WHERE $qtype LIKE '%$query%'";
+			
+		if($user->data["level"] > 0)
+		{
+			if(empty($sqlQuery))
+				$sqlQuery = "WHERE user_id = " . $user->data["id"];
+			else
+				$sqlQuery .= " AND user_id = " . $user->data["id"];
+		}
 		
 		$rows = self::$dbAlternative->getData("SELECT * FROM sessions $sqlQuery");
 		

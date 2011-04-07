@@ -16,9 +16,9 @@ class SessionHandler
 	private $currentUser = null;
 	public $authenticationHandler = null; 
 	
-	public function __construct()
+	public function __construct($maxLifeTime)
 	{
-		$this->authenticationHandler = new Authentication();
+		$this->authenticationHandler = new Authentication(null, $maxLifeTime);
 	}
 	
 	public function __destruct()

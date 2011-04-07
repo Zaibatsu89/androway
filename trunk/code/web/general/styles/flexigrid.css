@@ -1,15 +1,21 @@
 @charset "UTF-8";
 /* CSS Document */
 
-.flexigrid .remove
+.flexigrid .show_module
 {
-	background-color: red;
+	background: blue !important;
 	cursor: pointer;
 }
 
 .flexigrid .edit
 {
-	background-color: green;
+	background: green !important;
+	cursor: pointer;
+}
+
+.flexigrid .remove
+{
+	background: red !important;
 	cursor: pointer;
 }
 
