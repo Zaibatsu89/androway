@@ -13,6 +13,7 @@ import java.util.Map;
 public interface IDatabaseManager
 {
     public abstract boolean init();
+    public abstract void close();
     public abstract boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException;
     public abstract Map<String, Object> getData(String dbName, String query);
 }

@@ -1,7 +1,5 @@
 package proj.androway.common;
 
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SettingsValidator
@@ -20,7 +18,7 @@ public class SettingsValidator
 
     public static boolean validateEmail(String email)
     {
-        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");        
+        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         return pattern.matcher(email).matches();
     }
 
@@ -28,7 +26,7 @@ public class SettingsValidator
     {
         boolean valid = false;
 
-        if(password.length() >= 6)
+        if(password.length() >= Constants.MINIMAL_PASSWORD_LENGTH)
             valid = true;
 
         return valid;

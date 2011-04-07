@@ -12,9 +12,10 @@ import org.apache.http.NameValuePair;
  */
 public interface IConnectionManager extends Runnable
 {
-	// Should be all public accessible methods
-	public abstract boolean open(String address, ArrayList<NameValuePair> data);
-	public abstract void close();
-	public abstract boolean post(String address, ArrayList<NameValuePair> data);
-	public abstract Map<String, Object> get(String address, ArrayList<NameValuePair> params);
+    // Should be all public accessible methods
+    public abstract boolean open(String address, ArrayList<NameValuePair> data);
+    public abstract void close(String address);
+    public abstract boolean checkConnection();
+    public abstract boolean post(String address, ArrayList<NameValuePair> data);
+    public abstract Map<String, Object> get(String address, ArrayList<NameValuePair> params);
 }

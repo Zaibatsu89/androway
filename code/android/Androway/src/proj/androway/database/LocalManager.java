@@ -29,47 +29,48 @@ public class LocalManager extends DatabaseManagerBase
         public boolean init() { return true; }
 
 	private static class DatabaseHelper extends SQLiteOpenHelper
-    {
-        DatabaseHelper(Context context)
         {
-            super(context, Constants.DATABASE_NAME, null, 1);
+            DatabaseHelper(Context context)
+            {
+                super(context, Constants.DATABASE_NAME, null, 1);
+            }
+
+            @Override
+            public void onCreate(SQLiteDatabase db)
+            {
+                            // Temporary: for developer phone
+                            db.execSQL("DROP TABLE IF EXISTS " + Constants.DATABASE_TABLE);
+
+                db.execSQL("CREATE TABLE " +
+                                    Constants.DATABASE_TABLE + " (" +
+                                    "id INTEGER PRIMARY KEY, " +
+                                    "time TEXT NOT NULL, " +
+                                    "subject TEXT NOT NULL, " +
+                                    "message TEXT NOT NULL)");
+            }
+
+                    @Override
+                    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
         }
-
-        @Override
-        public void onCreate(SQLiteDatabase db)
-        {
-			// Temporary: for developer phone
-			db.execSQL("DROP TABLE IF EXISTS " + Constants.DATABASE_TABLE);
-
-            db.execSQL("CREATE TABLE " +
-				Constants.DATABASE_TABLE + " (" +
-				"id INTEGER PRIMARY KEY, " +
-				"time TEXT NOT NULL, " +
-				"subject TEXT NOT NULL, " +
-				"message TEXT NOT NULL)");
-        }
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
-    }
 
 	//---opens the database---
-	private LocalManager open() throws SQLException {
-		_db = _dbHelper.getWritableDatabase();
-		return this;
+	public void open() throws SQLException
+        {
+            _db = _dbHelper.getWritableDatabase();;
 	}
 
 	//---closes the database---
-	private void close() {
-		_dbHelper.close();
+	public void close()
+        {
+            _dbHelper.close();
 	}
 
 	public boolean executeNonQuery(String dbName, String query)
 	{
-		open();
-		_db.execSQL(query);
-		close();
-		return true;
+            open();
+            _db.execSQL(query);
+            close();
+            return true;
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class LocalManager extends DatabaseManagerBase
 	      Map<String, Object> retList = new HashMap<String, Object>();
 	      Map<String, Object> list;
 
-		  open();
+              open();
 	      Cursor cursor = _db.rawQuery(query, null);
 
 	      if (cursor.moveToFirst())

@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import java.util.Locale;
 import proj.androway.database.DatabaseManagerBase;
 import proj.androway.ui.View;
 
@@ -28,6 +31,8 @@ public class Settings
     public static boolean BLOCK_1_LOCKED;
     public static boolean BLOCK_2_LOCKED;
     public static boolean SESSION_RUNNING;
+
+    public static boolean LANGUAGE_CHANGED = false;
 
     private static Context _context;
 
@@ -60,6 +65,23 @@ public class Settings
             LOG_TYPE = DatabaseManagerBase.TYPE_HTTP;
         else
             LOG_TYPE = DatabaseManagerBase.TYPE_LOCAL;
+
+        setLanguage(context, APP_LANGUAGE);
+    }
+
+    /*
+     * Change the system language
+     */
+    public static void setLanguage(Context context, String language)
+    {
+        Locale local = new Locale(language);
+        Locale.setDefault(local);
+
+        Configuration config = new Configuration();
+        config.locale = local;
+
+        Resources resources = context.getResources();
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
     public static void putSetting(String name, String value)

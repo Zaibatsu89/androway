@@ -2,6 +2,7 @@ package proj.androway.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,11 +24,15 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
         super.onCreate(savedInstanceState);
         
         this.addPreferencesFromResource(R.xml.settings);
-        this.getListView().setBackgroundColor(Color.parseColor("#b4000000"));      
+        this.getListView().setBackgroundColor(Color.parseColor("#b4000000"));
 
+        // Put the encrypted password
         Editor e = ((Preference) findPreference("encryptedPassword")).getEditor();
         e.putString("userPassword", Settings.USER_PASSWORD);
         e.commit();
+
+        // Load the most recent settings
+        Settings.initSettings(this);
 
         // Remove the encrypted password from the UI.
         _encryptedPasswordPreference = (Preference) findPreference("encryptedPassword");
@@ -37,10 +42,24 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
         Preference emailPref = (Preference)findPreference("userEmail");
         Preference passwordPref = (Preference)findPreference("userPassword");
         Preference bluetoothPref = (Preference)findPreference("bluetoothAddress");
+        Preference languagePref = (Preference)findPreference("appLanguage");
         
-        emailPref.setOnPreferenceChangeListener(this);
-        passwordPref.setOnPreferenceChangeListener(this);
-        bluetoothPref.setOnPreferenceChangeListener(this);
+        // If the session is currently running, block some settings. Otherwise bind change listeners.
+        if(Settings.SESSION_RUNNING)
+        {
+            emailPref.setEnabled(false);
+            passwordPref.setEnabled(false);
+            bluetoothPref.setEnabled(false);
+            ((Preference)findPreference("httpLogging")).setEnabled(false);
+            languagePref.setEnabled(false);
+        }
+        else
+        {
+            emailPref.setOnPreferenceChangeListener(this);
+            passwordPref.setOnPreferenceChangeListener(this);
+            bluetoothPref.setOnPreferenceChangeListener(this);
+            languagePref.setOnPreferenceChangeListener(this);
+        }
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue)
@@ -73,6 +92,14 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
                 this.showInvalidAlert(R.string.bluetoothTitle, R.string.bluetoothInvalid);
             else
                 result = true;
+        }
+        else if(key.equals("appLanguage"))
+        {
+            Settings.LANGUAGE_CHANGED = true;
+            Settings.setLanguage(SettingsView.this, (String)newValue);
+            startActivity(new Intent(this.getBaseContext(), SettingsView.class));
+
+            result = true;
         }
 
         return result;

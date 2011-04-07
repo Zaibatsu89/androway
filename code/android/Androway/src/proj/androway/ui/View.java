@@ -27,11 +27,25 @@ public class View extends ActivityBase
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         this.setContentView(R.layout.main);
 
         _sharedObjects = (SharedObjects)this.getApplication();
 
         this.showDialog(0);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // If the language has changed, restart this activity so it will show the new language
+        if(Settings.LANGUAGE_CHANGED)
+        {
+            startActivity(new Intent(this.getBaseContext(), View.class));
+            Settings.LANGUAGE_CHANGED = false;
+        }
     }
 
     @Override

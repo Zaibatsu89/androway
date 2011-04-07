@@ -2,6 +2,8 @@ package proj.androway.connection;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.http.NameValuePair;
 
 /**
@@ -14,31 +16,36 @@ import org.apache.http.NameValuePair;
  */
 public class BluetoothManager extends ConnectionManagerBase
 {
-	public void run() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    private boolean _running = true;
 
-	public boolean open(String address, ArrayList<NameValuePair> data) {
-		synchronized(this) {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
+    public synchronized void run()
+    {
+        //while(_running) { }
+    }
 
-	public void close() {
-		synchronized(this) {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
+    public synchronized boolean open(String address, ArrayList<NameValuePair> data)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public boolean post(String address, ArrayList<NameValuePair> data) {
-		synchronized(this) {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
+    public synchronized void close(String address)
+    {
+        _running = false;
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public Map<String, Object> get(String address, ArrayList<NameValuePair> params) {
-		synchronized(this) {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
+    public synchronized boolean checkConnection()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public synchronized boolean post(String address, ArrayList<NameValuePair> data)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public synchronized Map<String, Object> get(String address, ArrayList<NameValuePair> params)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
