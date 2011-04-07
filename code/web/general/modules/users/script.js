@@ -4,22 +4,23 @@ function initUsersModule()
 	({
 		moduleName: 'users',
 		url: 'modules/users/usersService.php',
+		editRow: true,
+		removeRow: true,
 		colModel:
 		[
-			{display: 'Name', name : 'name', width : 140, sortable : true, align: 'left'},
-			{display: 'Email', name : 'email', width : 160, sortable : true, align: 'left'},
-			{display: 'Date Time', name : 'date_time', width : 140, sortable : true, align: 'left'},
-			/*DEZE REGEL MOEST ER NOG BIJ :D*/{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
+			{display: 'name', name : 'name', width : 140, sortable : true, align: 'left'},
+			{display: 'email', name : 'email', width : 160, sortable : true, align: 'left'},
+			{display: 'date/time', name : 'date_time', width : 140, sortable : true, align: 'left'},
+			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],
 		searchitems :
 		[
-			{display: 'Name', name : 'name', isdefault: true},
-			{display: 'Email', name : 'email'}
+			{display: 'name', name : 'name', isdefault: true},
+			{display: 'email', name : 'email'}
 		],
-		sortname: "name",
-		sortorder: "asc",
-		width: '100%',
+		sortname: 'name',
+		sortorder: 'asc',
 		onSuccess: function(){ },
 		onEdit: function(scope)
 		{
@@ -27,7 +28,7 @@ function initUsersModule()
 		},
 		onRemove: function(scope)
 		{
-			if(confirm('Are you sure you want to perminantly delete this user?'))
+			if(confirm('Are you sure you want to permanently delete this user?'))
 			{
 				var rowId = $(scope).attr('id');
 				

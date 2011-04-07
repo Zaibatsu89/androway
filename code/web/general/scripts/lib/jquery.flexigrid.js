@@ -1,6 +1,6 @@
 /*
  * Flexigrid for jQuery - New Wave Grid
- * Modified by Tymen Steur
+ * Modified by Tymen Steur and Rinse Cramer
  *
  * Copyright (c) 2008 Paulo P. Marinas (webplicity.net/flexigrid)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -19,8 +19,12 @@
 		p = $.extend
 		({
 			moduleName: '',
-			removeRow: true,
-			editRow: true,
+			showLogsRow: false,
+			editRow: false,
+			removeRow: false,
+			onShowLogs: false,
+			onEdit: false,
+			onRemove: false,
 			height: 'auto', //default height
 			width: 'auto', //auto width
 			striped: false, //apply odd even stripes
@@ -58,8 +62,7 @@
 			onChangeSort: false,
 			onSuccess: false,
 			onError: false,
-			onSubmit: false, // using a custom populate function
-			onRemove: false
+			onSubmit: false // using a custom populate function
 		}, p);
 
 		$(t)
@@ -523,6 +526,50 @@
 				
 				tbody = null; data = null; i = null;
 				
+				if(p.showLogsRow)
+				{
+					// Loop the table rows
+					$(t).find('tr').each(function(i, item)
+					{
+						var rowId = ($(this).attr('id').split('row'))[1];
+						var showLogsElement;
+						
+						if(p.editRow && p.removeRow)
+							showLogsElement = $(this).find('td:last').prev().prev();
+						else if(p.editRow || p.removeRow)
+							showLogsElement = $(this).find('td:last').prev();
+						else
+							showLogsElement = $(this).find('td:last');
+						
+						showLogsElement.addClass('show_module');
+						showLogsElement.attr('id', rowId);
+						showLogsElement.find('div').html('');
+						
+						showLogsElement.click(function(){p.onShowLogs(this)});
+					});
+				}
+				
+				if(p.editRow)
+				{
+					// Loop the table rows
+					$(t).find('tr').each(function(i, item)
+					{
+						var rowId = ($(this).attr('id').split('row'))[1];
+						var editElement;
+						
+						if(p.removeRow)
+							editElement = $(this).find('td:last').prev();
+						else
+							editElement = $(this).find('td:last');
+						
+						editElement.addClass('edit');
+						editElement.attr('id', rowId);
+						editElement.find('div').html('');
+						
+						editElement.click(function(){p.onEdit(this)});
+					});
+				}
+				
 				if(p.removeRow)
 				{
 					// Loop the table rows
@@ -539,21 +586,7 @@
 					});
 				}
 				
-				if(p.editRow)
-				{
-					// Loop the table rows
-					$(t).find('tr').each(function(i, item)
-					{
-						var rowId = ($(this).attr('id').split('row'))[1];
-						
-						var editElement = $(this).find('td:last').prev();
-						editElement.addClass('edit');
-						editElement.attr('id', rowId);
-						editElement.find('div').html('');
-						
-						editElement.click(function(){p.onEdit(this)});
-					});
-				}
+				
 				
 				if (p.onSuccess) p.onSuccess();
 				if (p.hideOnSubmit) $(g.block).remove();//$(t).show();

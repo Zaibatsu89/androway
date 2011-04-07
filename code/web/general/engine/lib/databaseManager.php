@@ -12,9 +12,9 @@ class DatabaseManager
 {
 	private $databaseType = "mysql";
 	private $hostName = "localhost";
-	private $dbName = "";
-	private $userName = "";
-	private $password = "";
+	private $dbName = null;
+	private $userName = null;
+	private $password = null;
 		
 	private $pdoDb = null;
 	

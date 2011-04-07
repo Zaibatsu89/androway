@@ -12,11 +12,11 @@ require_once("model.php");
 class User extends Model
 {
 	private $userTable = "users";
-	private $userNameClmn= "name";
-	private $userEmailClmn= "email";
+	private $userNameClmn = "name";
+	private $userEmailClmn = "email";
 	private $userPasswordClmn = "password";
 	private $userLevelClmn = "level";
-	private $userDateTimeClmn= "date_time";
+	private $userDateTimeClmn = "date_time";
 
 	public function __construct($id = null)
 	{

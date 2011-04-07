@@ -5,15 +5,14 @@ require_once("../../init.php");
 init();
 handleAuth(true);
 
-require_once("../../engine/lib/session.php");
-require_once("../../engine/lib/user.php");
+require_once("../../engine/lib/log.php");
 
 /*
  * Name: Rinse Cramer
- * Date: 30-03-2011
- * Version: 0.11
+ * Date: 31-03-2011
+ * Version: 0.1
  * 
- * Class to serve the session
+ * Class to serve the log
  */
 if(isset($_REQUEST["action"]))
 {
@@ -21,21 +20,21 @@ if(isset($_REQUEST["action"]))
 	{
 		case "getGridData":
 		{
-			function getRows($sessions)
-			{
+			function getRows($logs)
+			{				
 				$rows = array();
 				
-				foreach ($sessions as $session)
+				foreach ($logs as $log)
 				{
 					$rows[] = array
 					(
-						"id" => $session->data["id"],
+						"id" => $log->data["id"],
 						"cell" => array
 						(
-							$session->data["name"],
-							date("d-m-y",$session->data["date_time"])." ".date("G:i",$session->data["date_time"]),
-							$session->data["user_id"],
-							'showLogs',
+							$log->data["session_id"],
+							$log->data["time"],
+							$log->data["subject"],
+							$log->data["message"],
 							'edit',
 							'remove'
 						)
@@ -67,8 +66,8 @@ if(isset($_REQUEST["action"]))
 			$json = array
 			(
 				"page" => $page,
-				"total" => Session::total($qtype, $query, $sortname, $sortorder, $user),
-				"rows" => getRows(Session::loadSorted($qtype, $query, $sortname, $sortorder, $start, $rp, $user))
+				"total" => Log::total($qtype, $query, $sortname, $sortorder, $user),
+				"rows" => getRows(Log::loadSorted($qtype, $query, $sortname, $sortorder, $start, $rp, $user))
 			);
 			
 			echo json_encode($json);
@@ -78,37 +77,37 @@ if(isset($_REQUEST["action"]))
 		{
 			if (isset($_REQUEST["id"]) && !empty($_REQUEST["id"]))
 			{
-				$session = new Session($_REQUEST["id"]);
+				$log = new Log($_REQUEST["id"]);
 				
-				$session->removeSession();
+				$log->removeLog();
 			}
 		
 			break;	
 		}
-		case "getSession":
+		case "getLog":
 		{
 			$json = array();
 			
 			if(isset($_REQUEST["id"]))
 			{
-				$session = new Session($_REQUEST["id"]);				
-				$json = $session->data;
+				$log = new Log($_REQUEST["id"]);				
+				$json = $log->data;
 			}
 			
 			echo json_encode($json);
 			
 			break;
 		}
-		case "editSession":
+		case "editLog":
 		{
 			if(isset($_REQUEST["id"]))
 			{
-				$session = null;
+				$log = null;
 				
 				if($_REQUEST["id"] != "")
 				{
-					$session = new Session($_REQUEST["id"]);
-					$session->editSession($_REQUEST["name"]);
+					$log = new Log($_REQUEST["id"]);
+					$log->editLog($_REQUEST["subject"], $_REQUEST["message"]);
 				}
 			}
 			

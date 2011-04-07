@@ -12,7 +12,7 @@ function logout(formId)
 	});
 }
 
-function startModule(moduleName, moduleType)
+function startModule(moduleName, moduleType, moduleId)
 {
 	switch(moduleType)
 	{
@@ -20,7 +20,7 @@ function startModule(moduleName, moduleType)
 		{
 			var moduleElement = moduleName + 'Module';
 			
-			loadModuleDialog('/modules/' + moduleName + '/index.php', moduleElement, 600, 375);
+			loadModuleDialog('/modules/' + moduleName + '/index.php', moduleElement, 600, 375, function(){}, moduleId);
 
 			moduleElement = $(moduleElement);
 			
