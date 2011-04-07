@@ -22,12 +22,11 @@ import proj.androway.common.Settings;
 public class HttpManager extends DatabaseManagerBase
 {
     private IConnectionManager _httpManager;
-	private Thread _connectionThread;
+    private Thread _connectionThread;
 
     public HttpManager(Context context) throws MaxPoolSizeReachedException
     {
         _httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
-		_connectionThread = new Thread(_httpManager);
     }
 
     /*
@@ -35,7 +34,8 @@ public class HttpManager extends DatabaseManagerBase
      */
     public boolean init()
     {
-		_connectionThread.start();
+        _connectionThread = new Thread(_httpManager);
+        _connectionThread.start();
 
         // Get the login credentials from the settings
         ArrayList<NameValuePair> loginData = new ArrayList<NameValuePair>();
@@ -43,7 +43,12 @@ public class HttpManager extends DatabaseManagerBase
         loginData.add(new BasicNameValuePair("password", Settings.USER_PASSWORD));
         
         // Open the http connection (login) with the login url and login credentials.
-        return _httpManager.open(Constants.LOGIN_WEBSERVICE_URL, loginData);
+        return _httpManager.open(Constants.AUTH_WEBSERVICE_URL, loginData);
+    }
+
+    public void close()
+    {
+        _httpManager.close(Constants.AUTH_WEBSERVICE_URL);
     }
 
     public boolean executeNonQuery(String dbName, String query) throws NotSupportedQueryTypeException

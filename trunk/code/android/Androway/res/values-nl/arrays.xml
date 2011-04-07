@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string-array name="orientation_names">
-        <item>Portrait</item>
-        <item>Landscape</item>
+        <item>Portret</item>
+        <item>Landschap</item>
     </string-array>
     <string-array name="orientation_values">
         <item>portrait</item>
@@ -10,9 +10,9 @@
     </string-array>
 
     <string-array name="language_names">
-        <item>English</item>
-        <item>Dutch</item>
-        <item>Frisian</item>
+        <item>Engels</item>
+        <item>Nederlands</item>
+        <item>Fries</item>
     </string-array>
     <string-array name="language_values">
         <item>gb</item>

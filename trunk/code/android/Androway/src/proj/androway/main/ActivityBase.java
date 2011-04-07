@@ -23,15 +23,14 @@ public class ActivityBase extends Activity
     {
         super.onCreate(savedInstanceState);
 
-        Settings.initSettings(this.getApplicationContext());
+        Settings.initSettings(this.getBaseContext());
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-
-        Settings.initSettings(this.getApplicationContext());
+        Settings.initSettings(this.getBaseContext());
     }
 
     @Override

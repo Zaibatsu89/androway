@@ -1,10 +1,10 @@
 package proj.androway.main;
 
+import proj.androway.session.SessionService;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import proj.androway.common.Settings;
@@ -24,7 +24,6 @@ import proj.androway.ui.View;
 public class Controller extends Activity
 {
     private SharedObjects _sharedObjects;
-    private Thread _sessionServiceThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -91,33 +90,13 @@ public class Controller extends Activity
         startActivity(new Intent(Controller.this, RunningSessionView.class));
 
         if(!Settings.SESSION_RUNNING)
-        {
-            _sessionServiceThread = new Thread()
-            {
-                @Override
-                public void run()
-                {
-                    System.out.println("Session service thread started!");
-                    Context context = getApplicationContext();
-                    context.startService(new Intent(context, Session.class));
-
-                    // Keep running while not interrupted
-                    while (!Thread.currentThread().isInterrupted())
-                    { }
-                }
-            };
-            _sessionServiceThread.start();
-        }
+            startService(new Intent(this, SessionService.class));
     }
 
     public void stopSession()
-    {        
+    {
         // Stop the session service and return to the main view
-        this.stopService(new Intent(this, Session.class));
-
-        // Interrupt triggers the thread to die
-        _sessionServiceThread.interrupt();
-        
+        this.stopService(new Intent(this, SessionService.class));
         this.startActivity(new Intent(Controller.this, View.class));
     }
 }

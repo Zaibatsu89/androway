@@ -44,7 +44,8 @@ import java.util.Map;
 import proj.androway.R;
 import proj.androway.common.SharedObjects;
 import proj.androway.database.DatabaseManagerBase;
-import proj.androway.main.Session;
+import proj.androway.session.Session;
+import proj.androway.session.SessionService;
 import proj.androway.ui.block_component.DirectionBlock;
 import proj.androway.ui.quick_action.ActionItem;
 
@@ -69,6 +70,10 @@ public class RunningSessionView extends ActivityBase
     private TiltControls _oriTiltControls;
     private Map<String, BlockComponent> _blockComponents = new HashMap<String, BlockComponent>();
     private ProgressDialog _progressDialog = null;
+    private AlertDialog _failedAlert = null;
+    private boolean _startingSession = false;
+    private boolean _pausedDuringLoginProcess = false;
+
     private Messenger _sessionConnection = null;
     private final Messenger _messenger = new Messenger(new IncomingHandler());
 
@@ -103,15 +108,19 @@ public class RunningSessionView extends ActivityBase
     protected void onStart()
     {
         super.onStart();
-        
-        // Bind to Session service
-        bindService(new Intent(this, Session.class), _serviceConnection, Context.BIND_AUTO_CREATE);
+
+        // Bind to SessionService service
+        bindService(new Intent(this, SessionService.class), _serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
+
+        // If the user paused (left the activity) during the login process, show the failed dialog. Unable to handle.
+        if(_pausedDuringLoginProcess)
+            this.updateProcessDialog(RunningSessionView.DIALOG_TYPE_FAILED, R.string.left_during_login);
 
         if(_accTiltControls != null)
             _accTiltControls.register();
@@ -137,6 +146,11 @@ public class RunningSessionView extends ActivityBase
     @Override
     protected void onPause()
     {
+        // If the we where starting the session and the user is now pausing the activity
+        // set the _pausedDuringLoginProcess to true, so we can show an alert on resume.
+        if(_startingSession)
+            _pausedDuringLoginProcess = true;
+
         // Release the wake-lock
         _wakeLock.release();
 
@@ -166,7 +180,7 @@ public class RunningSessionView extends ActivityBase
         if(_oriTiltControls != null)
             _oriTiltControls.unregister();
 
-        // Unbind from the Session service
+        // Unbind from the SessionService service
         unbindService(_serviceConnection);
 
         super.onStop();
@@ -189,7 +203,7 @@ public class RunningSessionView extends ActivityBase
         {
             try
             {
-                // We've bound to the Session service, create a new messenger with the service.
+                // We've bound to the SessionService service, create a new messenger with the service.
                 _sessionConnection = new Messenger(service);
                 
                 // Send a message to link this view to the session service.
@@ -238,12 +252,20 @@ public class RunningSessionView extends ActivityBase
         {
             case DIALOG_TYPE_START:
             {
+                _startingSession = true;
+
                 // If LOG_TYPE is http logging in is required, so show that message.
                 // Otherwise continue with the bluetooth message.
                 if(Settings.LOG_TYPE.equals(DatabaseManagerBase.TYPE_HTTP))
                 {
+                    String password = "";
+
+                    int passwordLength = Settings.USER_PASSWORD.length();
+                    for(int i = 0; i < passwordLength; i++)
+                        password += "*";
+
                     _progressDialog.setTitle(R.string.login_title);
-                    _progressDialog.setMessage(getString(R.string.login_message));
+                    _progressDialog.setMessage(getString(R.string.login_message) + Settings.USER_EMAIL + "\n" + password);
                     _progressDialog.setIcon(R.drawable.ic_dialog_login);
                     _progressDialog.show();
                     break;
@@ -257,7 +279,7 @@ public class RunningSessionView extends ActivityBase
             case DIALOG_TYPE_BLUETOOTH:
             {
                 _progressDialog.setTitle(R.string.bluetooth_title);
-                _progressDialog.setMessage(getString(R.string.bluetooth_message));
+                _progressDialog.setMessage(getString(R.string.bluetooth_message) + Settings.BLUETOOTH_ADDRESS);
                 _progressDialog.setIcon(R.drawable.ic_dialog_bluetooth);
                 _progressDialog.show();
                 break;
@@ -265,12 +287,16 @@ public class RunningSessionView extends ActivityBase
             case DIALOG_TYPE_DONE:
             {
                 this.initView();
+                _startingSession = false;
                 _progressDialog.dismiss();
                 break;
             }
             case DIALOG_TYPE_FAILED:
             {
-                _progressDialog.dismiss();
+                _startingSession = false;
+
+                if(_progressDialog != null && _progressDialog.isShowing())
+                    _progressDialog.dismiss();
 
                 int message = R.string.error_message;
 
@@ -289,8 +315,8 @@ public class RunningSessionView extends ActivityBase
                            }
                        });
 
-                AlertDialog failedAlert = builder.create();
-                failedAlert.show();
+                _failedAlert = builder.create();
+                _failedAlert.show();
 
                 break;
             }

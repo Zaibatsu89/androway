@@ -20,58 +20,57 @@ import java.util.Map;
  */
 public final class DatabaseFactory extends Application
 {
-	private static DatabaseFactory _databaseFactory;
-	private static IDatabaseManager _databaseManager;
-	private static Map _databaseManagersCollection = new HashMap();
-	private static int _managerCount;
-	private static int _maxPoolSize = 2;
+    private static DatabaseFactory _databaseFactory;
+    private static Map _databaseManagersCollection = new HashMap();
+    private static int _managerCount = 0;
+    private static int _maxPoolSize = 2;
 
-	private DatabaseFactory() {}
+    private DatabaseFactory() {}
 
-	public static DatabaseFactory getInstance()
-	{
-            if (_databaseFactory == null)
-                _databaseFactory = new DatabaseFactory();
+    public static DatabaseFactory getInstance()
+    {
+        if (_databaseFactory == null)
+            _databaseFactory = new DatabaseFactory();
 
-            return _databaseFactory;
-	}
+        return _databaseFactory;
+    }
 
-	public static IDatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException
-	{
-		if (_managerCount < _maxPoolSize)
-		{
-			if (_databaseManagersCollection.containsKey(managerName))
-				_databaseManager = (IDatabaseManager) _databaseManagersCollection.get(managerName);
-			else
-			{
-				if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
-					_databaseManager = new HttpManager(context);
-				else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
-					_databaseManager = new LocalManager(context);
+    public static IDatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException
+    {
+        if (_managerCount <= _maxPoolSize)
+        {
+            IDatabaseManager databaseManager = null;
 
-				_databaseManagersCollection.put(managerName, null);
-				_managerCount++;
-			}
+            if (_databaseManagersCollection.containsKey(managerName))
+                databaseManager = (IDatabaseManager) _databaseManagersCollection.get(managerName);
+            else
+            {
+                if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
+                    databaseManager = new HttpManager(context);
+                else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
+                    databaseManager = new LocalManager(context);
 
-			return _databaseManager;
-		}
-		else
-		{
-			throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
-		}
-	}
+                _databaseManagersCollection.put(managerName, databaseManager);
+                _managerCount++;
+            }
 
-	public static void releaseDatabaseManager(String managerName)
-	{
-		if (_databaseManagersCollection.containsKey(managerName))
-		{
-			_databaseManagersCollection.remove(managerName);
-			_managerCount--;
-		}
-	}
+            return databaseManager;
+        }
+        else
+            throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
+    }
 
-	public static void setMaxPoolSize(int maxPoolSize)
-	{
-		_maxPoolSize = maxPoolSize;
-	}
+    public static void releaseDatabaseManager(String managerName)
+    {
+        if (_databaseManagersCollection.containsKey(managerName))
+        {
+            _databaseManagersCollection.remove(managerName);
+            _managerCount--;
+        }
+    }
+
+    public static void setMaxPoolSize(int maxPoolSize)
+    {
+        _maxPoolSize = maxPoolSize;
+    }
 }

@@ -27,13 +27,15 @@
             android:name="@string/bluetoothTitle"
             android:summary="@string/bluetoothSummary"
             android:title="@string/bluetoothTitle"
-            android:key="bluetoothAddress"/>
+            android:key="bluetoothAddress"
+            android:defaultValue="00:00:00:00:00:00"/>
 
         <CheckBoxPreference
             android:name="@string/logOnlineTitle"
             android:summary="@string/logOnlineSummary"
             android:title="@string/logOnlineTitle"
-            android:key="httpLogging"/>
+            android:key="httpLogging"
+            android:defaultValue="true"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="UI Settings">
@@ -41,13 +43,15 @@
             android:name="@string/block1LockedTitle"
             android:summary="@string/block1LockedSummary"
             android:title="@string/block1LockedTitle"
-            android:key="block1Locked"/>
+            android:key="block1Locked"
+            android:defaultValue="false"/>
 
         <CheckBoxPreference
             android:name="@string/block2LockedTitle"
             android:summary="@string/block2LockedSummary"
             android:title="@string/block2LockedTitle"
-            android:key="block2Locked"/>
+            android:key="block2Locked"
+            android:defaultValue="false"/>
 
         <ListPreference
             android:name="@string/orientationTitle"
@@ -55,7 +59,8 @@
             android:title="@string/orientationTitle"
             android:key="deviceOrientation"
             android:entries="@array/orientation_names"
-            android:entryValues="@array/orientation_values"/>
+            android:entryValues="@array/orientation_values"
+            android:defaultValue="portrait"/>
 
         <ListPreference
             android:name="@string/languageTitle"
@@ -63,6 +68,7 @@
             android:title="@string/languageTitle"
             android:key="appLanguage"
             android:entries="@array/language_names"
-            android:entryValues="@array/language_values"/>
+            android:entryValues="@array/language_values"
+            android:defaultValue="gb"/>
     </PreferenceCategory>
 </PreferenceScreen>

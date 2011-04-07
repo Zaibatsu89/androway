@@ -13,11 +13,12 @@
         android:name=".common.SharedObjects">
 
         <service
-            android:name=".main.Session"
+            android:name=".session.SessionService"
             android:exported="false"/>
 
         <activity
-             android:name=".main.Controller"             
+             android:name=".main.Controller"
+             android:configChanges="locale"
              android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
              android:windowSoftInputMode="stateAlwaysHidden">
 
@@ -30,12 +31,14 @@
 
          <activity
              android:name=".ui.View"
+             android:configChanges="locale"
              android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
              android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
 
         <activity
             android:name=".ui.RunningSessionView"
+            android:configChanges="locale"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:launchMode="singleTop">
@@ -43,15 +46,23 @@
 
         <activity
             android:name=".ui.ViewOldSessionView"
+            android:configChanges="locale"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
         </activity>
 
         <activity
             android:name=".ui.SettingsView"
+            android:configChanges="locale"
             android:label="@string/settings"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
         </activity>
 
     </application>
+
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:anyDensity="true"/>
     
 </manifest>
