@@ -13,7 +13,7 @@
     <string name="settings">Settings</string>
     <string name="view_settings">Settings</string>
     <string name="exit_app">Exit</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="invalid">invalid!</string>
 
     <!-- Dialog string values (on session start) -->
@@ -42,7 +42,7 @@
     <string name="emailInvalid">The email address must be of the correct format.\n\nPlease change your input.</string>
     <string name="passwordTitle">Password</string>
     <string name="passwordSummary">Your password</string>
-    <string name="passwordInvalid">The password must have a minimum length of 6.\n\nPlease change your input.</string>
+    <string name="passwordInvalid">The password must have a minimum length of 6 characters.\n\nPlease change your input.</string>
     <string name="bluetoothTitle">Bluetooth address</string>
     <string name="bluetoothSummary">The bluetooth for the remote Segway</string>
     <string name="bluetoothInvalid">The bluetooth address must be of the following format:\n\n00:00:00:00:00:00\n\nPlease change your input.</string>

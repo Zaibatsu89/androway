@@ -4,67 +4,67 @@
     <string name="app_label">Androway</string>
 
     <!-- UI -->
-    <string name="choose_action">Choose your action</string>
-    <string name="start_new_session">Start new session</string>
-    <string name="show_running_session">Show running session</string>
-    <string name="view_old_session">View old session</string>
-    <string name="connect">Connect</string>
-    <string name="disconnect">Disconnect</string>
-    <string name="settings">Settings</string>
-    <string name="view_settings">Settings</string>
-    <string name="exit_app">Exit</string>
-    <string name="ok">Ok</string>
-    <string name="invalid">invalid!</string>
+    <string name="choose_action">Kies in aksje</string>
+    <string name="start_new_session">Start nije sessy</string>
+    <string name="show_running_session">Toan rinnende sessy</string>
+    <string name="view_old_session">Toan âlde sessy</string>
+    <string name="connect">Ferbine</string>
+    <string name="disconnect">Ferbining ferbrekke</string>
+    <string name="settings">Ynstellings</string>
+    <string name="view_settings">Ynstellings</string>
+    <string name="exit_app">Ofslute</string>
+    <string name="ok">OK</string>
+    <string name="invalid">unjildich!</string>
 
     <!-- Dialog string values (on session start) -->
-    <string name="login_title">Logging in...</string>
-    <string name="login_message">Logging into Androway with the following credentials:\n\n</string>
-    <string name="bluetooth_title">Connecting bluetooth...</string>
-    <string name="bluetooth_message">Trying to connect to the Segway with the following address:\n\n</string>
-    <string name="error_title">A problem occured</string>
-    <string name="error_message">An error occured during the starting of the session.</string>
-    <string name="login_failed_message">The login process failed.\n\nPlease check your internet connection, your credentials or disable saving the data online.</string>
-    <string name="left_during_login">The login process failed.\n\nYou left the application during the login process, please try again.</string>
+    <string name="login_title">Dwaande mei ynloggen...</string>
+    <string name="login_message">Dwaande mei ynloggen by Androway mei de neikommende bysûnderheden:\n\n</string>
+    <string name="bluetooth_title">Ferbine mei bluetooth...</string>
+    <string name="bluetooth_message">Besykje om ferbining te meitsjen mei de Segway mei it neikommende adres:\n\n</string>
+    <string name="error_title">In swierrichheid kaam mei oer \'t mêd</string>
+    <string name="error_message">In swierricheid kaam mei oer \'t mêd ûnder it op gong bringen fan de sessy.</string>
+    <string name="login_failed_message">It ynloggen is misleare.\n\nKontrolearje as do wolst de internetferbining, de bysûnderheden of set it online opslaan ut.</string>
+    <string name="left_during_login">It ynloggen is misleare.\n\nDo hast de applikaasje ferlitten ûnder it ynloggen, probearje it nochris.</string>
 
     <!-- Notification string values -->
-    <string name="start_session_ticker">A new session started</string>
-    <string name="start_session_title">Running session</string>
-    <string name="start_session_message">Select to view the running session.</string>
-    <string name="session_hold_ticker">The session is put on hold</string>
-    <string name="session_hold_title">Session on hold</string>
-    <string name="session_hold_message">Select to continue the running session.</string>
+    <string name="start_session_ticker">In nije sessy is gestart</string>
+    <string name="start_session_title">Rinnende sessy</string>
+    <string name="start_session_message">Selektearje om de rinnende sessy te besjen.</string>
+    <string name="session_hold_ticker">De sessy is op skoft steld</string>
+    <string name="session_hold_title">Sessy hâld skoft</string>
+    <string name="session_hold_message">Selektearje om fierder te gean mei de rinnende sessy.</string>
 
     <!-- UI Settings View -->
-    <string name="accountSettings">Account Settings</string>
-    <string name="systemSettings">System Settings</string>
-    <string name="emailTitle">Email address</string>
-    <string name="emailSummary">Your account email address</string>
-    <string name="emailInvalid">The email address must be of the correct format.\n\nPlease change your input.</string>
-    <string name="passwordTitle">Password</string>
-    <string name="passwordSummary">Your password</string>
-    <string name="passwordInvalid">The password must have a minimum length of 6.\n\nPlease change your input.</string>
-    <string name="bluetoothTitle">Bluetooth address</string>
-    <string name="bluetoothSummary">The bluetooth for the remote Segway</string>
-    <string name="bluetoothInvalid">The bluetooth address must be of the following format:\n\n00:00:00:00:00:00\n\nPlease change your input.</string>
-    <string name="logOnlineTitle">Save data online</string>
-    <string name="logOnlineSummary">Store the session data online</string>
-    <string name="block1LockedTitle">Top block locked</string>
-    <string name="block1LockedSummary">Prevent the top block from sliding</string>
-    <string name="block2LockedTitle">Bottom block locked</string>
-    <string name="block2LockedSummary">Prevent the bottom block from sliding</string>
-    <string name="orientationTitle">Device orientation</string>
-    <string name="orientationSummary">The preferred device orientation</string>
-    <string name="languageTitle">Language</string>
-    <string name="languageSummary">The preferred application language</string>
+    <string name="accountSettings">Accountynstellings</string>
+    <string name="systemSettings">Systeemynstellings</string>
+    <string name="emailTitle">E-mailadres</string>
+    <string name="emailSummary">It e-mailadres fan dyn akkount</string>
+    <string name="emailInvalid">Dit is net in jildich e-mailadres.\n\nFeroarje as do wolst dyn ynfier.</string>
+    <string name="passwordTitle">Wachtwurd</string>
+    <string name="passwordSummary">It wachtwurd fan dyn akkount</string>
+    <string name="passwordInvalid">It wachtwurd moat in minimale lingte hawwe fan 6 tekens.\n\nFeroarje as do wolst dyn ynfier.</string>
+    <string name="bluetoothTitle">Bluetooth-adres</string>
+    <string name="bluetoothSummary">It bluetooth-adres fan de Segway</string>
+    <string name="bluetoothInvalid">It bluetooth-adres moat de neikommende yndieling hawwe:\n\n00:00:00:00:00:00\n\nFeroarje as do wolst dyn ynfier.</string>
+    <string name="logOnlineTitle">Bysûnderheden online opslaan</string>
+    <string name="logOnlineSummary">De sessybysûnderheden online opslaan</string>
+    <string name="block1LockedTitle">Boppeste blok geblokkeard</string>
+    <string name="block1LockedSummary">Foarkom dat it boppeste blok kin ferskowe</string>
+    <string name="block2LockedTitle">Underste blok geblokkeard</string>
+    <string name="block2LockedSummary">Foarkom dat it underste blok kin ferskowe</string>
+    <string name="orientationTitle">Apparaatoriïntaasje</string>
+    <string name="orientationSummary">De gewinske apparaatoriïntaasje</string>
+    <string name="languageTitle">Taal</string>
+    <string name="languageSummary">De gewinske applikaasjetaal</string>
 
     <!-- Logging -->
-    <string name="add">Add</string>
-    <string name="get">Show All</string>
-    <string name="remove">Remove All</string>
+    <string name="add">Tafoegje</string>
+    <string name="get">Alles sjen litte</string>
+    <string name="remove">Alles ferwiderje</string>
     <string name="format">dd-MM-yyyy H:mm</string>
-    <string name="added">Log added.</string>
-    <string name="removed">All logs are removed.</string>
-    <string name="empty">There are no logs.</string>
+    <string name="added">Loch tafoege.</string>
+    <string name="removed">Alle lochs binne ferwidere.</string>
+    <string name="empty">Der binne gjin lochs.</string>
 
     <!-- Exception messages -->
     <string name="MaxPoolSizeReachedException">The Factory object pool has reached its maximum size.</string>

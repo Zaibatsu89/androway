@@ -12,8 +12,8 @@
     <string name="disconnect">Verbinding verbreken</string>
     <string name="settings">Instellingen</string>
     <string name="view_settings">Instellingen</string>
-    <string name="exit_app">Afstluiten</string>
-    <string name="ok">Ok</string>
+    <string name="exit_app">Afsluiten</string>
+    <string name="ok">OK</string>
     <string name="invalid">ongeldig!</string>
 
     <!-- Dialog string values (on session start) -->
@@ -23,7 +23,7 @@
     <string name="bluetooth_message">Probeert verbinding te maken met de Segway met het volgende adres:\n\n</string>
     <string name="error_title">Er is een probleem opgetreden</string>
     <string name="error_message">Er is een probleem opgetreden tijdens het opstarten van de sessie.</string>
-    <string name="login_failed_message">Het inloggen is mislukt.\n\nControleer alstublieft de internet verbinding, de gegevens of zet het online opslaan uit.</string>
+    <string name="login_failed_message">Het inloggen is mislukt.\n\nControleer alstublieft de internetverbinding, de gegevens of zet het online opslaan uit.</string>
     <string name="left_during_login">Het inloggen is mislukt.\n\nJe hebt de applicatie verlaten tijdens het inloggen, probeer het nogmaals.</string>
 
     <!-- Notification string values -->
@@ -35,19 +35,19 @@
     <string name="session_hold_message">Selecteer om verder te gaan met de gepauzeerde sessie.</string>
 
     <!-- UI Settings View -->
-    <string name="accountSettings">Account Instellingen</string>
-    <string name="systemSettings">Systeem Instellingen</string>
-    <string name="emailTitle">Email adres</string>
-    <string name="emailSummary">Het email adres van je account</string>
-    <string name="emailInvalid">Dit is niet een geldig email adres.\n\nVerander alstublieft je invoer.</string>
+    <string name="accountSettings">Accountinstellingen</string>
+    <string name="systemSettings">Systeeminstellingen</string>
+    <string name="emailTitle">E-mailadres</string>
+    <string name="emailSummary">Het e-mailadres van je account</string>
+    <string name="emailInvalid">Dit is niet een geldig e-mailadres.\n\nVerander alstublieft je invoer.</string>
     <string name="passwordTitle">Wachtwoord</string>
     <string name="passwordSummary">Het wachtwoord van je account</string>
-    <string name="passwordInvalid">Het wachtwoord moet een minimale lengte hebben van 6.\n\nVerander alstublieft je invoer.</string>
-    <string name="bluetoothTitle">Bluetooth adres</string>
-    <string name="bluetoothSummary">Het bluetooth adres van de Segway</string>
-    <string name="bluetoothInvalid">Het bluetooth adres moet van het volgende indeling zijn:\n\n00:00:00:00:00:00\n\nVerander alstublieft je invoer.</string>
+    <string name="passwordInvalid">Het wachtwoord moet een minimale lengte hebben van 6 tekens.\n\nVerander alstublieft je invoer.</string>
+    <string name="bluetoothTitle">Bluetooth-adres</string>
+    <string name="bluetoothSummary">Het bluetooth-adres van de Segway</string>
+    <string name="bluetoothInvalid">Het bluetooth-adres moet de volgende indeling hebben:\n\n00:00:00:00:00:00\n\nVerander alstublieft je invoer.</string>
     <string name="logOnlineTitle">Data online opslaan</string>
-    <string name="logOnlineSummary">De sessie data online opslaan</string>
+    <string name="logOnlineSummary">De sessiedata online opslaan</string>
     <string name="block1LockedTitle">Bovenste blok geblokkeerd</string>
     <string name="block1LockedSummary">Voorkom dat het bovenste blok kan verschuiven</string>
     <string name="block2LockedTitle">Onderste blok geblokkeerd</string>
@@ -55,12 +55,12 @@
     <string name="orientationTitle">Apparaatoriëntatie</string>
     <string name="orientationSummary">De gewenste apparaatoriëntatie</string>
     <string name="languageTitle">Taal</string>
-    <string name="languageSummary">De gewenste applicatie taal</string>
+    <string name="languageSummary">De gewenste applicatietaal</string>
 
     <!-- Logging -->
     <string name="add">Toevoegen</string>
-    <string name="get">Toon alles</string>
-    <string name="remove">Verwijder alles</string>
+    <string name="get">Alles tonen</string>
+    <string name="remove">Alles verwijderen</string>
     <string name="format">dd-MM-yyyy H:mm</string>
     <string name="added">Log toegevoegd.</string>
     <string name="removed">Alle logs zijn verwijderd.</string>
