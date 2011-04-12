@@ -90,13 +90,12 @@ public class Controller extends Activity
         startActivity(new Intent(Controller.this, RunningSessionView.class));
 
         if(!Settings.SESSION_RUNNING)
-            startService(new Intent(this, SessionService.class));
+            this.startService(new Intent(this, SessionService.class));
     }
 
     public void stopSession()
     {
         // Stop the session service and return to the main view
         this.stopService(new Intent(this, SessionService.class));
-        this.startActivity(new Intent(Controller.this, View.class));
     }
 }

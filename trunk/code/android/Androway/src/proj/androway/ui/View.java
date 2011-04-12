@@ -46,6 +46,8 @@ public class View extends ActivityBase
             startActivity(new Intent(this.getBaseContext(), View.class));
             Settings.LANGUAGE_CHANGED = false;
         }
+
+        this.showDialog(0);
     }
 
     @Override

@@ -15,19 +15,20 @@
     <string name="exit_app">Ofslute</string>
     <string name="ok">OK</string>
     <string name="invalid">unjildich!</string>
+    <string name="stop_session">Stop Sessy</string>
 
     <!-- Dialog string values (on session start) -->
     <string name="login_title">Dwaande mei ynloggen...</string>
-    <string name="login_message">Dwaande mei ynloggen by Androway mei de neikommende bysûnderheden:\n\n</string>
+    <string name="login_message">Dwaande mei ynloggen by Androway mei de neikommende gegevens:\n\n</string>
     <string name="bluetooth_title">Ferbine mei bluetooth...</string>
     <string name="bluetooth_message">Besykje om ferbining te meitsjen mei de Segway mei it neikommende adres:\n\n</string>
     <string name="error_title">In swierrichheid kaam mei oer \'t mêd</string>
     <string name="error_message">In swierricheid kaam mei oer \'t mêd ûnder it op gong bringen fan de sessy.</string>
-    <string name="login_failed_message">It ynloggen is misleare.\n\nKontrolearje as do wolst de internetferbining, de bysûnderheden of set it online opslaan ut.</string>
+    <string name="login_failed_message">It ynloggen is misleare.\n\nKontrolearje as do wolst de internetferbining, de gegevens of set it online opslaan ut.</string>
     <string name="left_during_login">It ynloggen is misleare.\n\nDo hast de applikaasje ferlitten ûnder it ynloggen, probearje it nochris.</string>
 
     <!-- Notification string values -->
-    <string name="start_session_ticker">In nije sessy is gestart</string>
+    <string name="start_session_ticker">In nije sessy is starten</string>
     <string name="start_session_title">Rinnende sessy</string>
     <string name="start_session_message">Selektearje om de rinnende sessy te besjen.</string>
     <string name="session_hold_ticker">De sessy is op skoft steld</string>
@@ -48,9 +49,9 @@
     <string name="bluetoothInvalid">It bluetooth-adres moat de neikommende yndieling hawwe:\n\n00:00:00:00:00:00\n\nFeroarje as do wolst dyn ynfier.</string>
     <string name="logOnlineTitle">Bysûnderheden online opslaan</string>
     <string name="logOnlineSummary">De sessybysûnderheden online opslaan</string>
-    <string name="block1LockedTitle">Boppeste blok geblokkeard</string>
+    <string name="block1LockedTitle">Boppeste blok blokkeard</string>
     <string name="block1LockedSummary">Foarkom dat it boppeste blok kin ferskowe</string>
-    <string name="block2LockedTitle">Underste blok geblokkeard</string>
+    <string name="block2LockedTitle">Underste blok blokkeard</string>
     <string name="block2LockedSummary">Foarkom dat it underste blok kin ferskowe</string>
     <string name="orientationTitle">Apparaatoriïntaasje</string>
     <string name="orientationSummary">De gewinske apparaatoriïntaasje</string>

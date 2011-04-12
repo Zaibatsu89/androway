@@ -50,8 +50,9 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
             emailPref.setEnabled(false);
             passwordPref.setEnabled(false);
             bluetoothPref.setEnabled(false);
-            ((Preference)findPreference("httpLogging")).setEnabled(false);
             languagePref.setEnabled(false);
+            ((Preference)findPreference("httpLogging")).setEnabled(false);
+            ((Preference)findPreference("deviceOrientation")).setEnabled(false);
         }
         else
         {

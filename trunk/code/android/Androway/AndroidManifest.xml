@@ -41,7 +41,7 @@
             android:configChanges="locale"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
         </activity>
 
         <activity
