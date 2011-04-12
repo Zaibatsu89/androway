@@ -24,29 +24,28 @@
             <android.gesture.GestureOverlayView
                 android:id="@+id/block1"
                 style="@style/GestureOverlay">
-                <ViewFlipper
+
+                <!-- Use custom ViewFlipper class because standard android ViewFlipper crashes on orientation change -->
+                <proj.androway.ui.ViewFlipper
                     android:id="@+id/block1_flipper"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
                         
-                        <include layout="@layout/inclination" />
-                        <include layout="@layout/balance" />
-                        
-                </ViewFlipper>
+                </proj.androway.ui.ViewFlipper>
             </android.gesture.GestureOverlayView>
 
             <!-- The second flipper block -->
             <android.gesture.GestureOverlayView
                 android:id="@+id/block2"
                 style="@style/GestureOverlay">
-                <ViewFlipper
+
+                <!-- Use custom ViewFlipper class because standard android ViewFlipper crashes on orientation change -->
+                <proj.androway.ui.ViewFlipper
                     android:id="@+id/block2_flipper"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                        <include layout="@layout/direction" />
-
-                </ViewFlipper>
+                </proj.androway.ui.ViewFlipper>
             </android.gesture.GestureOverlayView>
 
         </LinearLayout>

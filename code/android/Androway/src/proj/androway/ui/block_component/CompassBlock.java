@@ -1,6 +1,7 @@
 package proj.androway.ui.block_component;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -8,6 +9,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import proj.androway.R;
 import java.util.Map;
+import proj.androway.common.Settings;
 import proj.androway.main.TiltControls;
 
 /**
@@ -34,6 +36,9 @@ public class CompassBlock extends BlockComponent
         {
             // Store the compas degrees value
             _compDegrees = 360 - (Float)params.get(TiltControls.UPDATE_AZIMUTH);
+
+            if(Settings.DEVICE_ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+                _compDegrees -= 90;
 
             setCompassRotation(_compDegrees, _compPreviousDegrees, 200, new RotationListener());
         }

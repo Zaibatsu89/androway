@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_settings"
           android:icon="@drawable/ic_menu_settings"
-          android:title="Settings"/>
+          android:title="@string/settings"/>
     <item android:id="@+id/menu_quit_session"
           android:icon="@drawable/ic_menu_stop"
-          android:title="Stop Session"/>
+          android:title="@string/stop_session"/>
 </menu>

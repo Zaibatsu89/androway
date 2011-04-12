@@ -18,7 +18,7 @@ public class Constants
     public static final String ROOT_URL = "http://www.androway.nl";
     public static final String WEBSERVICE_URL = ROOT_URL + "/webservices/loggingService.php";
     public static final String AUTH_WEBSERVICE_URL = ROOT_URL + "/webservices/authService.php";
-    public static final String WEB_VIEW_URL = "http://m.androway.nl/";
+    public static final String WEB_VIEW_URL = "http://www.androway.nl/site_index.php?from_app";
 
     // A unique id for the device
     public static final String CUSTOM_UNIQUE_ID =  "35" + //we make this look like a valid IMEI

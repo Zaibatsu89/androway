@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.gesture.GestureOverlayView;
 import android.graphics.Path.Direction;
 import android.hardware.Sensor;
@@ -22,11 +23,13 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View.OnTouchListener;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import proj.androway.common.Settings;
@@ -36,8 +39,6 @@ import proj.androway.ui.block_component.balance_block.BalanceBlock;
 import proj.androway.ui.block_component.BlockComponent;
 import proj.androway.ui.block_component.CompassBlock;
 import proj.androway.ui.block_component.InclinationBlock;
-import proj.androway.ui.quick_action.QuickAction;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ import proj.androway.session.Session;
 import proj.androway.session.SessionService;
 import proj.androway.ui.block_component.DirectionBlock;
 import proj.androway.ui.quick_action.ActionItem;
+import proj.androway.ui.quick_action.QuickAction;
 
 /**
  * The view for a running session
@@ -61,6 +63,10 @@ public class RunningSessionView extends ActivityBase
     public static final int DIALOG_TYPE_BLUETOOTH = 1;
     public static final int DIALOG_TYPE_DONE = 2;
     public static final int DIALOG_TYPE_FAILED = 3;
+
+    public static final int STATUS_LOG_TYPE = 0;
+    public static final int STATUS_BATTERY = 1;
+    public static final int STATUS_BLUETOOTH = 2;
 
     private SharedObjects _sharedObjects;
     private WakeLock _wakeLock;
@@ -82,6 +88,14 @@ public class RunningSessionView extends ActivityBase
     {
         super.onCreate(savedInstanceState);
 
+        // If the orientation settings are set to landscape, hide the android status bar (fullscreen),
+        // so we have more space for our 'dashboard'
+        if(Settings.DEVICE_ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Request the orientation that is stored in the settings
+        this.setRequestedOrientation(Settings.DEVICE_ORIENTATION);
+
         _sharedObjects = (SharedObjects)this.getApplication();
         _sharedObjects.runningSessionView = this;
 
@@ -90,9 +104,6 @@ public class RunningSessionView extends ActivityBase
          * since the user will not be using the screen or buttons much.
          */
         _wakeLock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getClass().getName());
-
-        // Request the orientation that is stored in the settings
-        this.setRequestedOrientation(Settings.DEVICE_ORIENTATION);
 
         // Set the content for the view
         this.setContentView(R.layout.running_session);
@@ -193,7 +204,7 @@ public class RunningSessionView extends ActivityBase
         _sharedObjects.controller.removeNotification();
         _sharedObjects.runningSessionView = null;
         super.onDestroy();
-    }    
+    }
 
     // Defines callbacks for service binding, passed to the service
     private ServiceConnection _serviceConnection = new ServiceConnection()
@@ -311,7 +322,7 @@ public class RunningSessionView extends ActivityBase
                        {
                            public void onClick(DialogInterface dialog, int id)
                            {
-                               _sharedObjects.controller.stopSession();
+                               _stopSession();
                            }
                        });
 
@@ -327,6 +338,9 @@ public class RunningSessionView extends ActivityBase
     {
         // Set the block components
         _setBlockComponents();
+
+        // Update the log type
+        _updateStatusItem(STATUS_LOG_TYPE);
 
         // Bind the tilt controls for both the accelerometer and the orientation sensor
         _accTiltControls = new TiltControls(RunningSessionView.this, this, Sensor.TYPE_ACCELEROMETER);
@@ -400,7 +414,7 @@ public class RunningSessionView extends ActivityBase
             }
         });
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -422,14 +436,23 @@ public class RunningSessionView extends ActivityBase
             }
             case R.id.menu_quit_session:
             {
-                _sharedObjects.controller.stopSession();
-                this.finish();
+                this._stopSession();
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void _stopSession()
+    {
+        _sharedObjects.controller.stopSession();
+
+        // Set running session to false (also done in stopService, but done here so that it is
+        // done in time, because of main view is loaded)
+        Settings.putSetting("sessionRunning", false);
+        this.finish();
     }
 
     /*
@@ -483,6 +506,55 @@ public class RunningSessionView extends ActivityBase
             blockStatusImg.setImageResource(R.drawable.second_locked);
         else
             blockStatusImg.setImageResource(R.drawable.transparent);
+    }
+
+    private void _updateStatusItem(int statusItem)
+    {
+        _updateStatusItem(statusItem, new HashMap<String, Object>());
+    }
+
+    private void _updateStatusItem(int statusItem, Map<String, Object> params)
+    {
+        switch(statusItem)
+        {
+            case STATUS_LOG_TYPE:
+            {
+                // Change the logging type icon based on the current setting
+                ImageButton logTypeButton = (ImageButton) findViewById(R.id.log_web_button);
+
+                if(Settings.LOG_TYPE.equals(DatabaseManagerBase.TYPE_HTTP))
+                    logTypeButton.setImageResource(R.drawable.log_web_icon);
+                else
+                    logTypeButton.setImageResource(R.drawable.log_local_icon);
+
+                break;
+            }
+            case STATUS_BATTERY:
+            {
+                // Change the battery icon based on the current value
+                int batteryPower = (Integer)params.get("batteryPower");
+                ImageButton batteryButton = (ImageButton) findViewById(R.id.log_web_button);
+
+                if(batteryPower > 75)
+                    batteryButton.setImageResource(R.drawable.battery_icon_100);
+                else if(batteryPower > 50)
+                    batteryButton.setImageResource(R.drawable.battery_icon_75);
+                else if(batteryPower > 25)
+                    batteryButton.setImageResource(R.drawable.battery_icon_50);
+                else if(batteryPower > 10)
+                    batteryButton.setImageResource(R.drawable.battery_icon_25);
+                else if(batteryPower > 5)
+                    batteryButton.setImageResource(R.drawable.battery_icon_10);
+                else
+                    batteryButton.setImageResource(R.drawable.battery_icon_5);
+
+                break;
+            }
+            case STATUS_BLUETOOTH:
+            {
+                break;
+            }
+        }
     }
 
     /*

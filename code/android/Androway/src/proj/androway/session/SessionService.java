@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import proj.androway.R;
 import proj.androway.common.Constants;
 import proj.androway.main.Controller;
+import proj.androway.ui.View;
 
 /**
  *

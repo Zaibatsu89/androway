@@ -9,7 +9,7 @@
         android:id="@+id/log_web_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/log_web_icon"
+        android:src="@null"
         android:layout_weight="0.25"
         style="@style/StatusBarLeft" />
 
