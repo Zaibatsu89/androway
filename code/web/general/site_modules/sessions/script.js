@@ -3,7 +3,7 @@ function initSessionsModule()
 	$('#sessionsTable').flexigrid
 	({
 		moduleName: 'sessions',
-		url: 'modules/sessions/sessionsService.php',
+		url: 'system_modules/sessions/sessionsService.php',
 		showLogsRow: true,
 		editRow: true,
 		removeRow: true,
@@ -37,7 +37,7 @@ function initSessionsModule()
 			{
 				var rowId = $(scope).attr('id');
 				
-				$.post('modules/sessions/sessionsService.php',{action : 'removeRow', id : rowId}, function()
+				$.post('system_modules/sessions/sessionsService.php',{action : 'removeRow', id : rowId}, function()
 				{
 					$('#sessionsTable').flexReload();
 				});
@@ -51,12 +51,12 @@ function onEditSession(sessionId)
 	var idName = 'editSession';
 	
 	// Show the edit session dialog
-	loadModuleDialog('modules/sessions/window.php', idName, 600, 200, function()
+	loadModuleDialog('system_modules/sessions/window.php', idName, 600, 200, function()
 	{
 		// Check if the session id is defined, if so load the existing session data into the form for editing
 		if(isDefined(sessionId))
 		{
-			$.getJSON('modules/sessions/sessionsService.php', {id: sessionId, action: 'getSession'}, function(data)
+			$.getJSON('system_modules/sessions/sessionsService.php', {id: sessionId, action: 'getSession'}, function(data)
 			{
 				$('#editSessionForm').fillForm(data);
 			});
@@ -66,7 +66,7 @@ function onEditSession(sessionId)
 		$('#' + idName).find('.save_edit_form').click(function()
 		{
 			// Een ajax post met de values array
-			$.post('modules/sessions/sessionsService.php', $('#editSessionForm').serializeArray(), function(data)
+			$.post('system_modules/sessions/sessionsService.php', $('#editSessionForm').serializeArray(), function(data)
 			{
 				$('#sessionsTable').flexReload();
 			});

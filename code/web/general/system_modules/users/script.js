@@ -3,7 +3,7 @@ function initUsersModule()
 	$('#usersTable').flexigrid
 	({
 		moduleName: 'users',
-		url: 'modules/users/usersService.php',
+		url: 'system_modules/users/usersService.php',
 		editRow: true,
 		removeRow: true,
 		colModel:
@@ -32,7 +32,7 @@ function initUsersModule()
 			{
 				var rowId = $(scope).attr('id');
 				
-				$.post('modules/users/usersService.php',{action : 'removeRow', id : rowId}, function()
+				$.post('system_modules/users/usersService.php',{action : 'removeRow', id : rowId}, function()
 				{
 					$('#usersTable').flexReload();
 				});
@@ -46,12 +46,12 @@ function onEditUser(userId)
 	var idName = 'editUser';
 	
 	// Show the edit user dialog
-	loadModuleDialog('modules/users/window.php', idName, 600, 200, function()
+	loadModuleDialog('system_modules/users/window.php', idName, 600, 200, function()
 	{
 		// Check if the user id is defined, if so load the existing user data into the form for editing
 		if(isDefined(userId))
 		{
-			$.getJSON('modules/users/usersService.php', {id: userId, action: 'getUser'}, function(data)
+			$.getJSON('system_modules/users/usersService.php', {id: userId, action: 'getUser'}, function(data)
 			{
 				$('#editUserForm').fillForm(data);
 				$('#editUserForm').find('#val_password').val('');
@@ -63,7 +63,7 @@ function onEditUser(userId)
 		$('#' + idName).find('.save_edit_form').click(function()
 		{
 			// Een ajax post met de values array
-			$.post('modules/users/usersService.php', $('#editUserForm').serializeArray(), function(data)
+			$.post('system_modules/users/usersService.php', $('#editUserForm').serializeArray(), function(data)
 			{
 				$('#usersTable').flexReload();
 			});
