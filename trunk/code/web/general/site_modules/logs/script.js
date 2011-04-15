@@ -11,7 +11,7 @@ function initLogsModule(moduleId)
 	table.flexigrid
 	({
 		moduleName: 'logs',
-		url: 'modules/logs/logsService.php',
+		url: 'system_modules/logs/logsService.php',
 		editRow: true,
 		removeRow: true,
 		qtype: qType,
@@ -43,7 +43,7 @@ function initLogsModule(moduleId)
 			{
 				var rowId = $(scope).attr('id');
 				
-				$.post('modules/logs/logsService.php',{action : 'removeRow', id : rowId}, function()
+				$.post('system_modules/logs/logsService.php',{action : 'removeRow', id : rowId}, function()
 				{
 					$('#logsTable').flexReload();
 				});
@@ -57,12 +57,12 @@ function onEditLog(logId)
 	var idName = 'editLog';
 	
 	// Show the edit log dialog
-	loadModuleDialog('modules/logs/window.php', idName, 600, 200, function()
+	loadModuleDialog('system_modules/logs/window.php', idName, 600, 200, function()
 	{
 		// Check if the log id is defined, if so load the existing log data into the form for editing
 		if(isDefined(logId))
 		{
-			$.getJSON('modules/logs/logsService.php', {id: logId, action: 'getLog'}, function(data)
+			$.getJSON('system_modules/logs/logsService.php', {id: logId, action: 'getLog'}, function(data)
 			{
 				$('#editLogForm').fillForm(data);
 			});
@@ -72,7 +72,7 @@ function onEditLog(logId)
 		$('#' + idName).find('.save_edit_form').click(function()
 		{
 			// Een ajax post met de values array
-			$.post('modules/logs/logsService.php', $('#editLogForm').serializeArray(), function(data)
+			$.post('system_modules/logs/logsService.php', $('#editLogForm').serializeArray(), function(data)
 			{
 				$('#logsTable').flexReload();
 			});

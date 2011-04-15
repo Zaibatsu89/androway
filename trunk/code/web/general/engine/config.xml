@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<generalRedirectUrl>http://www.androway.nl/</generalRedirectUrl>
+	<homePageId>1</homePageId>
+	<maxLifeTime>1800</maxLifeTime>
+	<mobileRedirectUrl>http://m.androway.nl/</mobileRedirectUrl>
+	<websiteTitle>Androway - </websiteTitle>
+	
+	<standardDatabase>
+		<name>androway_framework</name>
+		<user>androway</user>
+		<password>hz7bkaxw</password>
+	</standardDatabase>
+	
+	<alternativeDatabase>
+		<name>androway_logging</name>
+		<user>androway_logging</user>
+		<password>hz7bkaxw</password>
+	</alternativeDatabase>
+</config>
