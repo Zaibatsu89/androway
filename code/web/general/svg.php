@@ -31,6 +31,15 @@ var strAdd = 'Set left wheel motor power at 0% and right wheel motor power at 0%
 var strMove1 = 'Set left wheel motor power at 70% and right wheel motor power at 10%';
 var strMove2 = 'Set left wheel motor power at 55% and right wheel motor power at 35%';
 var strMove3 = 'Set left wheel motor power at 50% and right wheel motor power at 50%';
+var androwayCoordinates = [];
+
+var idLeftText = 'leftText';
+var idCenterText = 'centerText';
+var idRightText = 'rightText';
+
+var idLeftWheel = 'leftWheel';
+var idCenterCircle = 'centerCircle';
+var idRightWheel = 'rightWheel';
 
 function init()
 {
@@ -38,124 +47,117 @@ function init()
 	$('#move_1').text(strMove1);
 	$('#move_2').text(strMove2);
 	$('#move_3').text(strMove3);
+	$('#show_svg').text('Show SVG');
 }
 
-function drawCommand() {
-	
-	var command = this.id;
-	var svg = $('#svg_frame').svg('get');
-	
-	if (command != null)
+function drawCommand()
+{	
+	switch ($(this).attr('id'))
 	{
-		if (command == 'add_segway')
+		case 'add_segway':
 		{
-			if($('#' + command).text() == 'Undo move')
-			{
-				$('#' + command).text(strAdd);
-				move(0, false, 0, 0);
-			}
-			else
-			{
-				$('#' + command).text('Undo move');
-				move(0, true, 0, 0);
-			}
+			move(0, 0);
+			break;
 		}
-		else if (command == 'move_1') {
-			if($('#' + command).text() == 'Undo move')
-			{
-				$('#' + command).text(strMove1);
-				move(1, false, 70, 10);
-			}
-			else
-			{
-				$('#' + command).text('Undo move');
-				move(1, true, 70, 10);
-			}
+		case 'move_1':
+		{
+			move(70, 10);
+			break;
 		}
-		else if (command == 'move_2') {
-			if($('#' + command).text() == 'Undo move')
-			{
-				$('#' + command).text(strMove2);
-				move(2, false, 55, 35);
-			}
-			else
-			{
-				$('#' + command).text('Undo move');
-				move(2, true, 55, 35);
-			}
+		case 'move_2':
+		{
+			move(55, 35);
+			break;
 		}
-		else if (command == 'move_3') {
-			if($('#' + command).text() == 'Undo move')
-			{
-				$('#' + command).text(strAdd);
-				move(3, false, 50, 50);
-			}
-			else
-			{
-				$('#' + command).text('Undo move');
-				move(3, true, 50, 50);
-			}
+		case 'move_3':
+		{
+			move(50, 50);
+			break;
+		}
+		case 'show_svg':
+		{
+			displaySVG();
+			break;
 		}
 	}
+	
+	displayValues();
 }
 
-function drawSegway() {
-	var svg = $('#svg_frame').svg('get');
-	var x = Math.round(document.body.clientWidth / 2);
-	var y = Math.round(document.body.clientHeight / 2);
-	svg.circle(x, y, 3, {fill: 'black', stroke: 'black', 'stroke-width': 1});
-	var g = svg.group({stroke: 'black', 'stroke-width': 2});
-	svg.line(g, x - 20, y - 4, x - 20, y + 4);
-	svg.line(g, x + 20, y - 4, x + 20, y + 4);
-}
-
-function move(id, draw, left, right)
+function move(left, right)
 {
-	var x = Math.round(document.body.clientWidth / 2);
-	var y = Math.round(document.body.clientHeight / 2);
-	var x = x + left * 2;
-	var y = y - right * 2;
-	var x1 = x - 20;
-	var y1 = y - 4;
-	var x2 = x - 20;
-	var y2 = y + 4;
-	var x3 = x + 20;
-	var y3 = y - 4;
-	var x4 = x + 20;
-	var y4 = y + 4;
-	
 	var svg = $('#svg_frame').svg('get');
-	var line1 = "line(g, x1, y1, x2, y2)";
-	var line2 = "line(g, x3, y3, x4, y4)";
-	
-	if (draw)
-	{	
-		var circle = svg.circle(x, y, 3, {fill: 'black', stroke: 'black', 'stroke-width': 1});
-		var g = svg.group({stroke: 'black', 'stroke-width': 2});
-		eval('svg.' + line1);
-		eval('svg.' + line2);
+
+	if (typeof(androwayCoordinates['center']) == 'undefined')
+	{
+		androwayCoordinates['center'] = {x: document.body.clientWidth / 2, y: document.body.clientHeight / 2};
+		androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['center'].y - 4, x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['center'].y + 4};
+		androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['center'].y - 4, x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['center'].y + 4};
 	}
 	else
 	{
-		var circle = svg.circle(x, y, 4, {fill: 'white', stroke: 'white', 'stroke-width': 1});
-		var g = svg.group({stroke: 'white', 'stroke-width': 2});
-		eval('svg.' + line1);
-		eval('svg.' + line2);
+		androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['left'].y1 - 1 * (left / 10), x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['left'].y2 - 1 * (left / 10)};
+		androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['right'].y1 - 1 * (right / 10), x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['right'].y2 - 1 * (right / 10)};
+	}
+	
+	// put center circle in the vertical middle between the left and right wheel 
+	androwayCoordinates['center'].y = (((androwayCoordinates['left'].y1 + androwayCoordinates['left'].y2) / 2) + ((androwayCoordinates['right'].y1 + androwayCoordinates['right'].y2) / 2)) / 2;
+	
+	if ($('#' + idLeftWheel).length <= 0)
+	{
+		var g = svg.group({stroke: 'black', 'stroke-width': 2});
+		
+		svg.line(g, androwayCoordinates['left'].x1, androwayCoordinates['left'].y1, androwayCoordinates['left'].x2, androwayCoordinates['left'].y2, {id: idLeftWheel});
+		svg.circle(androwayCoordinates['center'].x, androwayCoordinates['center'].y, 3, {fill: 'black', stroke: 'black', 'stroke-width': 1, id: idCenterCircle});
+		svg.line(g, androwayCoordinates['right'].x1, androwayCoordinates['right'].y1, androwayCoordinates['right'].x2, androwayCoordinates['right'].y2, {id: idRightWheel});
+	}
+	else
+	{
+		var leftWheel = svg.getElementById(idLeftWheel);
+		var centerCircle = svg.getElementById(idCenterCircle);
+		var rightWheel = svg.getElementById(idRightWheel);
+		
+		svg.change(leftWheel, {x1: androwayCoordinates['left'].x1, y1: androwayCoordinates['left'].y1, x2: androwayCoordinates['left'].x2, y2: androwayCoordinates['left'].y2});
+		svg.change(centerCircle, {cx: androwayCoordinates['center'].x, cy: androwayCoordinates['center'].y});
+		svg.change(rightWheel, {x1: androwayCoordinates['right'].x1, y1: androwayCoordinates['right'].y1, x2: androwayCoordinates['right'].x2, y2: androwayCoordinates['right'].y2});
 	}
 }
 
-function random(range) {
-	return Math.floor(Math.random() * range);
+function displayValues()
+{
+	var svg = $('#svg_frame').svg('get');
+	
+	if ($('#' + idLeftText).length <= 0)
+	{
+		svg.text(5, 18, 'Left: (' + androwayCoordinates['left'].x1 + ', ' + androwayCoordinates['left'].y1 + ', ' + androwayCoordinates['left'].x2 + ', ' + androwayCoordinates['left'].y2 + ')', {id: idLeftText, style: 'font-family:Calibri;font-size:16px;'});
+		svg.text(5, 40, 'Center: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')', {id: idCenterText, style: 'font-family:Calibri;font-size:16px;'});
+		svg.text(5, 62, 'Right: (' + androwayCoordinates['right'].x1 + ', ' + androwayCoordinates['right'].y1 + ', ' + androwayCoordinates['right'].x2 + ', ' + androwayCoordinates['right'].y2 + ')', {id: idRightText, style: 'font-family:Calibri;font-size:16px;'});
+	}
+	else
+	{
+		$('#'+idLeftText).text('Left: (' + androwayCoordinates['left'].x1 + ', ' + androwayCoordinates['left'].y1 + ', ' + androwayCoordinates['left'].x2 + ', ' + androwayCoordinates['left'].y2 + ')');
+		$('#'+idCenterText).text('Center: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')');
+		$('#'+idRightText).text('Right: (' + androwayCoordinates['right'].x1 + ', ' + androwayCoordinates['right'].y1 + ', ' + androwayCoordinates['right'].x2 + ', ' + androwayCoordinates['right'].y2 + ')');
+	}
+}
+
+function displaySVG()
+{
+	var svg = $('#svg_frame').svg('get').toSVG();
+	
+	$('#svg_code').html(svg.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 }
 </script>
 </head>
 <body>
 <div id="svg_frame"></div>
-<p>
+<p id="buttons">
 	<button id="add_segway"></button>
 	<button id="move_1"></button>
 	<button id="move_2"></button>
 	<button id="move_3"></button>
+	<button id="show_svg"></button>
 </p>
+<p><div id="svg_code"></p>
 </body>
 </html>
