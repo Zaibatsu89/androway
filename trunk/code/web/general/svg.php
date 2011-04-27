@@ -24,60 +24,88 @@
 <script type="text/javascript" src="scripts/lib/jquery.svganim.pack.js"></script>
 <script type="text/javascript">
 $(function() {
-	$('#svg_frame').svg({function:init()});
+	$('#svg_frame').svg({onLoad: init});
 	$('button').click(drawCommand);
 });
 
 var androwayCoordinates = [];
-var lastLeft = 0;
-var lastRight = 0;
-var totalLeft = 0;
-var totalRight = 0;
 
-var strAdd = 'Set left wheel motor power at 0% and right wheel motor power at 0%';
-var strMove1 = 'Set left wheel motor power at 70% and right wheel motor power at 10%';
-var strMove2 = 'Set left wheel motor power at 55% and right wheel motor power at 35%';
-var strMove3 = 'Set left wheel motor power at 50% and right wheel motor power at 50%';
-var strMove4 = 'Set left wheel motor power at -50% and right wheel motor power at -50%';
+var strAdd = '0 0, 0';
+var strMove1 = '┐ 70, 5';
+var strMove2 = '│ 70, 25';
+var strMove3 = '─ 50, 50';
+var strMove4 = '┌ 10, 70';
+var strMove5 = '─ -50, -50';
+var strMove6 = '┘ -70, -10';
+var strMove7 = '└ -10, -70';
+var strMove8 = '│ 40, -60';
 
-var idG = 'gGroup';
+var idText = 'text';
+var idCircleGroup = 'all';
+var idCircleA = 'circleA';
+var idCircleB = 'circleB';
 
-var idLeftText = 'leftText';
-var idCenterText = 'centerText';
-var idRightText = 'rightText';
+var oldX;
+var oldY;
+var cornerPosX = 0;
+var cornerPosY = 0;
+var oldCornerPosX = 0;
+var oldCornerPosY = 0;
 
-var idLeftWheel = 'leftWheel';
-var idCenterCircle = 'centerCircle';
-var idRightWheel = 'rightWheel';
-
-function init()
-{
+function init(svg)
+{	
 	$('#add_segway').text(strAdd);
 	$('#move_1').text(strMove1);
 	$('#move_2').text(strMove2);
 	$('#move_3').text(strMove3);
 	$('#move_4').text(strMove4);
+	$('#move_5').text(strMove5);
+	$('#move_6').text(strMove6);
+	$('#move_7').text(strMove7);
+	$('#move_8').text(strMove8);
 	$('#show_svg').text('Show SVG');
+	
+	var defs = svg.defs();
+	var ptn = svg.pattern(defs, 'grid', 0, 0, 20, 20, {patternUnits: 'userSpaceOnUse'});
+	var rect1 = svg.rect(ptn, 0, 0, 10, 10, {fill: 'black', opacity: '0.1'});
+	var rect2 = svg.rect(ptn, 10, 0, 10, 10, {fill: 'white'});
+	var rect3 = svg.rect(ptn, 10, 10, 10, 10, {fill: 'black', opacity: '0.1'});
+	var rect4 = svg.rect(ptn, 0, 10, 10, 10, {fill: 'white'});
+	var rectFill = svg.rect(0, 0, 0, 0, {fill: 'url(#grid)', width: '100%', height: '100%'});
+	
+	var circleGroup = svg.group({id: idCircleGroup, transform: 'translate(0 0) rotate(0)'});
 }
 
 function drawCommand()
-{	
+{
 	switch ($(this).attr('id'))
 	{
 		case 'add_segway':
 			move(0, 0);
 			break;
 		case 'move_1':
-			move(70, 10);
+			move(70, 5);
 			break;
 		case 'move_2':
-			move(55, 35);
+			move(70, 25);
 			break;
 		case 'move_3':
 			move(50, 50);
 			break;
 		case 'move_4':
+			move(10, 70);
+			break;
+		case 'move_5':
 			move(-50, -50);
+			break;
+		case 'move_6':
+			move(-70, -10);
+			break;
+		case 'move_7':
+			move(-10, -70);
+			break;
+		case 'move_8':
+			move(40, -60);
 			break;
 		case 'show_svg':
 			displaySVG();
@@ -86,55 +114,99 @@ function drawCommand()
 	
 	displayValues();
 	
-	checkBorders();
+	//checkBorders();
+	
+	moveCircleGroup();
 }
 
 function move(left, right)
-{
-	lastLeft = left;
-	lastRight = right;
-	
+{	
 	var svg = $('#svg_frame').svg('get');
-
+	var circleGroup = svg.getElementById(idCircleGroup);
+	
 	if (typeof(androwayCoordinates['center']) == 'undefined')
 	{
 		androwayCoordinates['center'] = {x: $('#svg_frame').width() / 2, y: $('#svg_frame').height() / 2};
-		androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['center'].y - 4, x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['center'].y + 4};
-		androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['center'].y - 4, x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['center'].y + 4};
-	}
-	else if (left != 0 && right != 0)
-	{
-		totalLeft += left / 100;
-		totalRight += right / 100;
-	
-		androwayCoordinates['left'] = {x1: androwayCoordinates['left'].x1 + Math.cos(totalLeft), y1: androwayCoordinates['left'].y1 + Math.sin(totalLeft) - 0.5, x2: androwayCoordinates['left'].x2 + Math.cos(totalLeft), y2: androwayCoordinates['left'].y2 + Math.sin(totalLeft) - 0.5};
-		androwayCoordinates['right'] = {x1: androwayCoordinates['right'].x1 + Math.cos(totalRight), y1: androwayCoordinates['right'].y1 + Math.sin(totalRight) - 0.5, x2: androwayCoordinates['right'].x2 + Math.cos(totalRight), y2: androwayCoordinates['right'].y2 + Math.sin(totalRight) - 0.5};
-	}
-	
-	// put center circle in the horizontal middle between the left and right wheel
-	androwayCoordinates['center'].x = (((androwayCoordinates['left'].x1 + androwayCoordinates['left'].x2) / 2) + ((androwayCoordinates['right'].x1 + androwayCoordinates['right'].x2) / 2)) / 2;
-	// put center circle in the vertical middle between the left and right wheel
-	androwayCoordinates['center'].y = (((androwayCoordinates['left'].y1 + androwayCoordinates['left'].y2) / 2) + ((androwayCoordinates['right'].y1 + androwayCoordinates['right'].y2) / 2)) / 2;
-	
-	if ($('#' + idLeftWheel).length <= 0)
-	{
-		var g = svg.group({id: idG, stroke: 'black', 'stroke-width': 1});
-		
-		svg.line(g, androwayCoordinates['left'].x1, androwayCoordinates['left'].y1, androwayCoordinates['left'].x2, androwayCoordinates['left'].y2, {id: idLeftWheel});
-		svg.circle(g, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 3, {fill: 'black', id: idCenterCircle});
-		svg.line(g, androwayCoordinates['right'].x1, androwayCoordinates['right'].y1, androwayCoordinates['right'].x2, androwayCoordinates['right'].y2, {id: idRightWheel});
+		oldX = androwayCoordinates['center'].x;
+		oldY = androwayCoordinates['center'].y;
 	}
 	else
-	{
-		var g = svg.getElementById(idG);
-		var leftWheel = svg.getElementById(idLeftWheel);
-		var centerCircle = svg.getElementById(idCenterCircle);
-		var rightWheel = svg.getElementById(idRightWheel);
-		
-		svg.change(leftWheel, {x1: androwayCoordinates['left'].x1, y1: androwayCoordinates['left'].y1, x2: androwayCoordinates['left'].x2, y2: androwayCoordinates['left'].y2});
-		svg.change(centerCircle, {cx: androwayCoordinates['center'].x, cy: androwayCoordinates['center'].y});
-		svg.change(rightWheel, {x1: androwayCoordinates['right'].x1, y1: androwayCoordinates['right'].y1, x2: androwayCoordinates['right'].x2, y2: androwayCoordinates['right'].y2});
+	{	
+		oldX = androwayCoordinates['center'].x;
+		oldY = androwayCoordinates['center'].y;
+		androwayCoordinates['center'] = {x: androwayCoordinates['center'].x + getX(left, right), y: androwayCoordinates['center'].y + getY(left, right)};
 	}
+	
+	svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 2, {fill: 'gray', id: idCircleB});
+	
+	if ($('#' + idCircleA).length <= 0)
+		
+		svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 3, {fill: 'black', id: idCircleA});
+	else
+	{
+		var circleA = svg.getElementById(idCircleA);
+		svg.change(circleA, {cx: androwayCoordinates['center'].x, cy: androwayCoordinates['center'].y});
+	}
+}
+
+function getX(left, right)
+{
+	var sum = left + right;
+	var max = 10;
+	var x = 0;
+	
+	if (sum != 0)
+	{
+		var xLeft = left / sum;
+		var xRight = right / sum;
+		
+		x = xLeft * max - xRight * max;
+	}
+	
+	return x;
+}1
+
+function getY(left, right)
+{
+	var sum = left + right;
+	var max = 10;
+	var y = 0;
+	
+	if (sum != 0)
+		y = -1 * sum / max;
+	
+	return y;
+}
+
+function moveCircleGroup()
+{
+	var svg = $('#svg_frame').svg('get');
+	
+	var circleGroup = svg.getElementById(idCircleGroup);
+	
+	var x = $('#svg_frame').width() / 2;
+	var y = $('#svg_frame').height() / 2;
+	var xDiff = x - androwayCoordinates['center'].x;
+	var yDiff = y - androwayCoordinates['center'].y;
+	
+	oldCornerPosX = cornerPosX;
+	oldCornerPosY = cornerPosY;
+	
+	cornerPosX = androwayCoordinates['center'].x - oldX;
+	cornerPosY = androwayCoordinates['center'].y - oldY;
+	
+	var xCornerDiff = cornerPosX - oldCornerPosX;
+	var yCornerDiff = cornerPosY - oldCornerPosY;
+	
+	console.log(xCornerDiff);
+	console.log(yCornerDiff);
+ 	
+ 	var corner = 0;
+ 	
+ 	if (xCornerDiff != 0 && yCornerDiff != 0)
+ 		corner = (xCornerDiff + yCornerDiff) * 5;
+	
+	svg.change(circleGroup, {transform: 'translate(' + xDiff + ' ' + yDiff + ') rotate(' + corner  + ')'});
 }
 
 function checkBorders()
@@ -142,46 +214,16 @@ function checkBorders()
 	var width = $('#svg_frame').width();
 	var height = $('#svg_frame').height();
 	
-	if (typeof(androwayCoordinates['left']) != 'undefined')
+	if (typeof(androwayCoordinates['center']) != 'undefined')
 	{
-		switch (true)
-		{
-			case androwayCoordinates['left'].x1 < 0:
-				console.log('x1 left = ' + androwayCoordinates['left'].x1);
-				break;
-			case androwayCoordinates['left'].x1 > width:
-				console.log('x1 left = ' + androwayCoordinates['left'].x1);
-				break;
-			case androwayCoordinates['left'].y1 < 4:
-				androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['left'].y1 + lastLeft / 10, x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['left'].y2 + lastLeft / 10};
-				androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['right'].y1 + lastRight / 10, x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['right'].y2 + lastRight / 10};
-				break;
-			case androwayCoordinates['left'].y2 > height - 4:
-				androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['left'].y1 - lastLeft / 10 - 10, x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['left'].y2 - lastLeft / 10 - 10};
-				androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['right'].y1 - lastRight / 10 - 10, x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['right'].y2 - lastRight / 10 - 10};
-				break;
-		}
-	}
-	
-	if (typeof(androwayCoordinates['right']) != 'undefined')
-	{
-		switch (true)
-		{
-			case androwayCoordinates['right'].x1 < 0:
-				console.log('x1 right = ' + androwayCoordinates['right'].x1);
-				break;
-			case androwayCoordinates['right'].x1 > width:
-				console.log('x1 right = ' + androwayCoordinates['right'].x1);
-				break;
-			case androwayCoordinates['right'].y1 < 4:
-				androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['left'].y1 + lastLeft / 10, x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['left'].y2 + lastLeft / 10};
-				androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['right'].y1 + lastRight / 10, x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['right'].y2 + lastRight / 10};
-				break;
-			case androwayCoordinates['right'].y2 > height - 4:
-				androwayCoordinates['left'] = {x1: androwayCoordinates['center'].x - 20, y1: androwayCoordinates['left'].y1 - lastLeft / 10 - 10, x2: androwayCoordinates['center'].x - 20, y2: androwayCoordinates['left'].y2 - lastLeft / 10 - 10};
-				androwayCoordinates['right'] = {x1: androwayCoordinates['center'].x + 20, y1: androwayCoordinates['right'].y1 - lastRight / 10 - 10, x2: androwayCoordinates['center'].x + 20, y2: androwayCoordinates['right'].y2 - lastRight / 10 - 10};
-				break;
-		}
+		if (androwayCoordinates['center'].x < 6)
+			androwayCoordinates['center'] = {x: 7.5, y: androwayCoordinates['center'].y};
+		if (androwayCoordinates['center'].x > width - 6)
+			androwayCoordinates['center'] = {x: width - 7.5, y: androwayCoordinates['center'].y};
+		if (androwayCoordinates['center'].y < 6)
+			androwayCoordinates['center'] = {x: androwayCoordinates['center'].x, y: 10};
+		if (androwayCoordinates['center'].y > height - 6)
+			androwayCoordinates['center'] = {x: androwayCoordinates['center'].x, y: height - 10};
 	}
 }
 
@@ -189,18 +231,10 @@ function displayValues()
 {
 	var svg = $('#svg_frame').svg('get');
 	
-	if ($('#' + idLeftText).length <= 0)
-	{
-		svg.text(5, 18, 'Left: (' + androwayCoordinates['left'].x1 + ', ' + androwayCoordinates['left'].y1 + ', ' + androwayCoordinates['left'].x2 + ', ' + androwayCoordinates['left'].y2 + ')', {id: idLeftText, style: 'font-family:Calibri;font-size:16px;'});
-		svg.text(5, 40, 'Center: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')', {id: idCenterText, style: 'font-family:Calibri;font-size:16px;'});
-		svg.text(5, 62, 'Right: (' + androwayCoordinates['right'].x1 + ', ' + androwayCoordinates['right'].y1 + ', ' + androwayCoordinates['right'].x2 + ', ' + androwayCoordinates['right'].y2 + ')', {id: idRightText, style: 'font-family:Calibri;font-size:16px;'});
-	}
+	if ($('#' + idText).length <= 0)
+		svg.text(5, 18, 'Position: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')', {id: idText, style: 'font-family:Calibri;font-size:16px;'});
 	else
-	{
-		$('#'+idLeftText).text('Left: (' + androwayCoordinates['left'].x1 + ', ' + androwayCoordinates['left'].y1 + ', ' + androwayCoordinates['left'].x2 + ', ' + androwayCoordinates['left'].y2 + ')');
-		$('#'+idCenterText).text('Center: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')');
-		$('#'+idRightText).text('Right: (' + androwayCoordinates['right'].x1 + ', ' + androwayCoordinates['right'].y1 + ', ' + androwayCoordinates['right'].x2 + ', ' + androwayCoordinates['right'].y2 + ')');
-	}
+		$('#'+idText).text('Position: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')');
 }
 
 function displaySVG()
@@ -214,11 +248,15 @@ function displaySVG()
 <body>
 <div id="svg_frame"></div>
 <p id="buttons">
-	<button id="add_segway"></button>
-	<button id="move_1"></button>
-	<button id="move_2"></button>
-	<button id="move_3"></button>
 	<button id="move_4"></button>
+	<button id="move_3"></button>
+	<button id="move_1"></button>
+	<button id="move_8"></button>
+	<button id="add_segway"></button>
+	<button id="move_2"></button>
+	<button id="move_7"></button>
+	<button id="move_5"></button>
+	<button id="move_6"></button>
 	<button id="show_svg"></button>
 </p>
 <p><div id="svg_code"></p>
