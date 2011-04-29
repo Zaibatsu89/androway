@@ -34,7 +34,7 @@ var strAdd = '0 0, 0';
 var strMove1 = '┐ 70, 5';
 var strMove2 = '│ 70, 25';
 var strMove3 = '─ 50, 50';
-var strMove4 = '┌ 10, 70';
+var strMove4 = '┌ 30, 70';
 var strMove5 = '─ -50, -50';
 var strMove6 = '┘ -70, -10';
 var strMove7 = '└ -10, -70';
@@ -45,12 +45,17 @@ var idCircleGroup = 'all';
 var idCircleA = 'circleA';
 var idCircleB = 'circleB';
 
-var oldX;
-var oldY;
-var cornerPosX = 0;
-var cornerPosY = 0;
-var oldCornerPosX = 0;
-var oldCornerPosY = 0;
+var xDiff = 0;
+var yDiff = 0;
+var oldX = 0;
+var oldY = 0;
+var oldXDiff = 0;
+var oldYDiff = 0;
+var xD = 0;
+var yD = 0;
+
+var xFlag = false;
+var yFlag = false;
 
 function init(svg)
 {	
@@ -93,7 +98,7 @@ function drawCommand()
 			move(50, 50);
 			break;
 		case 'move_4':
-			move(10, 70);
+			move(30, 70);
 			break;
 		case 'move_5':
 			move(-50, -50);
@@ -126,15 +131,18 @@ function move(left, right)
 	
 	if (typeof(androwayCoordinates['center']) == 'undefined')
 	{
-		androwayCoordinates['center'] = {x: $('#svg_frame').width() / 2, y: $('#svg_frame').height() / 2};
+		//androwayCoordinates['center'] = {x: $('#svg_frame').width() / 2, y: $('#svg_frame').height() / 2};
+		androwayCoordinates['center'] = {x: 0, y: 0};
 		oldX = androwayCoordinates['center'].x;
 		oldY = androwayCoordinates['center'].y;
 	}
 	else
-	{	
+	{
 		oldX = androwayCoordinates['center'].x;
 		oldY = androwayCoordinates['center'].y;
 		androwayCoordinates['center'] = {x: androwayCoordinates['center'].x + getX(left, right), y: androwayCoordinates['center'].y + getY(left, right)};
+		
+		console.log(androwayCoordinates['center'].x, androwayCoordinates['center'].y);
 	}
 	
 	svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 2, {fill: 'gray', id: idCircleB});
@@ -151,31 +159,38 @@ function move(left, right)
 
 function getX(left, right)
 {
-	var sum = left + right;
-	var max = 10;
-	var x = 0;
+	var x;
+	var angle = 0;
 	
-	if (sum != 0)
-	{
-		var xLeft = left / sum;
-		var xRight = right / sum;
-		
-		x = xLeft * max - xRight * max;
-	}
+	if (left < 0)
+		angle = (right - left) * 0.9;
+	if (left > 0)
+		angle = (left - right) * 0.9;
+	
+	x = 0.3 * Math.sin(angle) * left;
+	
+	if (Math.abs(left) < Math.abs(right))
+		x *= 2;
 	
 	return x;
 }1
 
 function getY(left, right)
 {
-	var sum = left + right;
-	var max = 10;
-	var y = 0;
+	var y;
+	var angle = 0;
 	
-	if (sum != 0)
-		y = -1 * sum / max;
+	if (left > 0)
+		angle = (right - left) * 0.9;
+	if (left < 0)
+		angle = (left - right) * 0.9;
 	
-	return y;
+	y = 0.3 * Math.cos(angle) * right;
+	
+	if (Math.abs(left) > Math.abs(right))
+		y *= 2;
+	
+	return -y;
 }
 
 function moveCircleGroup()
@@ -186,27 +201,17 @@ function moveCircleGroup()
 	
 	var x = $('#svg_frame').width() / 2;
 	var y = $('#svg_frame').height() / 2;
-	var xDiff = x - androwayCoordinates['center'].x;
-	var yDiff = y - androwayCoordinates['center'].y;
 	
-	oldCornerPosX = cornerPosX;
-	oldCornerPosY = cornerPosY;
+	oldXDiff = xDiff;
+	oldYDiff = yDiff;
 	
-	cornerPosX = androwayCoordinates['center'].x - oldX;
-	cornerPosY = androwayCoordinates['center'].y - oldY;
+	xDiff = x - androwayCoordinates['center'].x;
+	yDiff = y - androwayCoordinates['center'].y;
 	
-	var xCornerDiff = cornerPosX - oldCornerPosX;
-	var yCornerDiff = cornerPosY - oldCornerPosY;
+	xD = xDiff - oldXDiff;
+	yD = yDiff - oldYDiff;
 	
-	console.log(xCornerDiff);
-	console.log(yCornerDiff);
- 	
- 	var corner = 0;
- 	
- 	if (xCornerDiff != 0 && yCornerDiff != 0)
- 		corner = (xCornerDiff + yCornerDiff) * 5;
-	
-	svg.change(circleGroup, {transform: 'translate(' + xDiff + ' ' + yDiff + ') rotate(' + corner  + ')'});
+	svg.change(circleGroup, {transform: 'translate(' + xDiff + ' ' + yDiff + ')'});
 }
 
 function checkBorders()
@@ -231,10 +236,13 @@ function displayValues()
 {
 	var svg = $('#svg_frame').svg('get');
 	
-	if ($('#' + idText).length <= 0)
-		svg.text(5, 18, 'Position: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')', {id: idText, style: 'font-family:Calibri;font-size:16px;'});
-	else
-		$('#'+idText).text('Position: (' + androwayCoordinates.center.x + ', ' + androwayCoordinates.center.y + ')');
+	if (typeof(androwayCoordinates['center']) != 'undefined')
+	{
+		if ($('#' + idText).length <= 0)
+			svg.text(5, 18, 'Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')', {id: idText, style: 'font-family:Calibri;font-size:16px;'});
+		else
+			$('#'+idText).text('Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')');
+	}
 }
 
 function displaySVG()
