@@ -40,10 +40,14 @@ var strMove6 = '┘ -70, -10';
 var strMove7 = '└ -10, -70';
 var strMove8 = '│ 40, -60';
 
-var idText = 'text';
+var idTextPosition = 'textPosition';
+var idTextHeading = 'textHeading';
 var idCircleGroup = 'all';
 var idCircleA = 'circleA';
 var idCircleB = 'circleB';
+
+var angle = 0;
+var heading = 0;
 
 var xDiff = 0;
 var yDiff = 0;
@@ -119,8 +123,6 @@ function drawCommand()
 	
 	displayValues();
 	
-	//checkBorders();
-	
 	moveCircleGroup();
 }
 
@@ -130,26 +132,19 @@ function move(left, right)
 	var circleGroup = svg.getElementById(idCircleGroup);
 	
 	if (typeof(androwayCoordinates['center']) == 'undefined')
-	{
-		//androwayCoordinates['center'] = {x: $('#svg_frame').width() / 2, y: $('#svg_frame').height() / 2};
 		androwayCoordinates['center'] = {x: 0, y: 0};
-		oldX = androwayCoordinates['center'].x;
-		oldY = androwayCoordinates['center'].y;
-	}
 	else
 	{
-		oldX = androwayCoordinates['center'].x;
-		oldY = androwayCoordinates['center'].y;
-		androwayCoordinates['center'] = {x: androwayCoordinates['center'].x + getX(left, right), y: androwayCoordinates['center'].y + getY(left, right)};
+		setHeading(left, right);
 		
-		console.log(androwayCoordinates['center'].x, androwayCoordinates['center'].y);
+		androwayCoordinates['center'] = {x: androwayCoordinates['center'].x + getX(left, right), y: androwayCoordinates['center'].y + getY(left, right)};
 	}
 	
-	svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 2, {fill: 'gray', id: idCircleB});
+	svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 2, {heading: heading % 360, fill: 'gray', id: idCircleB});
 	
 	if ($('#' + idCircleA).length <= 0)
 		
-		svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 3, {fill: 'black', id: idCircleA});
+		svg.circle(circleGroup, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 4, {fill: 'black', id: idCircleA});
 	else
 	{
 		var circleA = svg.getElementById(idCircleA);
@@ -157,40 +152,26 @@ function move(left, right)
 	}
 }
 
+function setHeading(left, right)
+{
+	if (left < 0)
+		angle = (right - left) * 0.9;
+	else if (left > 0)
+		angle = (left - right) * 0.9;
+	else
+		angle = 0;
+	
+	heading += angle;
+}
+
 function getX(left, right)
 {
-	var x;
-	var angle = 0;
-	
-	if (left < 0)
-		angle = (right - left) * 0.9;
-	if (left > 0)
-		angle = (left - right) * 0.9;
-	
-	x = 0.3 * Math.sin(angle) * left;
-	
-	if (Math.abs(left) < Math.abs(right))
-		x *= 2;
-	
-	return x;
-}1
+	return 0.5 * (left + right) * Math.sin(heading * Math.PI / 180);
+}
 
 function getY(left, right)
-{
-	var y;
-	var angle = 0;
-	
-	if (left > 0)
-		angle = (right - left) * 0.9;
-	if (left < 0)
-		angle = (left - right) * 0.9;
-	
-	y = 0.3 * Math.cos(angle) * right;
-	
-	if (Math.abs(left) > Math.abs(right))
-		y *= 2;
-	
-	return -y;
+{	
+	return -0.5 * (left + right) * Math.cos(heading * Math.PI / 180);
 }
 
 function moveCircleGroup()
@@ -238,10 +219,16 @@ function displayValues()
 	
 	if (typeof(androwayCoordinates['center']) != 'undefined')
 	{
-		if ($('#' + idText).length <= 0)
-			svg.text(5, 18, 'Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')', {id: idText, style: 'font-family:Calibri;font-size:16px;'});
+		if ($('#' + idTextPosition).length <= 0)
+		{
+			svg.text(5, 18, 'Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')', {id: idTextPosition, style: 'font-family:Calibri;font-size:16px;'});
+			svg.text(5, 36, 'Heading: ' + heading % 360, {id: idTextHeading, style: 'font-family:Calibri;font-size:16px;'});
+		}
 		else
-			$('#'+idText).text('Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')');
+		{
+			$('#'+idTextPosition).text('Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')');
+			$('#'+idTextHeading).text('Heading: ' + heading % 360 + '°');
+		}
 	}
 }
 
