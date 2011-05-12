@@ -1,3 +1,7 @@
+/*
+  Bluetooth.cpp - Class for handeling the bluetooth connection and the messages.
+ */
+
 #include <NewSoftSerial.h>
 #include "Bluetooth.h"
 
@@ -44,9 +48,12 @@ void Bluetooth::loop()
     
     delay(4000);
   }
+   
+  // The time difference between the last received message time and the current time
+  long timeDiff = (millis() - _lastReceivedMessage);
   
-  // If we did not receive any message for the last maxMessageReceiveTime milliseconds, the connection is probably lost so we can go to auto (hold).
-  if((_lastReceivedMessage != -1) && ((millis() - _lastReceivedMessage) > MAX_MESSAGE_RECEIVE_TIME))
+  // If we did not receive any message for the last maxMessageReceiveTime milliseconds, the connection is probably lost so we can go to auto (on hold).
+  if((_lastReceivedMessage != -1) && timeDiff > MAX_MESSAGE_RECEIVE_TIME)
   {
     // Handle connection lost stuff
     Serial.println("There was no message for more then 10 seconds. Was the connection was lost? Currently unhandled.");
@@ -102,8 +109,9 @@ void Bluetooth::handleMessage()
   // Check if verification succeeded
   if(verifyMessage())
   {
-    // We received a verified message, set the last received message time to the current time
-    _lastReceivedMessage = millis();
+    // We received a verified message, set the last received message time to the current time and make sure the led is turned off
+    _lastReceivedMessage = millis();    
+    digitalWrite(_ledPin, LOW);
     
     // The start and the end of the actual data in the complete message array (so without verification and message separator characters)
     short mStart = sizeof(VERIFICATION_STRING) - 1;

@@ -1,3 +1,7 @@
+/*
+  Bluetooth.h - Class for handeling the bluetooth connection and the messages.
+ */
+
 #ifndef Bluetooth_h
 #define Bluetooth_h
 
@@ -32,7 +36,7 @@ class Bluetooth
     int _dcdPin;
     int _ledPin;
     int _receiveCounter;
-    long _lastReceivedMessage;
+    unsigned long _lastReceivedMessage;
     char _receiveBuffer[BUFFER_LENGTH];
     char _receivedData[RECEIVED_DATA_LENGTH];
       
