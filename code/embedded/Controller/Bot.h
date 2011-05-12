@@ -1,6 +1,6 @@
 /*
-  Boat.cpp - Class for interacting with the physical boat.
-*/
+  Bot.h - Class for interacting with the physical balancing bot.
+ */
 
 #ifndef Bot_h
 #define Bot_h
@@ -14,7 +14,7 @@
 typedef struct BotData
 {
   float drivingDirection;
-  int drivingSpeed;
+  float drivingSpeed;
   boolean isOnHold;
 };
 
@@ -34,6 +34,7 @@ class Bot
 
     struct BotData getData(){ return _data; };  // Get the data currently used by the bot
     void setData(struct BotData botData);       // Set the new data for the bot
+    void handleMotion();  // Handles the motion/driving of the bot. Triggers the engines.
 };
 
 #endif
