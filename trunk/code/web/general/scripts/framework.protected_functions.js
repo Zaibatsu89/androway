@@ -20,7 +20,7 @@ function startModule(moduleName, moduleType, moduleId)
 		{
 			var moduleElement = moduleName + 'Module';
 			
-			loadModuleDialog('/modules/' + moduleName + '/index.php', moduleElement, 600, 375, function(){}, moduleId);
+			loadModuleDialog('/system_modules/' + moduleName + '/index.php', moduleElement, 600, 375, function(){}, moduleId);
 
 			moduleElement = $(moduleElement);
 			

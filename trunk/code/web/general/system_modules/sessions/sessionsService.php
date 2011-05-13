@@ -35,6 +35,7 @@ if(isset($_REQUEST["action"]))
 							$session->data["name"],
 							date("d-m-y",$session->data["date_time"])." ".date("G:i",$session->data["date_time"]),
 							$session->data["user_id"],
+							'showReplay',
 							'showLogs',
 							'edit',
 							'remove'

@@ -12,6 +12,7 @@ abstract class Model
 	// The database manager to use
 	protected static $db;
 	protected static $dbAlternative;
+	protected static $config;
 	
 	protected $useAlternative;
 	protected $dbTable;
@@ -38,8 +39,9 @@ abstract class Model
 			$this->data = array();
 	}
 	
-	public function init(DatabaseManager $db, DatabaseManager $alternativeDb = null)
+	public function init($config, DatabaseManager $db, DatabaseManager $alternativeDb = null)
 	{
+		Model::$config = $config;
 		Model::$db = $db;
 		
 		if($alternativeDb != null)

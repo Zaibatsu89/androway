@@ -22,7 +22,7 @@ function initSessionsModule()
 		],
 		sortname: 'date_time',
 		sortorder: 'desc',
-		onSuccess: function(){ },
+		onSuccess: function(){ },	
 		onShowLogs: function(scope)
 		{
 			onShowSessionLogs($(scope).attr('id'));

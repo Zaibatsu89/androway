@@ -89,11 +89,11 @@ function generateMenu(menuData, level)
 
 function loadPage(pageId)
 {
-	if(!isDefined(pageId))
+	if (!isDefined(pageId))
 		pageId = false;
 	
 	$.getJSON('webservices/siteService.php', { action : 'loadPage', page_id : pageId }, function(pageData)
-	{
+	{	
 		document.title = website_title + pageData.page_title;
 		$('#content').empty();
 		processPageModules(pageData.modules);
@@ -108,5 +108,16 @@ function processPageModules(modules)
 		
 		// Execute the generated function
 		eval(moduleFunction);
+	});
+}
+
+function loadModuleData(moduleName, moduleData, callback)
+{
+	if (!isDefined(callback))
+		callback = function(){};
+	
+	$.getJSON('webservices/siteService.php', { action: 'loadModule', module_name : moduleName, id : moduleData.id }, function(data)
+	{
+		callback(data);
 	});
 }

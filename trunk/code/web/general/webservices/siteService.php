@@ -56,11 +56,12 @@ switch($_REQUEST["action"])
 		break;
 	}
 	case "loadModule":
-	{
+	{		
 		require_once("../site_modules/" . $_REQUEST["module_name"] . "/class.php");
 		
 		// Should be CamelCase instead of ucfirst
 		$moduleClass = ucfirst($_REQUEST["module_name"]);
+		
 		$instance = new $moduleClass($_REQUEST["id"]);		
 		$result = $instance->loadData();
 		

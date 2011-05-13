@@ -1,7 +1,20 @@
+body
+{
+	padding: 0;
+	margin: 0;
+}
+
 button
 {
 	float: none;
-	display: block;
-	width: 450px;
-	margin: 10px auto;
+	width: 83px;
+	margin: 2px auto;
+}
+#svg_code
+{
+	font-family: sans-serif;
+}
+#svg_frame
+{
+	border: 1px solid;
 }
