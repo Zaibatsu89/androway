@@ -44,7 +44,7 @@ function init($redirect = true)
 	$alternativeDbConfig = $configuration["alternativeDatabase"];
 	$dbAlternativeManager = new DatabaseManager($alternativeDbConfig["name"], $alternativeDbConfig["user"], $alternativeDbConfig["password"]);
 	
-	Model::init($dbManager, $dbAlternativeManager);
+	Model::init($configuration, $dbManager, $dbAlternativeManager);
 	
 	$loggedIn = $sessionHandler->authenticate();
 }

@@ -4,6 +4,7 @@ function initSessionsModule()
 	({
 		moduleName: 'sessions',
 		url: 'system_modules/sessions/sessionsService.php',
+		showReplay: true,
 		showLogsRow: true,
 		editRow: true,
 		removeRow: true,
@@ -12,6 +13,7 @@ function initSessionsModule()
 			{display: 'name', name : 'name', width : 140, sortable : true, align: 'left'},
 			{display: 'date/time', name : 'date_time', width : 140, sortable : true, align: 'left'},
 			{display: 'user id', name : 'user_id', width : 80, sortable : true, align: 'left'},
+			{display: '', name : 'show_replay', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'show_module', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
@@ -23,6 +25,10 @@ function initSessionsModule()
 		sortname: 'date_time',
 		sortorder: 'desc',
 		onSuccess: function(){ },
+		onShowReplay: function(scope)
+		{
+			onShowReplay($(scope).attr('id'));
+		},
 		onShowLogs: function(scope)
 		{
 			onShowSessionLogs($(scope).attr('id'));
@@ -80,6 +86,11 @@ function onEditSession(sessionId)
 			$('#editSession').dialog('destroy');
 		});
 	});
+}
+
+function onShowReplay(sessionId)
+{
+	startModule('replay', 'dialog', sessionId);
 }
 
 function onShowSessionLogs(sessionId)

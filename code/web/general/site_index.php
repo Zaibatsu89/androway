@@ -6,17 +6,23 @@
 	<head>
 		<!-- The required style files -->
 		<link rel="stylesheet" href="styles/framework.css"/>
-		<link rel="stylesheet" href="styles/flexigrid.css"/> 
+		<link rel="stylesheet" href="styles/flexigrid.css"/>
+		<link rel="stylesheet" href="styles/jquery.mobile.min.css"/> 
 		
 		<!-- The required script files -->
 		<script type="text/javascript" src="scripts/lib/jquery.1.5.1.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.mobile.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.ui.all.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.flexigrid.js"></script>
 		
 		<script type="text/javascript" src="scripts/framework.functions.js"></script>
-		<script type="text/javascript" src="modules/logs/script.js"></script>
-		<script type="text/javascript" src="modules/sessions/script.js"></script>
-		<script type="text/javascript" src="modules/users/script.js"></script>
+		<script type="text/javascript" src="scripts/framework.site.js"></script>
+		<script type="text/javascript" src="site_modules/grid/script.js"></script>
+		<script type="text/javascript" src="site_modules/text/script.js"></script>
+		<script type="text/javascript" src="site_modules/logs/script.js"></script>
+		<script type="text/javascript" src="site_modules/sessions/script.js"></script>
+		
+
 		
 		<?php
 			// Protected script functions. Only included when logged in.
@@ -24,15 +30,16 @@
 			{
 				?>
 				<script type="text/javascript" src="scripts/framework.protected_functions.js"></script>
+				<script type="text/javascript" src="system_modules/logs/script.js"></script>
+				<script type="text/javascript" src="system_modules/sessions/script.js"></script>
+				<script type="text/javascript" src="system_modules/users/script.js"></script>
 				<?
 			}
 		?>
 		
 		<script type="text/javascript">
 			<?php
-				if($sessionHandler->authenticate())
-					echo "$(function(){ $('#main_menu').show(); });";
-				else
+				if(!$sessionHandler->authenticate() && isset($_GET['admin']))
 					echo "$(function(){ $('#loginDialog').dialog(); });";
 			?>
 
@@ -78,7 +85,7 @@
 	</head>
 	<body>
 		<?php
-		if($sessionHandler->authenticate())
+		if ($sessionHandler->authenticate())
 		{
 		?>
 		<!-- Html only shown when logged in -->
@@ -98,7 +105,7 @@
 		</div>
 		<?
 		}
-		else
+		else if (isset($_GET['admin']))
 		{
 		?>
 		<!-- Html only shown when not logged in -->
@@ -112,6 +119,16 @@
 				<div class="message_box auth_normal"></div>
 			</fieldset>
 			</form>
+		</div>
+		<?
+		}
+		else
+		{
+		?>
+		<div data-role="page">
+			<div data-role="content">
+				<div id="content"></div>
+			</div>
 		</div>
 		<?
 		}

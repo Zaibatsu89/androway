@@ -1,5 +1,5 @@
 function loadGrid(data)
-{
+{	
 	loadModuleData('grid', data, function(columnData)
 	{
 		$('#content').append
@@ -15,7 +15,7 @@ function loadGrid(data)
 }
 
 function createGrid(gridData, rows)
-{
+{	
 	var gridString = '';
 	
 	$.each(rows, function(i, row)

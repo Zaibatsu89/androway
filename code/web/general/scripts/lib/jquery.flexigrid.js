@@ -19,9 +19,11 @@
 		p = $.extend
 		({
 			moduleName: '',
+			showReplay: false,
 			showLogsRow: false,
 			editRow: false,
 			removeRow: false,
+			onShowReplay: false,
 			onShowLogs: false,
 			onEdit: false,
 			onRemove: false,
@@ -525,6 +527,31 @@
 				this.rePosDrag();
 				
 				tbody = null; data = null; i = null;
+				
+				if(p.showReplay)
+				{
+					// Loop the table rows
+					$(t).find('tr').each(function(i, item)
+					{
+						var rowId = ($(this).attr('id').split('row'))[1];
+						var showReplayElement;
+						
+						if(p.showLogsRow && p.editRow && p.removeRow)
+							showReplayElement = $(this).find('td:last').prev().prev().prev();
+						else if(p.editRow && p.removeRow)
+							showReplayElement = $(this).find('td:last').prev().prev();
+						else if(p.editRow || p.removeRow)
+							showReplayElement = $(this).find('td:last').prev();
+						else
+							showReplayElement = $(this).find('td:last');
+						
+						showReplayElement.addClass('show_replay');
+						showReplayElement.attr('id', rowId);
+						showReplayElement.find('div').html('');
+						
+						showReplayElement.click(function(){p.onShowReplay(this)});
+					});
+				}
 				
 				if(p.showLogsRow)
 				{

@@ -17,7 +17,7 @@ class Grid extends Model
 	}
 	
 	public function loadData()
-	{
+	{		
 		$dbToUse = self::$db;
 		
 		if($this->data["database"] == "alternative")
