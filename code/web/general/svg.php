@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="styles/svg.css" />
 <link rel="stylesheet" href="styles/jquery.svg.css" />
 
-<script type="text/javascript" src="scripts/lib/jquery.1.5.1.min.js"></script>
+<script type="text/javascript" src="scripts/lib/jquery.min.js"></script>
 <script type="text/javascript" src="scripts/lib/jquery.svg.pack.js"></script>
 <script type="text/javascript" src="scripts/lib/jquery.svganim.pack.js"></script>
 <script type="text/javascript">
