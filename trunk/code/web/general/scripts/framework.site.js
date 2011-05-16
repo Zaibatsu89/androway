@@ -103,7 +103,7 @@ function loadPage(pageId)
 function processPageModules(modules)
 {
 	$.each(modules, function(i, module)
-	{
+	{	
 		var moduleFunction = 'load' + ucFirst(module.tag) + '(' + stringify(module.data) + ');';
 		
 		// Execute the generated function

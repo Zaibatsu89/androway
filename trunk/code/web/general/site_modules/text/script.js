@@ -1,10 +1,8 @@
 function loadText(data)
 {
-	$('#content').append
+	$('#contentText').append
 	(
-			'<div class="text_module">'
-		+		'<div class="title">'+ data.title +'</div>'
-		+		data.content
-		+	'</div>'
-	);
+		//'<div class="title">'+ data.title +'</div>'
+		data.content
+	).page();
 }

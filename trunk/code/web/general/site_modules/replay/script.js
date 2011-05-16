@@ -1,4 +1,4 @@
-function initReplayModule(moduleId)
+function initReplayModule(sessionId)
 {
 	var logs = $('#logs');
 	
