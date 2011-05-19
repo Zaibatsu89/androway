@@ -2,7 +2,6 @@ package proj.androway.ui.block_component.balance_block;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +12,7 @@ import android.widget.LinearLayout;
 import java.util.Map;
 import proj.androway.R;
 import proj.androway.common.Settings;
+import proj.androway.common.SharedObjects;
 import proj.androway.main.TiltControls;
 
 /**
@@ -27,11 +27,14 @@ public class BalanceViewHandler extends LinearLayout
     private float _direction;
     private Display _display;
     private LinearLayout _moveArrow;
+    private SharedObjects _sharedObjects;
     private static final int _imgBgMargin = 5;
 
-    public BalanceViewHandler(Context context)
+    public BalanceViewHandler(Context context, SharedObjects sharedObjects)
     {
         super(context);
+
+        _sharedObjects = sharedObjects;
 
         // This background color is necessary, otherwise the element will not be visible
         this.setBackgroundColor(Color.parseColor("#00FF99FF"));
@@ -103,6 +106,10 @@ public class BalanceViewHandler extends LinearLayout
 
         if (sensorC > 0 && direction != -100 && direction != 100)
             _speed = speed;
+
+        // Store the calculated direction and speed in the outgoingData object
+        _sharedObjects.outgoingData.drivingDirection = _direction;
+        _sharedObjects.outgoingData.drivingSpeed = _speed;
 
         this.invalidate();
     }

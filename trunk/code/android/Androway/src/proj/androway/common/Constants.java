@@ -13,6 +13,7 @@ public class Constants
     public static final int NOTIFICATION_ID = 1;
 
     public static final int MINIMAL_PASSWORD_LENGTH = 6;
+    public static final int UPDATE_INTERVAL = 1000;
     public static final String DATABASE_NAME = "androway_logging";
     public static final String DATABASE_TABLE = "logs";
     public static final String ROOT_URL = "http://www.androway.nl";

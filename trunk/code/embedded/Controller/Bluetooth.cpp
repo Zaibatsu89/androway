@@ -94,7 +94,7 @@ void Bluetooth::receiveData()
 
 // Handle the received character
 void Bluetooth::handleChar(char value)
-{
+{  
   _receiveBuffer[_receiveCounter] = value;  // Add the byte to the receive buffer
   _receiveCounter ++;
   

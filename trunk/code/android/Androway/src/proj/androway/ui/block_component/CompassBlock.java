@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import proj.androway.R;
 import java.util.Map;
 import proj.androway.common.Settings;
+import proj.androway.common.SharedObjects;
 import proj.androway.main.TiltControls;
 
 /**
@@ -23,9 +24,9 @@ public class CompassBlock extends BlockComponent
     private float _compDegrees = 0;
     private float _compPreviousDegrees = 0;
 
-    public CompassBlock(Context context, int layoutId)
+    public CompassBlock(Context context, SharedObjects sharedObjects, int layoutId)
     {
-        super(context, layoutId, BlockComponent.ID_BLOCK_1);
+        super(context, sharedObjects, layoutId, BlockComponent.ID_BLOCK_1);
     }
 
     @Override
