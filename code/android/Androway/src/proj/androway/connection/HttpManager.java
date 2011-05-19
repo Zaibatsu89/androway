@@ -33,11 +33,12 @@ import org.json.JSONObject;
  * @since 17-03-2011
  * @version 0.42
  */
-public class HttpManager extends ConnectionManagerBase
+public class HttpManager extends ConnectionManagerBase implements Runnable
 {
     private Context _context;
     private HttpClient _httpClient;
     private boolean _running = true;
+    Thread _myThread;
 
     public HttpManager(Context context)
     {
@@ -53,6 +54,9 @@ public class HttpManager extends ConnectionManagerBase
     // Opening the connection, to login to the remote site
     public synchronized boolean open(String address, ArrayList<NameValuePair> data)
     {
+        _myThread = new Thread(this);
+        _myThread.start();
+
         boolean emailAvailable = false;
         boolean passwordAvailable = false;
         boolean result = false;

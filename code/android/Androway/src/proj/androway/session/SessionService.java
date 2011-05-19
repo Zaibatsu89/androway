@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -16,7 +17,6 @@ import java.util.logging.Logger;
 import proj.androway.R;
 import proj.androway.common.Constants;
 import proj.androway.main.Controller;
-import proj.androway.ui.View;
 
 /**
  *
@@ -98,7 +98,9 @@ public class SessionService extends Service
                         {
                             public void run()
                             {
+                                Looper.prepare();
                                 _startSession();
+                                Looper.loop();
                             }
                         }).start();
                     }

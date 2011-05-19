@@ -34,8 +34,8 @@ public class HttpManager extends DatabaseManagerBase
      */
     public boolean init()
     {
-        _connectionThread = new Thread(_httpManager);
-        _connectionThread.start();
+        //_connectionThread = new Thread(_httpManager);
+        //_connectionThread.start();
 
         // Get the login credentials from the settings
         ArrayList<NameValuePair> loginData = new ArrayList<NameValuePair>();
