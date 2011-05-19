@@ -24,6 +24,7 @@
     <string name="error_title">Er is een probleem opgetreden</string>
     <string name="error_message">Er is een probleem opgetreden tijdens het opstarten van de sessie.</string>
     <string name="login_failed_message">Het inloggen is mislukt.\n\nControleer alstublieft de internetverbinding, de gegevens of zet het online opslaan uit.</string>
+    <string name="bluetooth_failed_message">De bluetooth verbinding is mislukt.\n\nControleer alstublieft het bluetooth adres en of bluetooth wel aan staat.</string>
     <string name="left_during_login">Het inloggen is mislukt.\n\nJe hebt de applicatie verlaten tijdens het inloggen, probeer het nogmaals.</string>
 
     <!-- Notification string values -->
@@ -73,4 +74,5 @@
     <string name="HttpPostRequestFailedException">Assignment of post data failed.</string>
     <string name="HttpGetRequestFailedException">Could not fetch the response.</string>
     <string name="ConstructingLoggingManagerFailedException">The login process of the HttpManager failed.</string>
+    <string name="ConnectingBluetoothFailedException">The connecting to the bluetooth device failed.</string>
 </resources>

@@ -79,6 +79,7 @@ public class RunningSessionView extends ActivityBase
     private AlertDialog _failedAlert = null;
     private boolean _startingSession = false;
     private boolean _pausedDuringLoginProcess = false;
+    private boolean _pauseForBluetooth = false;
 
     private Messenger _sessionConnection = null;
     private final Messenger _messenger = new Messenger(new IncomingHandler());
@@ -130,7 +131,8 @@ public class RunningSessionView extends ActivityBase
         super.onResume();
 
         // If the user paused (left the activity) during the login process, show the failed dialog. Unable to handle.
-        if(_pausedDuringLoginProcess)
+        // Unless the bluetooth process has started
+        if(_pausedDuringLoginProcess && !_pauseForBluetooth)
             this.updateProcessDialog(RunningSessionView.DIALOG_TYPE_FAILED, R.string.left_during_login);
 
         if(_accTiltControls != null)
@@ -289,6 +291,8 @@ public class RunningSessionView extends ActivityBase
             }
             case DIALOG_TYPE_BLUETOOTH:
             {
+                _pauseForBluetooth = true;
+                
                 _progressDialog.setTitle(R.string.bluetooth_title);
                 _progressDialog.setMessage(getString(R.string.bluetooth_message) + Settings.BLUETOOTH_ADDRESS);
                 _progressDialog.setIcon(R.drawable.ic_dialog_bluetooth);
@@ -359,6 +363,22 @@ public class RunningSessionView extends ActivityBase
         {
             public void onClick(android.view.View v)
             {
+                // Send a message to link this view to the session service.
+                Message msg = Message.obtain(null, Session.MSG_BLUETOOTH_POST);
+                msg.replyTo = _messenger;
+                Bundle bundle = new Bundle();
+                bundle.putString(Session.MSG_DATA_KEY, "0,0,1");
+                msg.setData(bundle);
+
+                try
+                {
+                    // Send the data to the session connection, which will send it through bluetooth
+                    _sessionConnection.send(msg);
+                }
+                catch (RemoteException ex)
+                {
+                    Logger.getLogger(RunningSessionView.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         actionItems.add(connect);
@@ -387,7 +407,7 @@ public class RunningSessionView extends ActivityBase
 
 
 
-
+        
         // Initialize the fling gesture detectors
         _gestureDetectorBlock1 = new GestureDetector(new FlingDetector(RunningSessionView.this, BlockComponent.ID_BLOCK_1, (ViewFlipper)findViewById(R.id.block1_flipper)));
         _gestureDetectorBlock2 = new GestureDetector(new FlingDetector(RunningSessionView.this, BlockComponent.ID_BLOCK_2, (ViewFlipper)findViewById(R.id.block2_flipper)));
@@ -463,10 +483,10 @@ public class RunningSessionView extends ActivityBase
         if(_blockComponents.isEmpty())
         {
             // Add all wanted BlockComponents
-            _blockComponents.put(InclinationBlock.class.getName(), new InclinationBlock(RunningSessionView.this, R.layout.inclination));
-            _blockComponents.put(BalanceBlock.class.getName(), new BalanceBlock(RunningSessionView.this, R.layout.balance));
-            _blockComponents.put(CompassBlock.class.getName(), new CompassBlock(RunningSessionView.this, R.layout.compass));
-            _blockComponents.put(Direction.class.getName(), new DirectionBlock(RunningSessionView.this, R.layout.direction));
+            _blockComponents.put(InclinationBlock.class.getName(), new InclinationBlock(RunningSessionView.this, _sharedObjects, R.layout.inclination));
+            _blockComponents.put(BalanceBlock.class.getName(), new BalanceBlock(RunningSessionView.this, _sharedObjects, R.layout.balance));
+            _blockComponents.put(CompassBlock.class.getName(), new CompassBlock(RunningSessionView.this, _sharedObjects, R.layout.compass));
+            _blockComponents.put(Direction.class.getName(), new DirectionBlock(RunningSessionView.this, _sharedObjects, R.layout.direction));
 
             ViewFlipper block_1 = (ViewFlipper)findViewById(BlockComponent.ID_BLOCK_1);
             ViewFlipper block_2 = (ViewFlipper)findViewById(BlockComponent.ID_BLOCK_2);
@@ -579,11 +599,7 @@ public class RunningSessionView extends ActivityBase
      */
     public void updateSessionDataRelatedViews()
     {
-        // If the updatedData map does not exist yet, create it.
-        if(_sharedObjects.updatedData == null)
-            _sharedObjects.updatedData = new HashMap<String, Object>();
-
         // Update all block components with the new data
-        _updateBlockComponents(BlockComponent.UPDATE_TYPE_SESSION_DATA, _sharedObjects.updatedData);
+        _updateBlockComponents(BlockComponent.UPDATE_TYPE_SESSION_DATA, new HashMap<String, Object>());
     }
 }

@@ -25,6 +25,7 @@
     <string name="error_title">In swierrichheid kaam mei oer \'t mêd</string>
     <string name="error_message">In swierricheid kaam mei oer \'t mêd ûnder it op gong bringen fan de sessy.</string>
     <string name="login_failed_message">It ynloggen is misleare.\n\nKontrolearje as do wolst de internetferbining, de gegevens of set it online opslaan ut.</string>
+    <string name="bluetooth_failed_message">De bluetooth ferbining is misleare.\n\nKontrolearje as do wolst it bluetooth adres en at bluetooth wol oan stiet.</string>
     <string name="left_during_login">It ynloggen is misleare.\n\nDo hast de applikaasje ferlitten ûnder it ynloggen, probearje it nochris.</string>
 
     <!-- Notification string values -->
@@ -74,4 +75,5 @@
     <string name="HttpPostRequestFailedException">Assignment of post data failed.</string>
     <string name="HttpGetRequestFailedException">Could not fetch the response.</string>
     <string name="ConstructingLoggingManagerFailedException">The login process of the HttpManager failed.</string>
+    <string name="ConnectingBluetoothFailedException">The connecting to the bluetooth device failed.</string>
 </resources>

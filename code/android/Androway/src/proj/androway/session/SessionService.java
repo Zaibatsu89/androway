@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import proj.androway.R;
 import proj.androway.common.Constants;
+import proj.androway.common.SharedObjects;
 import proj.androway.main.Controller;
 
 /**
@@ -33,7 +34,7 @@ public class SessionService extends Service
     @Override
     public void onCreate()
     {
-        _session = new Session(SessionService.this);
+        _session = new Session(SessionService.this, (SharedObjects)this.getApplication());
     }
 
     // Called when the service is started
@@ -107,6 +108,11 @@ public class SessionService extends Service
 
                     break;
                 }
+                case Session.MSG_BLUETOOTH_POST:
+                {
+                    _session.bluetoothPost(msg.getData().getString(Session.MSG_DATA_KEY));
+                    break;
+                }
                 default:
                     super.handleMessage(msg);
             }
@@ -127,15 +133,25 @@ public class SessionService extends Service
         // sessionStartResult[0] = whether the login was successfull
         // sessionStartResult[1] = the dialog type to show
         // sessionStartResult[2] = the dialog message
-        int[] sessionStartResult = _session.startSession();
+        int[] sessionStartResult = _session.startSession(this);
 
         // Check if the session start failed, if so stop it (kill the thread)
         if(sessionStartResult[0] == 0)
             _session.stopSession();
 
+        sendMessage(sessionStartResult[1], sessionStartResult[2]);
+    }
+
+    public synchronized void sendMessage(int arg1)
+    {
+        sendMessage(arg1, 0);
+    }
+
+    public synchronized void sendMessage(int arg1, int arg2)
+    {
         // Send a message with the results to the RunningSessionView
         // with the returned dialog type and message.
-        Message msg = Message.obtain(null, Session.MSG_UPDATE_DIALOG, sessionStartResult[1], sessionStartResult[2]);
+        Message msg = Message.obtain(null, Session.MSG_UPDATE_DIALOG, arg1, arg2);
         try
         {
             _sessionViewConnection.send(msg);

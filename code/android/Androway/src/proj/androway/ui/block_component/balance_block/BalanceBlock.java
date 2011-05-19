@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import proj.androway.R;
 import proj.androway.ui.block_component.BlockComponent;
 import java.util.Map;
+import proj.androway.common.SharedObjects;
 import proj.androway.main.TiltControls;
 
 /**
@@ -18,12 +19,12 @@ public class BalanceBlock extends BlockComponent
 {
     private BalanceViewHandler _balanceViewHandler;
 
-    public BalanceBlock(Context context, int layoutId)
+    public BalanceBlock(Context context, SharedObjects sharedObjects, int layoutId)
     {
-        super(context, layoutId, BlockComponent.ID_BLOCK_1);
+        super(context, sharedObjects, layoutId, BlockComponent.ID_BLOCK_1);
 
         // Add the actual BalanceViewHandler to the BalanceBlock
-        _balanceViewHandler = new BalanceViewHandler(context);
+        _balanceViewHandler = new BalanceViewHandler(context, sharedObjects);
         LinearLayout balanceWrapper = (LinearLayout) findViewById(R.id.balance);
         balanceWrapper.addView(_balanceViewHandler);
     }

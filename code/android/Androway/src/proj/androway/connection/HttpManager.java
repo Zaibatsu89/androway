@@ -96,6 +96,7 @@ public class HttpManager extends ConnectionManagerBase implements Runnable
         _running = false;
     }
 
+    // Check the current connection
     public synchronized boolean checkConnection()
     {
         ConnectivityManager cm = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);

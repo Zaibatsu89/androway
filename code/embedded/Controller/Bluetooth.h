@@ -28,7 +28,7 @@ extern "C"
 class Bluetooth
 {
   private:
-    NewSoftSerial &_mySerial;
+    NewSoftSerial _mySerial;
     BluetoothCallback _callback;
     int _rxPin;
     int _txPin;
@@ -41,17 +41,10 @@ class Bluetooth
     char _receivedData[RECEIVED_DATA_LENGTH];
       
   public:
-    // The constructor for the class, store the NewSoftSerial instance and the pin numbers in private variables.
-    //
-    // boolean verifyMessages - Wheter to verify the incoming data messages with the set verification string or not.
-    // String verificationString - The verification string to use for the incoming messages. If verification is enabled, every message should start with this string.
-    // char messageSeparator - The separation character used to signal the end of a message
-    // NewSoftSerial mySerial - The new soft serial connection to use.
-    // int rxPin, int txPin, int rstPin, int dcdPin, int ledPin - The different digital pin numbers used by the bluetooth module.
-    Bluetooth(NewSoftSerial &mySerial, int rxPin, int txPin, int rstPin, int dcdPin, int ledPin) : _mySerial(mySerial)
+    // The constructor for the class, store the pin numbers and initialize the bluetooth software serial connection
+    Bluetooth(int rxPin, int txPin, int rstPin, int dcdPin, int ledPin) : _mySerial(rxPin, txPin)
     {
       // Store the given settings in the private variables
-      _mySerial = mySerial;
       _callback = NULL;
       _rxPin = rxPin;
       _txPin = txPin;

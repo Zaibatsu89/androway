@@ -64,7 +64,7 @@ public class Exceptions
 	}
 
         /**
-	 * Exception used when the the constructing of the logging manager fails
+	 * Exception used when the constructing of the logging manager fails
 	 */
 	public static class ConstructingLoggingManagerFailedException extends Exception
 	{
@@ -73,4 +73,15 @@ public class Exceptions
                 super(message);
             }
 	}
+
+        /**
+	 * Exception used when the connecting process of the bluetooth failed
+	 */
+        public static class ConnectingBluetoothFailedException extends Exception
+        {
+            public ConnectingBluetoothFailedException(String message)
+            {
+                super(message);
+            }
+        }
 }

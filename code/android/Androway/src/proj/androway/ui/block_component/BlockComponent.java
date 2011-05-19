@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.LinearLayout;
 import java.util.Map;
 import proj.androway.R;
+import proj.androway.common.SharedObjects;
 
 /**
  * The block component parent for all blocks that need to be added to the view flipper
@@ -21,11 +22,13 @@ public abstract class BlockComponent extends LinearLayout
     public final int blockId;
 
     private int _layoutId;
+    private SharedObjects _sharedObjects;
     
-    public BlockComponent(Context context, int layoutId, int blockType)
+    public BlockComponent(Context context, SharedObjects sharedObjects, int layoutId, int blockType)
     {
         super(context);
 
+        _sharedObjects = sharedObjects;
         _layoutId = layoutId;
         blockId = blockType;
 

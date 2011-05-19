@@ -25,6 +25,7 @@
     <string name="error_title">A problem occured</string>
     <string name="error_message">An error occured during the starting of the session.</string>
     <string name="login_failed_message">The login process failed.\n\nPlease check your internet connection, your credentials or disable saving the data online.</string>
+    <string name="bluetooth_failed_message">The bluetooth connection failed.\n\nPlease check the bluetooth address and check if bluetooth is enabled.</string>
     <string name="left_during_login">The login process failed.\n\nYou left the application during the login process, please try again.</string>
 
     <!-- Notification string values -->
@@ -74,4 +75,5 @@
     <string name="HttpPostRequestFailedException">Assignment of post data failed.</string>
     <string name="HttpGetRequestFailedException">Could not fetch the response.</string>
     <string name="ConstructingLoggingManagerFailedException">The login process of the HttpManager failed.</string>
+    <string name="ConnectingBluetoothFailedException">The connecting to the bluetooth device failed.</string>
 </resources>

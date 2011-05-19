@@ -2,6 +2,7 @@ package proj.androway.ui.block_component;
 
 import android.content.Context;
 import java.util.Map;
+import proj.androway.common.SharedObjects;
 
 /**
  * The inclination block
@@ -11,9 +12,9 @@ import java.util.Map;
  */
 public class InclinationBlock extends BlockComponent
 {
-    public InclinationBlock(Context context, int layoutId)
+    public InclinationBlock(Context context, SharedObjects sharedObjects, int layoutId)
     {
-        super(context, layoutId, BlockComponent.ID_BLOCK_1);
+        super(context, sharedObjects, layoutId, BlockComponent.ID_BLOCK_1);
     }
 
     @Override
