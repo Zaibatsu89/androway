@@ -10,9 +10,10 @@ import org.apache.http.NameValuePair;
  * @since 17-03-2011
  * @version 0.43
  */
-public interface IConnectionManager extends Runnable
+public interface IConnectionManager
 {
     // Should be all public accessible methods
+    public abstract boolean open(String address);
     public abstract boolean open(String address, ArrayList<NameValuePair> data);
     public abstract void close(String address);
     public abstract boolean checkConnection();

@@ -6,6 +6,7 @@
 package proj.androway.session;
 
 import android.content.Context;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import java.util.HashMap;
@@ -18,7 +19,9 @@ import proj.androway.common.Exceptions.MapIsEmptyException;
 import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
 import proj.androway.common.Exceptions.NotSupportedQueryTypeException;
 import proj.androway.common.Settings;
-import proj.androway.database.DatabaseManagerBase;
+import proj.androway.connection.ConnectionFactory;
+import proj.androway.connection.ConnectionManagerBase;
+import proj.androway.connection.IConnectionManager;
 import proj.androway.logging.LoggingManager;
 import proj.androway.ui.RunningSessionView;
 
@@ -35,6 +38,7 @@ public class Session implements Runnable
     private Context _context;
     private boolean _running = true;
     private LoggingManager _lm;
+    private IConnectionManager _btManager;
 
     public Session(Context context)
     {
@@ -43,7 +47,7 @@ public class Session implements Runnable
 
     public void run()
     {
-        while(_running) { }
+        while(_running){}
     }
 
     /*
@@ -62,7 +66,12 @@ public class Session implements Runnable
             {
                 _lm = new LoggingManager(_context, Settings.LOG_TYPE);
 
+                _btManager = ConnectionFactory.acquireConnectionManager(_context, ConnectionManagerBase.TYPE_BLUETOOTH);
+                //btManager.open(Settings.BLUETOOTH_ADDRESS);
+                _btManager.open("00:0b:53:13:20:c9");
+
                 // TEMPORARY, FAKE BLUETOOTH PROCESS
+                /*
                 if(Settings.LOG_TYPE.equals(DatabaseManagerBase.TYPE_LOCAL))
                 {
                     long endTime = System.currentTimeMillis() + 3 * 1000;
@@ -77,6 +86,7 @@ public class Session implements Runnable
                         }
                     }
                 }
+                */
 
                 // Set the dialog type to trigger when done
                 dialogType = RunningSessionView.DIALOG_TYPE_DONE;
