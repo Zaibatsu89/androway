@@ -13,11 +13,11 @@ class Grid extends Model
 {
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "module_grid", false);
+		parent::__construct($id, "grid_id", "module_grid", false);
 	}
 	
 	public function loadData()
-	{		
+	{
 		$dbToUse = self::$db;
 		
 		if($this->data["database"] == "alternative")

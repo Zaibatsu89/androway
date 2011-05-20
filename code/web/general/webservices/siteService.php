@@ -62,7 +62,7 @@ switch($_REQUEST["action"])
 		// Should be CamelCase instead of ucfirst
 		$moduleClass = ucfirst($_REQUEST["module_name"]);
 		
-		$instance = new $moduleClass($_REQUEST["id"]);		
+		$instance = new $moduleClass($_REQUEST["id"]);
 		$result = $instance->loadData();
 		
 		echo json_encode($result);

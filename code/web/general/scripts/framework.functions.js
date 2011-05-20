@@ -13,6 +13,16 @@ $.fn.fillForm = function(formData)
 	});
 }
 
+$.fn.fillDiv = function(divData)
+{
+	var self = this;
+	
+	$.each(divData, function(item)
+	{
+		self.find('#val_' + item).html(divData[item]);
+	});
+}
+
 function ucFirst (str)
 {
     str += '';
