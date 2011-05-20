@@ -4,7 +4,18 @@ $(function()
 {
 	loadSiteMenu();
 	loadPage();
+	
+	if(fromApp)
+		hideHeaders();
 });
+
+function hideHeaders()
+{
+	$('.ui-page').each(function()
+	{
+		$(this).find('.ui-header').hide();
+	});
+}
 
 function loadSiteMenu()
 {
@@ -37,7 +48,7 @@ function generateMenu(menuData, level)
 			var append_string = '';
 			append_string	+=	'<li class="ui-block-'+ alphaString.charAt(i) +'">'
 							+		'<a href="#" data-theme="a" onClick="loadPage(' + data.id + ');">'
-							+		data.name
+							+			data.name
 							+		'</a>'
 							+	'</li>';
 			
@@ -46,45 +57,6 @@ function generateMenu(menuData, level)
 			generateMenu(data.children, level + 1);
 		}
 	});
-	
-	/*if(!isDefined(level))
-		level = 0;
-	
-	$.each(menuData, function(i, data)
-	{
-		if(data.is_visible == '1')
-		{
-			var append_to = '';
-			if(data.parent_id == '-1')
-				append_to = '#site_menu';
-			else
-				append_to = '#page' + data.parent_id;
-			
-			var spacing = '';
-			for(var j = 0; j < level; j++)
-				spacing += '&nbsp;&nbsp;&nbsp;&nbsp;';
-			
-			var append_string = '';
-			if(data.children.length > 0)
-			{
-				append_string = 	'<div id="page'+ data.id +'">'
-								+		'<div class="menu_item" onclick="loadPage('+ data.id +')">'
-								+			spacing + data.name
-								+		'</div>'
-								+	'</div>';
-			}
-			else
-			{
-				append_string = 	'<div id="page'+ data.id +'" class="menu_item" onclick="loadPage('+ data.id +')">'
-								+		spacing + data.name
-								+	'</div>';
-			}
-			
-			$(append_to).append(append_string);
-			
-			generateMenu(data.children, level + 1);
-		}
-	});*/
 }
 
 function loadPage(pageId)
@@ -93,17 +65,21 @@ function loadPage(pageId)
 		pageId = false;
 	
 	$.getJSON('webservices/siteService.php', { action : 'loadPage', page_id : pageId }, function(pageData)
-	{	
+	{
 		document.title = website_title + pageData.page_title;
+		$('#page').find('div[data-role=header]').html('<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">' + document.title + '</h1>');
+		
 		$('#content').empty();
 		processPageModules(pageData.modules);
 	});
+	
+	$('#page').find('div[data-role=header]').page();
 }
 
 function processPageModules(modules)
 {
 	$.each(modules, function(i, module)
-	{	
+	{		
 		var moduleFunction = 'load' + ucFirst(module.tag) + '(' + stringify(module.data) + ');';
 		
 		// Execute the generated function
@@ -116,8 +92,10 @@ function loadModuleData(moduleName, moduleData, callback)
 	if (!isDefined(callback))
 		callback = function(){};
 	
-	$.getJSON('webservices/siteService.php', { action: 'loadModule', module_name : moduleName, id : moduleData.id }, function(data)
+	$.getJSON('webservices/siteService.php', { action: 'loadModule', module_name : moduleName, id : eval('moduleData.' + moduleName + '_id') }, function(data)
 	{
 		callback(data);
 	});
+	
+	$('#page').find('div[data-role=header]').page();
 }

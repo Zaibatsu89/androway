@@ -1,13 +1,18 @@
 <?php
 	require_once("init.php");
-	init();
+	init(false);
 ?>
 <html> 
 	<head>
 		<!-- The required style files -->
 		<link rel="stylesheet" href="styles/framework.css"/>
 		<!--<link rel="stylesheet" href="styles/flexigrid.css"/>-->
-		<link rel="stylesheet" href="styles/jquery.mobile.min.css"/> 
+		<link rel="stylesheet" href="styles/jquery.mobile.min.css"/>
+		<link rel="stylesheet" href="styles/svg.css" />
+		<link rel="stylesheet" href="styles/jquery.svg.css" />
+		
+		<!-- The site favicon -->
+		<link rel="shortcut icon" href="images/favicon.ico" />
 		
 		<!-- The required script files -->
 		<script type="text/javascript" src="scripts/lib/jquery.min.js"></script>
@@ -16,18 +21,21 @@
 				$.mobile.selectmenu.prototype.options.nativeMenu = false;
 			});
 		</script>
-		<script type="text/javascript" src="scripts/lib/jquery.mobile.min.js"></script>
-		
+		<script type="text/javascript" src="scripts/lib/jquery.mobile.min.js"></script>		
 		<script type="text/javascript" src="scripts/lib/jquery.ui.all.js"></script>
 		<!--
 		<script type="text/javascript" src="scripts/lib/jquery.flexigrid.js"></script>
 		-->
-		<script type="text/javascript" src="scripts/framework.functions.js"></script>
 		
-		<script type="text/javascript" src="scripts/framework.site.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.svg.pack.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.svganim.pack.js"></script>
 		
-		<script type="text/javascript" src="site_modules/grid/script.js"></script>
+		<script type="text/javascript" src="scripts/framework.functions.js"></script>		
+		<script type="text/javascript" src="scripts/framework.site.js"></script>		
 		
+		<script type="text/javascript" src="site_modules/grid/script.js"></script>		
+		<script type="text/javascript" src="site_modules/replay/script.js"></script>		
+		<script type="text/javascript" src="site_modules/replay/svg.js"></script>		
 		<script type="text/javascript" src="site_modules/text/script.js"></script>
 		<!--
 		<script type="text/javascript" src="site_modules/logs/script.js"></script>
@@ -93,6 +101,8 @@
 					window.location = '/site_index.php';
 				});
 			}
+			
+			var fromApp = <?php echo (isset($_REQUEST["from_app"])) ? ("true") : ("false");?>;
 		</script> 
 	</head>
 	<body>
@@ -138,8 +148,11 @@
 		{
 		?>
 		<div data-role="page" id="page">
+			<div data-role="header" id="commonHeader"></div>
 			<div data-role="content" id="contentText"></div>
 			<div data-role="content" id="contentGrid"></div>
+			<div data-role="content" id="contentLogs"></div>
+			<div data-role="content" id="contentReplay"></div>
 		</div>
 		<?
 		}

@@ -256,8 +256,8 @@ function checkBorders()
 		var yChange = 0;
 		
 		margin *= scale;
-		xTotal += (2 * margin);
-		yTotal += (2 * margin);
+		xTotal -= (2 * margin);
+		yTotal -= (2 * margin);
 		
 		var scaledWidth = (scale == 1 ? width : width * Math.pow(scale, -1));
 		
@@ -334,7 +334,7 @@ function checkBorders()
 				}
 				else
 				{
-					yChange = Math.abs(yMax) - margin;
+					yChange = Math.abs(yMax) + margin;
 					console.log('3.1.2.   yChange = abs(yMax) - margin:          ' + yChange + ' = ' + Math.abs(yMax) + ' - ' + margin);
 				}
 			}

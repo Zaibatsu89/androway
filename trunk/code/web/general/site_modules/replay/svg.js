@@ -1,46 +1,13 @@
-$(function()
-{
-	var svgFramePadding = 10;
-	var browserWidth = $(window).width() - 2 * svgFramePadding;
-	var browserHeight = Math.round(browserWidth / 16 * 5) - 2 * svgFramePadding;
-	
-	$('#svg_frame').width(browserWidth).height(browserHeight).css('margin', svgFramePadding + 'px');
-	$('#svg_frame').svg({onLoad: init});
-	$('button').click(drawCommand);
-});
-
-var androwayCoordinates = [];
-
-var strPlay = 'play';
-var strPause = 'pause';
-
-var idTextPosition = 'textPosition';
-var idTextHeading = 'textHeading';
 var idAll = 'all';
 var idPath = 'path';
 var idCircleA = 'circleA';
 var idCircleB = 'circleB';
 
+var path;
+var androwayCoordinates = [];
+
 var angle = 0;
 var heading = 0;
-
-var xDiff = 0;
-var yDiff = 0;
-var oldX = 0;
-var oldY = 0;
-var oldXDiff = 0;
-var oldYDiff = 0;
-var xD = 0;
-var yD = 0;
-
-var path;
-
-var xFlag = false;
-var yFlag = false;
-
-var svgFramePadding = 10;
-var browserWidth = $(window).width() - 2 * svgFramePadding;
-var browserHeight = Math.round(browserWidth / 16 * 5) - 2 * svgFramePadding;
 
 var xMin = 0;
 var xMax = 0;
@@ -49,52 +16,22 @@ var yMax = 0;
 
 var scale = 1;
 
-function init(svg)
-{
-	$('#play').text(strPlay);
-	$('#pause').text(strPause);
-	$('#show_svg').text('SVG');
+$.fn.initSVG = function()
+{	
+	var parentWidth = $(this).parent().width() - 5;
+	var parentHeight = Math.round(parentWidth / 16 * 5);
 	
+	$(this).width(parentWidth).height(parentHeight);
+	$(this).svg();
+	
+	var svg = $('#svg_frame').svg('get');
 	var defs = svg.defs();
-	var ptn = svg.pattern(defs, 'grid', 0, 0, 20, 20, {patternUnits: 'userSpaceOnUse'});
-	var rect1 = svg.rect(ptn, 0, 0, 10, 10, {fill: 'black', opacity: '0.1'});
-	var rect2 = svg.rect(ptn, 10, 0, 10, 10, {fill: 'white'});
-	var rect3 = svg.rect(ptn, 10, 10, 10, 10, {fill: 'black', opacity: '0.1'});
-	var rect4 = svg.rect(ptn, 0, 10, 10, 10, {fill: 'white'});
-	var rectFill = svg.rect(0, 0, 0, 0, {fill: 'url(#grid)', width: '100%', height: '100%'});
+	var rectFill = svg.rect(0, 0, 0, 0, {fill: 'white', width: '100%', height: '100%'});
 	
 	var all = svg.group({id: idAll, transform: 'translate(0 0) scale(' + scale + ')'});
 	
 	path = svg.createPath();
 	svg.path(all, path, {id: idPath, stroke: '#D90000', strokeWidth: 1});
-}
-
-function drawCommand()
-{
-	switch ($(this).attr('id'))
-	{
-		case 'play':
-			play();
-			break;
-		case 'pause':
-			pause;
-			break;
-		case 'show_svg':
-			displaySVG();
-			break;
-	}
-	
-	checkBorders();
-}
-
-function play()
-{
-	
-}
-
-function pause()
-{
-	
 }
 
 function move(left, right)
@@ -152,7 +89,9 @@ function move(left, right)
 		yMin = androwayCoordinates['center'].y;
 	if (androwayCoordinates['center'].y > yMax)
 		yMax = androwayCoordinates['center'].y;
-		
+	
+	checkBorders();
+	
 	console.log('xMin: ' + xMin, 'xMax: ' + xMax, 'yMin: ' + yMin, 'yMax: ' + yMax);
 }
 
@@ -193,15 +132,6 @@ function checkBorders()
 	{
 		var zoomedIn = false;
 		var margin = 20;
-		
-		// Zoom in		
-		//if (yMin * scale > -height && yMax * scale < height)
-		
-		//var xScaleDiff = width - xTotal;
-		//var yScaleDiff = height - yTotal;
-		
-		//console.log('x-diff:' + xScaleDiff);
-		//console.log('y-diff:' + yScaleDiff);
 		
 		var xChange = 0;
 		var yChange = 0;
@@ -355,139 +285,7 @@ function checkBorders()
 		}
 		
 		svg.change(all, {transform: 'translate(' + (xChange + scaleWidth) + ', ' + (yChange + scaleHeight) + ') scale(' + scale + ')'});	
-		
-		/*
-		if ((androwayCoordinates['center'].y < yMax && androwayCoordinates['center'].y > yMin) || (androwayCoordinates['center'].x < xMax && androwayCoordinates['center'].x > xMin))
-		{
-			var xScaleDiff = width - xTotal;
-			var yScaleDiff = height - yTotal;
-			
-			if (xScaleDiff > 0 && yScaleDiff > 0)
-			{
-				var xScale = xScaleDiff / width;
-				var yScale = yScaleDiff / height;
-				
-				if (xScale > yScale)
-					scale = yScale;
-				else
-					scale = xScale;
-				
-				zoomedIn = true;
-			}
-		}
-		
-		console.log('zoomed in: ' + zoomedIn);
-	
-		// Zoom out
-		if (yTotal > (yMax / 2) && !zoomedIn)
-		{
-			console.log('y > (yMax / 2): ' + yTotal + ' > ' + yMax / 2);
-			scale = height / (yTotal * 2);
-		}		
-		*/
-		
-		/*
-		if (scale < 0.2)
-			scale = 0.2;
-		if (scale > 20)
-			scale = 20;
-		
-		var scaleWidth = 0;
-		var scaleHeight = 0;
-		
-		if(scale != 1)
-		{
-			scaleWidth = (width - width * scale) / 2;
-			scaleHeight = (height - height * scale) / 2;
-		}
-		
-		var xHalf = $('#svg_frame').width() / 2;
-		var yHalf = $('#svg_frame').height() / 2;
-		
-		oldXDiff = xDiff;
-		oldYDiff = yDiff;
-		
-		xDiff = xHalf - androwayCoordinates['center'].x;
-		yDiff = yHalf - androwayCoordinates['center'].y;
-		
-		xDiff *= scale;
-		yDiff *= scale;
-		
-		svg.change(all, {transform: 'translate(' + (xDiff + scaleWidth) + ', ' + (yDiff + scaleHeight) + ') scale(' + scale + ')'});
-		*/
-		//if (androwayCoordinates['center'].x < xMin)
-//		{
-//			console.log(androwayCoordinates['center'].x + ' < xMin');
-//			
-//			scale *= 0.99;
-//			svg.change(all, {transform: 'translate(' + x + ', ' + y + ') scale(' + scale + ')'});
-//			
-//			xMin = androwayCoordinates['center'].x;
-//		}
-//		if (androwayCoordinates['center'].x > xMax)
-//		{
-//			console.log(androwayCoordinates['center'].x + ' > xMax');
-//			
-//			scale *= 0.99;
-//			svg.change(all, {transform: 'translate(' + x + ', ' + y / 2 + ') scale(' + scale + ')'});
-//			
-//			xMax = androwayCoordinates['center'].x;
-//		}
-//		if (androwayCoordinates['center'].y < yMin)
-//		{
-//			console.log(androwayCoordinates['center'].y + ' < yMin');
-//			
-//			scale = height / Math.abs(yMin);
-//			
-//			if (scale > 1)
-//				scale = 1;
-//			
-//			x /= scale;
-//			y /= scale;
-//			
-//			console.log('xTransform: ' + x, 'yTransform: ' + y);
-//			
-//			svg.change(all, {transform: 'translate(' + x + ', ' + y + ') scale(' + scale + ')'});
-//			
-//			yMin = androwayCoordinates['center'].y;
-//		}
-//		if (androwayCoordinates['center'].y > yMax)
-//		{
-//			console.log(androwayCoordinates['center'].y + ' > yMax');
-//			
-//			scale *= 0.99;
-//			svg.change(all, {transform: 'translate(' + x + ', ' + y + ') scale(' + scale + ')'});
-//			
-//			yMax = androwayCoordinates['center'].y;
-//		}
 	}
 	
 	console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-}
-
-function displayValues()
-{
-	var svg = $('#svg_frame').svg('get');
-	
-	if (typeof(androwayCoordinates['center']) != 'undefined')
-	{
-		if ($('#' + idTextPosition).length <= 0)
-		{
-			svg.text(5, 18, 'Dimensions: (' + $('#svg_frame').width() + ', ' + $('#svg_frame').height() + ')', {style: 'font-family:Calibri;font-size:16px;'});
-			svg.text(5, 36, 'Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')', {id: idTextPosition, style: 'font-family:Calibri;font-size:16px;'});
-			svg.text(5, 54, 'Heading: ' + heading % 360, {id: idTextHeading, style: 'font-family:Calibri;font-size:16px;'});
-		}
-		else
-		{
-			$('#'+idTextPosition).text('Position: (' + androwayCoordinates['center'].x + ', ' + androwayCoordinates['center'].y + ')');
-			$('#'+idTextHeading).text('Heading: ' + heading % 360 + '°');
-		}
-	}
-}
-
-function displaySVG()
-{
-	var svg = $('#svg_frame').svg('get').toSVG();
-	
-	$('#svg_code').html(svg.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 }
