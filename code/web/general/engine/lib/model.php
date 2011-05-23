@@ -18,7 +18,7 @@ abstract class Model
 	protected $dbTable;
 	public $data;
 
-	protected function __construct($id = null, $dbTable, $useAlternative = false)
+	protected function __construct($id = null, $idColumn, $dbTable, $useAlternative = false)
 	{
 		$this->dbTable = $dbTable;
 		$this->useAlternative = $useAlternative;
@@ -30,7 +30,7 @@ abstract class Model
 			if($useAlternative)
 				$managerToUse = self::$dbAlternative;
 				
-			$dbData = $managerToUse->getData("SELECT * FROM $dbTable WHERE id = $id;");
+			$dbData = $managerToUse->getData("SELECT * FROM $dbTable WHERE $idColumn = $id;");
 			
 			if (!empty($dbData))
 				$this->data = $dbData[0];

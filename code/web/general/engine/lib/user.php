@@ -20,7 +20,7 @@ class User extends Model
 
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "users");
+		parent::__construct($id, "id", "users");
 	}
 	
 	public function createUser($name, $email, $password, $level)

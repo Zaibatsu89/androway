@@ -18,7 +18,7 @@ private $userLevelClmn = "level";
 
 public function __construct($id = null, $maxLifeTime)
 {
-	parent::__construct($id, "users");
+	parent::__construct($id, "id", "users");
 	
 	$this->maxLifeTime = $maxLifeTime;
 }

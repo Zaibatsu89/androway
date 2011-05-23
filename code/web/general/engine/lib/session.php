@@ -18,7 +18,7 @@ class Session extends Model
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "sessions", true);
+		parent::__construct($id, "id", "sessions", true);
 	}
 	
 	public function editSession($name)
