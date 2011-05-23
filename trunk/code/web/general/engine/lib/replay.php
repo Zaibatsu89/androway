@@ -19,7 +19,7 @@ class Replay extends Model
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "replay", true);
+		parent::__construct($id, "id", "replay", true);
 	}
 	
 	public function playReplay()

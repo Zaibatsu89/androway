@@ -18,7 +18,7 @@ class Page extends Model
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "page", false);
+		parent::__construct($id, "id", "page", false);
 		
 		if($id !== null)
 			$this->children = $this->getChildren();
@@ -91,7 +91,7 @@ class Page extends Model
 				$module_id = $pageModule["module_id"];
 				$tag = $pageModule["tag"];
 				
-				$module = self::$db->getData("SELECT * FROM module_$tag WHERE id = $module_id");
+				$module = self::$db->getData("SELECT * FROM module_$tag WHERE ".$tag."_id = $module_id");
 				$module = $module[0];
 				
 				$moduleData = array();				

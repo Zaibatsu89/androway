@@ -17,7 +17,7 @@ class SiteModule extends Model
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "site_module", true);
+		parent::__construct($id, "id", "site_module", true);
 	}
 	
 	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit)

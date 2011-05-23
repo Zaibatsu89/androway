@@ -19,7 +19,7 @@ class Log extends Model
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "logs", true);
+		parent::__construct($id, "id", "logs", true);
 	}
 	
 	public function editLog($subject, $message)
