@@ -34,7 +34,7 @@ $(function()
 var androwayCoordinates = [];
 
 var strAdd = '● 0, 0';
-var strMove1 = '┌ 70, 5';
+var strMove1 = '► 100, 0';
 var strMove2 = '┌ 70, 25';
 var strMove3 = '▲ 50, 50';
 var strMove4 = '┐ 30, 70';
@@ -53,15 +53,6 @@ var idCircleB = 'circleB';
 var angle = 0;
 var heading = 0;
 
-var xDiff = 0;
-var yDiff = 0;
-var oldX = 0;
-var oldY = 0;
-var oldXDiff = 0;
-var oldYDiff = 0;
-var xD = 0;
-var yD = 0;
-
 var path;
 
 var xFlag = false;
@@ -71,10 +62,27 @@ var svgFramePadding = 10;
 var browserWidth = $(window).width() - 2 * svgFramePadding;
 var browserHeight = Math.round(browserWidth / 16 * 5) - 2 * svgFramePadding;
 
+var xMinPrev = 0;
+var xMaxPrev = 0;
+var yMinPrev = 0;
+var yMaxPrev = 0;
+
 var xMin = 0;
 var xMax = 0;
 var yMin = 0;
 var yMax = 0;
+
+var xMinDiff = 0;
+var yMaxDiff = 0;
+var yMinDiff = 0;
+var yMaxDiff = 0;
+
+var xTotalPrev = 0;
+var yTotalPrev = 0;
+var xTotal = 0;
+var yTotal = 0;
+var xTotalDiff = 0;
+var yTotalDiff = 0;
 
 var scale = 1;
 
@@ -113,7 +121,7 @@ function drawCommand()
 			move(0, 0);
 			break;
 		case 'move_1':
-			move(70, 5);
+			move(100, 0);
 			break;
 		case 'move_2':
 			move(70, 25);
@@ -193,6 +201,11 @@ function move(left, right)
 		svg.change(circleA, {cx: androwayCoordinates['center'].x, cy: androwayCoordinates['center'].y});
 	}
 	
+	xMinPrev = xMin;
+	xMaxPrev = xMax;
+	yMinPrev = yMin;
+	yMaxPrev = yMax;
+	
 	if (androwayCoordinates['center'].x < xMin)
 		xMin = androwayCoordinates['center'].x;
 	if (androwayCoordinates['center'].x > xMax)
@@ -201,8 +214,11 @@ function move(left, right)
 		yMin = androwayCoordinates['center'].y;
 	if (androwayCoordinates['center'].y > yMax)
 		yMax = androwayCoordinates['center'].y;
-		
-	console.log('xMin: ' + xMin, 'xMax: ' + xMax, 'yMin: ' + yMin, 'yMax: ' + yMax);
+	
+	xMinDiff = xMin - xMinPrev;
+	xMaxDiff = xMax - xMaxPrev;
+	yMinDiff = yMin - yMinPrev;
+	yMaxDiff = yMax - yMaxPrev;
 }
 
 function setHeading(left, right)
@@ -232,8 +248,12 @@ function checkBorders()
 	var svg = $('#svg_frame').svg('get');
 	var all = svg.getElementById(idAll);
 	
-	var xTotal = Math.abs(xMin - xMax);
-	var yTotal = Math.abs(yMin - yMax);
+	xTotalPrev = xTotal;
+	yTotalPrev = yTotal;
+	xTotal = Math.abs(xMin - xMax);
+	yTotal = Math.abs(yMin - yMax);
+	xTotalDiff = Math.abs(xTotal - xTotalPrev);
+	yTotalDiff = Math.abs(yTotal - yTotalPrev);
 	
 	var width = $('#svg_frame').width();
 	var height = $('#svg_frame').height();
@@ -249,192 +269,83 @@ function checkBorders()
 		margin *= scale;
 		
 		var scaledWidth = (scale == 1 ? width : width * Math.pow(scale, -1));
+		var scaledHeight = (scale == 1 ? height : height * Math.pow(scale, -1));
 		
 		if (xMin < 0 + margin)
 		{
-			// xMin is out of the canvas						
-			console.log('1.       xMin < 0 + margin:                     ' + xMin + ' < ' + margin);
-			
 			if (xTotal < scaledWidth - 2 * margin)
 			{
-				console.log('1.1.     xTotal < scaledWidth - 2 * margin:     ' + xTotal + ' < ' + scaledWidth + ' - ' + 2 * margin);
-				
 				// Zoom in
 				var xScaleDiff = scaledWidth - xTotal - 2 * margin;
-				console.log('1.1.1.   xScaleDiff = sH - xTotal - 2 * margin: ' + xScaleDiff + ' = ' + scaledWidth + ' - ' + xTotal + ' - ' + 2 * margin);
-				
 				scale += xScaleDiff / scaledWidth;
-				if (scale > 10)
-				{
-					console.log('1.1.2.   Scale:                                 ' + scale);
-					scale = 10;
-				}
-				else
-					console.log('1.1.2.   Scale += xScaleDiff / scaledWidth:     ' + scale + ' += ' + xScaleDiff + ' / ' + scaledWidth);
-				
-				xChange = -(width / 2) + xTotal * scale + margin;
-				console.log('1.1.3.   xChange = -(width / 2) + xTotal * scale + margin:' + xChange + ' = -(' + width + ' / 2)' + ' + ' + xTotal + ' * ' + scale + ' + ' + margin);
+				xTotal -= xTotalDiff + xMinDiff;
+				xChange = -(width / 2) + xTotal * scale + 1.5 * margin;
 			}
 			else
 			{
-				console.log('1.2.     xTotal >= scaledWidth - 2 * margin:    ' + xTotal + ' >= ' + scaledWidth + ' - ' + 2 * margin);
-				
 				// Zoom out
 				var xScaleDiff = scaledWidth - xTotal - 2 * margin;
-				console.log('1.2.1.   xScaleDiff = sH - xTotal - 2 * margin: ' + xScaleDiff + ' = ' + scaledWidth + ' - ' + xTotal + ' - ' + 2 * margin);
-				
 				scale += xScaleDiff / scaledWidth;
-				if (scale < 0.3)
-				{
-					console.log('1.2.2.   Scale:                                 ' + scale);
-					scale = 0.3;
-				}
-				else
-					console.log('1.2.2.   Scale += xScaleDiff / scaledWidth:     ' + scale + ' += ' + xScaleDiff + ' / ' + scaledWidth);
-				
-				xChange = -(width / 2) + xTotal * scale + margin;
-				console.log('1.2.3.   xChange = -(width / 2) + xTotal * scale + margin:' + xChange + ' = -(' + width + ' / 2)' + ' + ' + xTotal + ' * ' + scale + ' + ' + margin);
+				xTotal -= xTotalDiff + xMinDiff;
+				xChange = -(width / 2) + xTotal * scale + 1.5 * margin;
 			}
 		}
 		else if(xMax > width - margin)
 		{
-			// xMax is out of the canvas
-			console.log('2.       xMax > width - margin:                 ' + xMax + ' > ' + width + ' - ' + margin);
-			
 			if (xTotal < scaledWidth - 2 * margin)
 			{
-				console.log('2.1.     xTotal < scaledWidth - 2 * margin:     ' + xTotal + ' < ' + scaledWidth + ' - ' + 2 * margin);
-				
 				//Zoom in
 		 		var xScaleDiff = scaledWidth - xTotal - 2 * margin;
-				console.log('2.1.1.   xScaleDiff = sH - xTotal - 2 * margin: ' + xScaleDiff + ' = ' + scaledWidth + ' - ' + xTotal + ' - ' + 2 * margin);
-				
 				scale += xScaleDiff / scaledWidth;
-				if (scale > 10)
-				{
-					console.log('2.1.2.   Scale:                                 ' + scale);
-					scale = 10;
-				}
-				else
-					console.log('2.1.2.   Scale += xScaleDiff / scaledWidth:     ' + scale + ' += ' + xScaleDiff + ' / ' + scaledWidth);
-				
-				xChange = width / 2 - xTotal * scale - margin;
-				console.log('2.1.3.   xChange = width / 2 - xTotal * scale - margin:' + xChange + ' = ' + width + ' / 2' + ' - ' + xTotal + ' * ' + scale + ' - ' + margin);
+				xTotal -= xTotalDiff + -xMaxDiff;
+				xChange = width / 2 - xTotal * scale - 0.5 * margin;
 			}
 			else
 			{
-				console.log('2.2.     xTotal >= scaledWidth - 2 * margin:    ' + xTotal + ' >= ' + scaledWidth + ' - ' + 2 * margin);
-				
 		 		//Zoom out
 		 		var xScaleDiff = scaledWidth - xTotal - 2 * margin;
-				console.log('2.2.1.   xScaleDiff = sH - xTotal - 2 * margin: ' + xScaleDiff + ' = ' + scaledWidth + ' - ' + xTotal + ' - ' + 2 * margin);
-				
 				scale += xScaleDiff / scaledWidth;
-				if (scale < 0.3)
-				{
-					console.log('2.2.2.   Scale:                                 ' + scale);
-					scale = 0.3;
-				}
-				else
-					console.log('2.2.2.   Scale += xScaleDiff / scaledWidth:     ' + scale + ' += ' + xScaleDiff + ' / ' + scaledWidth);
-				
-				xChange = width / 2 - xTotal * scale - margin;
-				console.log('2.2.3.   xChange = width / 2 - xTotal * scale - margin:' + xChange + ' = ' + width + ' / 2' + ' - ' + xTotal + ' * ' + scale + ' - ' + margin);
+				xTotal -= xTotalDiff + -xMaxDiff;
+				xChange = width / 2 - xTotal * scale - 0.5 * margin;
 			}
 		}
 		
-		var scaledHeight = (scale == 1 ? height : height * Math.pow(scale, -1));
-		
 		if (yMin < 0 + margin)
 		{
-			// yMin is out of the canvas						
-			console.log('3.       yMin < 0 + margin:                     ' + yMin + ' < ' + margin);
-			
 			if (yTotal < scaledHeight - 2 * margin)
 			{
-				console.log('3.1.     yTotal < scaledHeight - 2 * margin:    ' + yTotal + ' < ' + scaledHeight + ' - ' + 2 * margin);
-				
 				// Zoom in
 				var yScaleDiff = scaledHeight - yTotal - 2 * margin;
-				console.log('3.1.1.   yScaleDiff = sH - yTotal - 2 * margin: ' + yScaleDiff + ' = ' + scaledHeight + ' - ' + yTotal + ' - ' + 2 * margin);
-				
 				scale += yScaleDiff / scaledHeight;
-				if (scale > 10)
-				{
-					console.log('3.1.2.   Scale:                                 ' + scale);
-					scale = 10;
-				}
-				else
-					console.log('3.1.2.   Scale += yScaleDiff / scaledHeight:    ' + scale + ' += ' + yScaleDiff + ' / ' + scaledHeight);
-				
-				yChange = -(height / 2) + yTotal * scale + margin;
-				console.log('3.1.3.   yChange = -(height / 2) + yTotal * scale + margin:' + yChange + ' = -(' + height + ' / 2)' + ' + ' + yTotal + ' * ' + scale + ' + ' + margin);
+				yTotal -= yTotalDiff + yMinDiff;
+				yChange = -(height / 2) + yTotal * scale + 1.5 * margin;
 			}
 			else
 			{
-				console.log('3.2.     yTotal >= scaledHeight - 2 * margin:   ' + yTotal + ' >= ' + scaledHeight + ' - ' + 2 * margin);
-				
 				// Zoom out
 				var yScaleDiff = scaledHeight - yTotal - 2 * margin;
-				console.log('3.2.1.   yScaleDiff = sH - yTotal - 2 * margin: ' + yScaleDiff + ' = ' + scaledHeight + ' - ' + yTotal + ' - ' + 2 * margin);
-				
 				scale += yScaleDiff / scaledHeight;
-				if (scale < 0.3)
-				{
-					console.log('3.2.2.   Scale:                                 ' + scale);
-					scale = 0.3;
-				}
-				else
-					console.log('3.2.2.   Scale += yScaleDiff / scaledHeight:    ' + scale + ' += ' + yScaleDiff + ' / ' + scaledHeight);
-				
-				yChange = -(height / 2) + yTotal * scale + margin;
-				console.log('3.2.3.   yChange = -(height / 2) + yTotal * scale - margin:' + yChange + ' = -(' + height + ' / 2)' + ' + ' + yTotal + ' * ' + scale + ' - ' + margin);
+				yTotal -= yTotalDiff + yMinDiff;
+				yChange = -(height / 2) + yTotal * scale + 1.5 * margin;
 			}
 		}
 		else if(yMax > height - margin)
 		{
-			// yMax is out of the canvas
-			console.log('4.       yMax > height - margin:                ' + yMax + ' > ' + height + ' - ' + margin);
-			
 			if (yTotal < scaledHeight - 2 * margin)
 			{
-				console.log('4.1.     yTotal < scaledHeight - 2 * margin:    ' + yTotal + ' < ' + scaledHeight + ' - ' + 2 * margin);
-				
 				//Zoom in
 		 		var yScaleDiff = scaledHeight - yTotal - 2 * margin;
-				console.log('4.1.1.   yScaleDiff = sH - yTotal - 2 * margin: ' + yScaleDiff + ' = ' + scaledHeight + ' - ' + yTotal + ' - ' + 2 * margin);
-				
 				scale += yScaleDiff / scaledHeight;
-				if (scale > 10)
-				{
-					console.log('4.1.2.   Scale:                                 ' + scale);
-					scale = 10;
-				}
-				else
-					console.log('4.1.2.   Scale += yScaleDiff / scaledHeight:    ' + scale + ' += ' + yScaleDiff + ' / ' + scaledHeight);
-				
-				yChange = height / 2 - yTotal * scale - margin;
-				console.log('4.1.3.   yChange = height / 2 - yTotal * scale - margin:' + yChange + ' = ' + height + ' / 2' + ' - ' + yTotal + ' * ' + scale + ' - ' + margin);
+				yTotal -= yTotalDiff + -yMaxDiff;
+				yChange = height / 2 - yTotal * scale - 0.5 * margin;
 			}
 			else
 			{
-				console.log('4.2.     yTotal >= scaledHeight - 2 * margin:   ' + yTotal + ' >= ' + scaledHeight + ' - ' + 2 * margin);
-				
 		 		//Zoom out
 		 		var yScaleDiff = scaledHeight - yTotal - 2 * margin;
-				console.log('4.2.1.   yScaleDiff = sH - yTotal - 2 * margin: ' + yScaleDiff + ' = ' + scaledHeight + ' - ' + yTotal + ' - ' + 2 * margin);
-				
 				scale += yScaleDiff / scaledHeight;
-				if (scale < 0.3)
-				{
-					console.log('4.2.2.   Scale:                                 ' + scale);
-					scale = 0.3;
-				}
-				else
-					console.log('4.2.2.   Scale += yScaleDiff / scaledHeight:    ' + scale + ' += ' + yScaleDiff + ' / ' + scaledHeight);
-				
-				yChange = height / 2 - yTotal * scale - margin;
-				console.log('4.2.3.   yChange = height / 2 - yTotal * scale - margin:' + yChange + ' = ' + height + ' / 2' + ' - ' + yTotal + ' * ' + scale + ' - ' + margin);
+				yTotal -= yTotalDiff + -yMaxDiff;
+				yChange = height / 2 - yTotal * scale - 0.5 * margin;
 			}
 		}
 		
@@ -449,8 +360,6 @@ function checkBorders()
 		
 		svg.change(all, {transform: 'translate(' + (xChange + scaleWidth) + ', ' + (yChange + scaleHeight) + ') scale(' + scale + ')'});
 	}
-	
-	console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
 }
 
 function displayValues()
