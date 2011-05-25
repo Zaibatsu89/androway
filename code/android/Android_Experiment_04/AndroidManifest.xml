@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-     package="org.me.android_experiment_04">
+    package="org.me.android_experiment_04">
     <application>
-         <activity
-				android:name=".DrawDemo" android:label="DrawDemo"
-				android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+	<activity
+	    android:name=".DrawDemo" android:theme="@android:style/Theme.NoTitleBar" android:label="DrawDemo"
+	    android:screenOrientation="landscape">
+	    <intent-filter>
+		<action android:name="android.intent.action.MAIN"/>
+		<category android:name="android.intent.category.LAUNCHER"/>
+	    </intent-filter>
+	</activity>
     </application>
 </manifest>

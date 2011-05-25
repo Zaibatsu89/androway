@@ -13,11 +13,13 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 
 public class DrawDemo extends Activity
 {
     private DemoView mDemoView;
     private SensorManager mSensorManager = null;
+    private WindowManager mWindowManager;
     private Display mDisplay;
     private float mSensorX;
     private float mSensorY;
@@ -29,6 +31,8 @@ public class DrawDemo extends Activity
     {
         super.onCreate(savedInstanceState);
 
+	mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+	mDisplay = mWindowManager.getDefaultDisplay();
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
         mDemoView = new DemoView(this);
@@ -133,20 +137,26 @@ public class DrawDemo extends Activity
             // paint rectangle with line
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
-            canvas.drawRect(300, 132, 30, 402, paint);
-            canvas.drawLine(105, 267, 225, 267, paint);
+	    
+	    // Portrait
+            //canvas.drawRect(300, 132, 30, 402, paint);
+            //canvas.drawLine(105, 267, 225, 267, paint);
+	    
+	    // Landscape (left, top, right, bottom)
+	    canvas.drawRect(470, 13, 200, 283, paint);
+            canvas.drawLine(275, 148, 395, 148, paint);
 
             canvas.drawText("Sensor X: " + String.valueOf(mSensorX), 10, 30, paint);
             canvas.drawText("Sensor Y: " + String.valueOf(mSensorY), 10, 40, paint);
             canvas.drawText("Sensor Z: " + String.valueOf(mSensorZ), 10, 50, paint);
 
-            int tempX = (int)(getAnswer(mSensorX, mSensorY, 0) * -9.8f);
-            int tempY = (int)(getAnswer(mSensorX, mSensorY, 1) * -10.4f);
+            int tempX = (int)(getAnswer(mSensorX, mSensorZ, 1) * 9.8f);
+            int tempY = (int)(getAnswer(mSensorX, mSensorZ, 0) * -10.4f);
 
             canvas.drawText("Grid X: " + String.valueOf(tempX), 10, 70, paint);
             canvas.drawText("Grid Y: " + String.valueOf(tempY), 10, 80, paint);
 
-            if (tempX >= -100 && tempX <= 100 && tempY >= -100 && tempY <= 100 && mSensorZ >= 0f)
+            if (tempX >= -100 && tempX <= 100 && tempY >= -100 && tempY <= 100 && mSensorY <= 0f)
                     setStip(tempX, tempY);
 
             // Redraw
@@ -174,8 +184,8 @@ public class DrawDemo extends Activity
 
         private void setStip(int x, int y)
         {
-            x = (int) (x * 1.35f + 135);
-            y = (int) (y * -1.35f + 135);
+            x = (int) (x * 1.35f + 305);
+            y = (int) (y * -1.35f + 16);
 
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.RED);
