@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import proj.androway.common.Settings;
+import proj.androway.common.SharedObjects;
 
 /**
  * Class HttpManager stores log data on the androway.nl domain.
@@ -24,9 +25,10 @@ public class HttpManager extends DatabaseManagerBase
     private IConnectionManager _httpManager;
     private Thread _connectionThread;
 
-    public HttpManager(Context context) throws MaxPoolSizeReachedException
+    public HttpManager(SharedObjects sharedObjects, Context context) throws MaxPoolSizeReachedException
     {
-        _httpManager = ConnectionFactory.acquireConnectionManager(context, ConnectionManagerBase.TYPE_HTTP);
+        super(sharedObjects, context);
+        _httpManager = ConnectionFactory.acquireConnectionManager(sharedObjects, context, ConnectionManagerBase.TYPE_HTTP);
     }
 
     /*
@@ -41,7 +43,7 @@ public class HttpManager extends DatabaseManagerBase
         ArrayList<NameValuePair> loginData = new ArrayList<NameValuePair>();
         loginData.add(new BasicNameValuePair("email", Settings.USER_EMAIL));
         loginData.add(new BasicNameValuePair("password", Settings.USER_PASSWORD));
-        
+
         // Open the http connection (login) with the login url and login credentials.
         return _httpManager.open(Constants.AUTH_WEBSERVICE_URL, loginData);
     }

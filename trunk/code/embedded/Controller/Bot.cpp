@@ -6,13 +6,17 @@
 #include "Bot.h"
 
 // Set the new data for the bot
-void Bot::setData(struct BotData botData)
+void Bot::setIncomingData(struct IncomingData botData)
 {
-  // Store the given BotData as the new data for the bot
-  _data = botData;
+  // Store the given IncomingData as the new data for the bot
+  _incomingData = botData;
 
   // After the new data is set, handle the motion of the bot
   handleMotion();
+
+  // If stopSession is true, then stop the running session
+  if(botData.stopSession)
+    stopRunningSession();
 }
 
 // Handles the motion/driving of the bot. Triggers the engines.
@@ -24,10 +28,10 @@ void Bot::handleMotion()
   AF_DCMotor _leftMotor(3, MOTOR12_1KHZ);
   AF_DCMotor _rightMotor(4, MOTOR12_1KHZ);
 
-  if(!_data.isOnHold)
+  if(!_incomingData.isOnHold && !_incomingData.stopSession)
   {
-    float speed = _data.drivingSpeed;
-    float direction = _data.drivingDirection;
+    float speed = _incomingData.drivingSpeed;
+    float direction = _incomingData.drivingDirection;
     
     // Drive with the given motion data
     if(direction < 0)
@@ -66,9 +70,6 @@ void Bot::handleMotion()
       _leftMotor.run(FORWARD);
       _rightMotor.run(FORWARD);
     }
-    
-    Serial.print("left: "); Serial.print(left);
-    Serial.print(", right: "); Serial.print(right);
   }
   else
   {
@@ -80,5 +81,13 @@ void Bot::handleMotion()
     _rightMotor.run(RELEASE);
   }
   
-  Serial.println();
+  _outgoingData.leftWheel = left;
+  _outgoingData.rightWheel = right;
+  _outgoingData.inclination = 25.5;  // SET A TEMPORARY STATIC INCLINATION
+}
+
+// Handles the stopping of the current session
+void Bot::stopRunningSession()
+{
+  
 }

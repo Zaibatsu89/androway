@@ -1,7 +1,6 @@
 package proj.androway.logging;
 
 import android.content.Context;
-import android.widget.Toast;
 import proj.androway.common.Constants;
 import proj.androway.common.Exceptions.MapIsEmptyException;
 import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
@@ -14,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import proj.androway.common.Exceptions.ConstructingLoggingManagerFailedException;
+import proj.androway.common.SharedObjects;
 
 /**
  * Interface LoggingManager is.
@@ -23,74 +23,49 @@ import proj.androway.common.Exceptions.ConstructingLoggingManagerFailedException
  */
 public class LoggingManager
 {
-    private static Context _context;
-    private static String _strFormat, _strAdded, _strRemoved;
-
-    private static final String _ID = "id";
-    private static final String _TIME = "time";
-    private static final String _SUBJECT = "subject";
-    private static final String _MESSAGE = "message";
-
+    private SharedObjects _sharedObjects;
+    private Context _context;
+    private String _strDateFormat;
     private IDatabaseManager _myDbManager;
 
-    public LoggingManager(Context context, String loggingType) throws MaxPoolSizeReachedException, ConstructingLoggingManagerFailedException
+    public LoggingManager(SharedObjects sharedObjects, Context context, String loggingType) throws MaxPoolSizeReachedException, ConstructingLoggingManagerFailedException
     {
+        _sharedObjects = sharedObjects;
         _context = context;
 
-        _myDbManager = DatabaseFactory.acquireDatabaseManager(_context, loggingType);
+        _myDbManager = DatabaseFactory.acquireDatabaseManager(_sharedObjects, _context, loggingType);
 
         // If initializing the database manager fails throw an exception.
         // This operation is mainly aimed at the login proces for the HttpManager.
         if(!_myDbManager.init())
             throw new ConstructingLoggingManagerFailedException(context.getString(R.string.ConstructingLoggingManagerFailedException));
 
-        _strFormat = _context.getString(R.string.format);
-        _strAdded = _context.getString(R.string.added);
-        _strRemoved = _context.getString(R.string.removed);
+        _strDateFormat = _context.getString(R.string.format);
     }
 
-    public void addLog(String subject, String message) throws NotSupportedQueryTypeException
+    public void addLog() throws NotSupportedQueryTypeException
     {
-        DateFormat dateFormat = new SimpleDateFormat(_strFormat);
+        DateFormat dateFormat = new SimpleDateFormat(_strDateFormat);
         Date date = new Date();
         String dateTime = dateFormat.format(date);
+        
+        // Get the values for the log
+        String sessionId = String.valueOf(_sharedObjects.session.sessionId);
+        String leftWheel = String.valueOf(_sharedObjects.incomingData.leftWheelSpeed);
+        String rightWheel = String.valueOf(_sharedObjects.incomingData.rightWheelSpeed);
+        String inclination = String.valueOf(_sharedObjects.incomingData.inclination);
 
-        StringBuilder builder = new StringBuilder();
-        builder.append("INSERT INTO ");
-        builder.append(Constants.DATABASE_TABLE);
-        builder.append(" (");
-        builder.append(_ID);
-        builder.append(",");
-        builder.append(_TIME);
-        builder.append(",");
-        builder.append(_SUBJECT);
-        builder.append(",");
-        builder.append(_MESSAGE);
-        builder.append(") VALUES (NULL,'");
-        builder.append(dateTime);
-        builder.append("','");
-        builder.append(subject);
-        builder.append("','");
-        builder.append(message);
-        builder.append("')");
-        String query = builder.toString();
+        // Assemble the insert query for the log
+        String query = "INSERT INTO " + Constants.LOG_DB_TABLE + " (session_id, time, left_wheel, right_wheel, inclination) ";
+        query += "VALUES (" + sessionId + ", '" + dateTime + "', " + leftWheel + ", " + rightWheel + ", " + inclination + ");";
 
-        _myDbManager.executeNonQuery(Constants.DATABASE_NAME, query);
-        Toast.makeText(_context, _strAdded, Toast.LENGTH_LONG).show();
+        _myDbManager.executeNonQuery(Constants.LOG_DB_NAME, query);
     }
 
     public Map<String, Object> getLog(int logId) throws MapIsEmptyException
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * FROM ");
-        builder.append(Constants.DATABASE_TABLE);
-        builder.append(" WHERE ");
-        builder.append(_ID);
-        builder.append("=");
-        builder.append(logId);
-        String query = builder.toString();
-
-        Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
+        String query = "SELECT * FROM " + Constants.LOG_DB_TABLE + " WHERE log_id = " + String.valueOf(logId);
+        Map<String, Object> data = _myDbManager.getData(Constants.LOG_DB_NAME, query);
 
         if (!data.isEmpty())
                 return data;
@@ -99,15 +74,11 @@ public class LoggingManager
 
     public Map getLogs() throws MapIsEmptyException
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * FROM ");
-        builder.append(Constants.DATABASE_TABLE);
-        String query = builder.toString();
-
-        Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
+        String query = "SELECT * FROM " + Constants.LOG_DB_TABLE;
+        Map<String, Object> data = _myDbManager.getData(Constants.LOG_DB_NAME, query);
 
         if (!data.isEmpty())
-                return data;
+            return data;
         else throw new MapIsEmptyException(_context.getString(R.string.MapIsEmptyException));
     }
 
@@ -115,34 +86,24 @@ public class LoggingManager
     {
         StringBuilder builder = new StringBuilder();
         builder.append("DELETE FROM ");
-        builder.append(Constants.DATABASE_TABLE);
+        builder.append(Constants.LOG_DB_TABLE);
         String query = builder.toString();
-        _myDbManager.executeNonQuery(Constants.DATABASE_NAME, query);
-
-        Toast.makeText(_context, _strRemoved, Toast.LENGTH_LONG).show();
+        _myDbManager.executeNonQuery(Constants.LOG_DB_NAME, query);
     }
 
     public int count()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(id) FROM ");
-        builder.append(Constants.DATABASE_TABLE);
-        String query = builder.toString();
+        String query = "SELECT COUNT(" + Constants.LOG_DB_ID_KEY + ") FROM " + Constants.LOG_DB_TABLE;
+        Map<String, Object> data = _myDbManager.getData(Constants.LOG_DB_NAME, query);
 
-        Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
-
-        return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(id)").toString());
+        return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(" + Constants.LOG_DB_ID_KEY + ")").toString());
     }
 
     public boolean isEmpty()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SELECT COUNT(id) FROM ");
-        builder.append(Constants.DATABASE_TABLE);
-        String query = builder.toString();
+        String query = "SELECT COUNT(" + Constants.LOG_DB_ID_KEY + ") FROM " + Constants.LOG_DB_TABLE;
+        Map<String, Object> data = _myDbManager.getData(Constants.LOG_DB_NAME, query);
 
-        Map<String, Object> data = _myDbManager.getData(Constants.DATABASE_NAME, query);
-
-        return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(id)").toString()).equals(0);
+        return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(" + Constants.LOG_DB_ID_KEY + ")").toString()).equals(0);
     }
 }

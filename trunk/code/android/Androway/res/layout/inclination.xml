@@ -19,7 +19,7 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="-205dip"
+        android:layout_marginTop="-200dip"
         android:gravity="center_horizontal">
 
         <ImageView

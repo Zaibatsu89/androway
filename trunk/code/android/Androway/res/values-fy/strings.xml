@@ -64,8 +64,6 @@
     <string name="get">Alles sjen litte</string>
     <string name="remove">Alles ferwiderje</string>
     <string name="format">dd-MM-yyyy H:mm</string>
-    <string name="added">Loch tafoege.</string>
-    <string name="removed">Alle lochs binne ferwidere.</string>
     <string name="empty">Der binne gjin lochs.</string>
 
     <!-- Exception messages -->

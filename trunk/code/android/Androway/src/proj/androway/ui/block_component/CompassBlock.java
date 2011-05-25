@@ -32,16 +32,20 @@ public class CompassBlock extends BlockComponent
     @Override
     public void updateView(String updateType, Map<String, Object> params)
     {
-        int sensorType = (Integer)params.get(TiltControls.UPDATE_SENSOR_TYPE);
-        if(updateType.equals(BlockComponent.UPDATE_TYPE_TILT) && sensorType == Sensor.TYPE_ORIENTATION)
+        if(updateType.equals(BlockComponent.UPDATE_TYPE_TILT))
         {
-            // Store the compas degrees value
-            _compDegrees = 360 - (Float)params.get(TiltControls.UPDATE_AZIMUTH);
+            int sensorType = (Integer)params.get(TiltControls.UPDATE_SENSOR_TYPE);
 
-            if(Settings.DEVICE_ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-                _compDegrees -= 90;
+            if(sensorType == Sensor.TYPE_ORIENTATION)
+            {
+                // Store the compas degrees value
+                _compDegrees = 360 - (Float)params.get(TiltControls.UPDATE_AZIMUTH);
 
-            setCompassRotation(_compDegrees, _compPreviousDegrees, 200, new RotationListener());
+                if(Settings.DEVICE_ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+                    _compDegrees -= 90;
+
+                setCompassRotation(_compDegrees, _compPreviousDegrees, 200, new RotationListener());
+            }
         }
     }
 
@@ -54,7 +58,7 @@ public class CompassBlock extends BlockComponent
 
         RotateAnimation rotateAnim = new RotateAnimation(previousDegrees, degrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnim.setDuration(duration);
-        rotateAnim.setAnimationListener(new RotationListener());
+        rotateAnim.setAnimationListener(rotationListener);
 
         compassImage.setAnimation(rotateAnim);
 
@@ -62,7 +66,7 @@ public class CompassBlock extends BlockComponent
         _compPreviousDegrees = degrees;
     }
 
-    public class RotationListener implements AnimationListener
+    private class RotationListener implements AnimationListener
     {
         public void onAnimationStart(Animation a) { }
 

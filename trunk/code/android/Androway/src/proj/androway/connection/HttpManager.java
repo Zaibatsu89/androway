@@ -24,6 +24,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import proj.androway.common.SharedObjects;
 
 /**
  * Class HttpManager sets up the http
@@ -35,13 +36,14 @@ import org.json.JSONObject;
  */
 public class HttpManager extends ConnectionManagerBase implements Runnable
 {
-    private Context _context;
     private HttpClient _httpClient;
     private boolean _running = true;
     Thread _myThread;
 
-    public HttpManager(Context context)
+    public HttpManager(SharedObjects sharedObjects, Context context)
     {
+        super(sharedObjects, context);
+
         _context = context;
         _httpClient = new DefaultHttpClient();
     }
@@ -65,9 +67,9 @@ public class HttpManager extends ConnectionManagerBase implements Runnable
         for(NameValuePair nameValue : data)
         {
             if(nameValue.getName().equals("email"))
-                    emailAvailable = true;
+                emailAvailable = true;
             else if(nameValue.getName().equals("password"))
-                    passwordAvailable = true;
+                passwordAvailable = true;
         }
 
         // If the email and password are set and there is an http connection,
@@ -75,7 +77,12 @@ public class HttpManager extends ConnectionManagerBase implements Runnable
         if(emailAvailable && passwordAvailable && checkConnection())
         {
             data.add(new BasicNameValuePair("authType", "login"));
+            data.add(new BasicNameValuePair("fromApp", "true"));
             Map loginResult = this.get(address, data);
+
+            // Store the received session id and user id in the session
+            _sharedObjects.session.sessionId = Integer.parseInt((String)loginResult.get("sessionId"));
+            _sharedObjects.session.userId = Integer.parseInt((String)loginResult.get("userId"));
 
             // Return whether the login succeeded or not
             result = Boolean.parseBoolean((String)loginResult.get("success"));
@@ -100,11 +107,10 @@ public class HttpManager extends ConnectionManagerBase implements Runnable
     public synchronized boolean checkConnection()
     {
         ConnectivityManager cm = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         // Test if there is an http connection (mobile or wi-fi)
-        if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected())
+        if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnectedOrConnecting())
             return true;
         else
             return false;

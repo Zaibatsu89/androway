@@ -6,6 +6,7 @@ import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
 import proj.androway.R;
 import java.util.HashMap;
 import java.util.Map;
+import proj.androway.common.SharedObjects;
 
 /**
  * Class DatabaseFactory uses:
@@ -35,7 +36,7 @@ public final class DatabaseFactory extends Application
         return _databaseFactory;
     }
 
-    public static IDatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException
+    public static IDatabaseManager acquireDatabaseManager(SharedObjects sharedObjects, Context context, String managerName) throws MaxPoolSizeReachedException
     {
         if (_managerCount <= _maxPoolSize)
         {
@@ -46,9 +47,9 @@ public final class DatabaseFactory extends Application
             else
             {
                 if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
-                    databaseManager = new HttpManager(context);
+                    databaseManager = new HttpManager(sharedObjects, context);
                 else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
-                    databaseManager = new LocalManager(context);
+                    databaseManager = new LocalManager(sharedObjects, context);
 
                 _databaseManagersCollection.put(managerName, databaseManager);
                 _managerCount++;

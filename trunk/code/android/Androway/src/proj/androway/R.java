@@ -120,39 +120,42 @@ public final class R {
         public static final int view_old_session_icon_selected=0x7f020051;
     }
     public static final class id {
-        public static final int arrow_down=0x7f0a000c;
-        public static final int arrow_up=0x7f0a0008;
+        public static final int arrow_down=0x7f0a000f;
+        public static final int arrow_up=0x7f0a000b;
         public static final int balance=0x7f0a0002;
         public static final int balance_holder=0x7f0a0003;
-        public static final int battery_button=0x7f0a0012;
-        public static final int block1=0x7f0a000d;
-        public static final int block1_flipper=0x7f0a000e;
-        public static final int block2=0x7f0a000f;
-        public static final int block2_flipper=0x7f0a0010;
-        public static final int blocked_block=0x7f0a0016;
-        public static final int bluetooth_button=0x7f0a0013;
+        public static final int battery_button=0x7f0a0015;
+        public static final int block1=0x7f0a0010;
+        public static final int block1_flipper=0x7f0a0011;
+        public static final int block2=0x7f0a0012;
+        public static final int block2_flipper=0x7f0a0013;
+        public static final int blocked_block=0x7f0a0019;
+        public static final int bluetooth_button=0x7f0a0016;
         public static final int compass=0x7f0a0004;
-        public static final int footer=0x7f0a000b;
-        public static final int header2=0x7f0a0007;
+        public static final int direction_arrow=0x7f0a0007;
+        public static final int footer=0x7f0a000e;
+        public static final int header2=0x7f0a000a;
         public static final int icon=0x7f0a0000;
-        public static final int log_web_button=0x7f0a0011;
-        public static final int main_progress_bar=0x7f0a0015;
-        public static final int menu_quit_session=0x7f0a0020;
-        public static final int menu_settings=0x7f0a001f;
-        public static final int scroll=0x7f0a0009;
-        public static final int segway_body=0x7f0a0005;
-        public static final int start_session=0x7f0a0017;
-        public static final int start_session_icon=0x7f0a0018;
-        public static final int start_session_text=0x7f0a0019;
+        public static final int left_wheel_speed=0x7f0a0005;
+        public static final int log_web_button=0x7f0a0014;
+        public static final int main_progress_bar=0x7f0a0018;
+        public static final int menu_quit_session=0x7f0a0023;
+        public static final int menu_settings=0x7f0a0022;
+        public static final int right_wheel_speed=0x7f0a0006;
+        public static final int scroll=0x7f0a000c;
+        public static final int segway_body=0x7f0a0008;
+        public static final int start_session=0x7f0a001a;
+        public static final int start_session_icon=0x7f0a001b;
+        public static final int start_session_text=0x7f0a001c;
         public static final int title=0x7f0a0001;
-        public static final int titlebar=0x7f0a0014;
-        public static final int tracks=0x7f0a000a;
-        public static final int view_old_session=0x7f0a001a;
-        public static final int view_old_session_icon=0x7f0a001b;
-        public static final int view_settings=0x7f0a001c;
-        public static final int view_settings_icon=0x7f0a001d;
-        public static final int webview=0x7f0a001e;
-        public static final int window_tint=0x7f0a0006;
+        public static final int titlebar=0x7f0a0017;
+        public static final int tracks=0x7f0a000d;
+        public static final int view_old_session=0x7f0a001d;
+        public static final int view_old_session_icon=0x7f0a001e;
+        public static final int view_settings=0x7f0a001f;
+        public static final int view_settings_icon=0x7f0a0020;
+        public static final int webview=0x7f0a0021;
+        public static final int window_tint=0x7f0a0009;
     }
     public static final class layout {
         public static final int action_item=0x7f030000;
@@ -172,17 +175,17 @@ public final class R {
         public static final int running_session_menu=0x7f090000;
     }
     public static final class string {
-        public static final int ConnectingBluetoothFailedException=0x7f07003f;
-        public static final int ConstructingLoggingManagerFailedException=0x7f07003e;
-        public static final int HttpGetRequestFailedException=0x7f07003d;
-        public static final int HttpPostRequestFailedException=0x7f07003c;
-        public static final int MapIsEmptyException=0x7f07003b;
+        public static final int ConnectingBluetoothFailedException=0x7f07003d;
+        public static final int ConstructingLoggingManagerFailedException=0x7f07003c;
+        public static final int HttpGetRequestFailedException=0x7f07003b;
+        public static final int HttpPostRequestFailedException=0x7f07003a;
+        public static final int MapIsEmptyException=0x7f070039;
         /**  Exception messages 
  Exception messages 
  Exception messages 
          */
-        public static final int MaxPoolSizeReachedException=0x7f070039;
-        public static final int NotSupportedQueryTypeException=0x7f07003a;
+        public static final int MaxPoolSizeReachedException=0x7f070037;
+        public static final int NotSupportedQueryTypeException=0x7f070038;
         /**  UI Settings View 
  UI Settings View 
  UI Settings View 
@@ -193,7 +196,6 @@ public final class R {
  Logging 
          */
         public static final int add=0x7f070032;
-        public static final int added=0x7f070036;
         public static final int app_label=0x7f070001;
         public static final int app_name=0x7f070000;
         public static final int block1LockedSummary=0x7f07002b;
@@ -216,7 +218,7 @@ public final class R {
         public static final int emailInvalid=0x7f070021;
         public static final int emailSummary=0x7f070020;
         public static final int emailTitle=0x7f07001f;
-        public static final int empty=0x7f070038;
+        public static final int empty=0x7f070036;
         public static final int error_message=0x7f070013;
         public static final int error_title=0x7f070012;
         public static final int exit_app=0x7f07000a;
@@ -242,7 +244,6 @@ public final class R {
         public static final int passwordSummary=0x7f070023;
         public static final int passwordTitle=0x7f070022;
         public static final int remove=0x7f070034;
-        public static final int removed=0x7f070037;
         public static final int session_hold_message=0x7f07001c;
         public static final int session_hold_ticker=0x7f07001a;
         public static final int session_hold_title=0x7f07001b;

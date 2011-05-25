@@ -22,7 +22,7 @@ public abstract class BlockComponent extends LinearLayout
     public final int blockId;
 
     private int _layoutId;
-    private SharedObjects _sharedObjects;
+    protected SharedObjects _sharedObjects;
     
     public BlockComponent(Context context, SharedObjects sharedObjects, int layoutId, int blockType)
     {
