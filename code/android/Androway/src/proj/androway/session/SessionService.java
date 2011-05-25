@@ -29,12 +29,13 @@ public class SessionService extends Service
     private final Messenger _messenger = new Messenger(new IncomingHandler());
 
     private Thread _sessionThread;
-    private Session _session;
+    private SharedObjects _sharedObjects;
 
     @Override
     public void onCreate()
     {
-        _session = new Session(SessionService.this, (SharedObjects)this.getApplication());
+        _sharedObjects = (SharedObjects) this.getApplication();
+        _sharedObjects.session = new Session(SessionService.this, (SharedObjects)this.getApplication());
     }
 
     // Called when the service is started
@@ -64,7 +65,7 @@ public class SessionService extends Service
     public void onDestroy()
     {
         // Stop the session
-        _session.stopSession();
+        _sharedObjects.session.stopSession();
         
         // The whole try-catch block is used to remove the session as a foreground service
         try
@@ -110,7 +111,7 @@ public class SessionService extends Service
                 }
                 case Session.MSG_BLUETOOTH_POST:
                 {
-                    _session.bluetoothPost(msg.getData().getString(Session.MSG_DATA_KEY));
+                    _sharedObjects.session.bluetoothPost(msg.getData().getString(Session.MSG_DATA_KEY));
                     break;
                 }
                 default:
@@ -125,7 +126,7 @@ public class SessionService extends Service
     public void _startSession()
     {
         // Put the actual session in a thread
-        _sessionThread = new Thread(_session);
+        _sessionThread = new Thread(_sharedObjects.session);
         _sessionThread.start();
 
         // When the binding process is complete (messagers bound) start the session.
@@ -133,25 +134,25 @@ public class SessionService extends Service
         // sessionStartResult[0] = whether the login was successfull
         // sessionStartResult[1] = the dialog type to show
         // sessionStartResult[2] = the dialog message
-        int[] sessionStartResult = _session.startSession(this);
+        int[] sessionStartResult = _sharedObjects.session.startSession(this);
 
         // Check if the session start failed, if so stop it (kill the thread)
         if(sessionStartResult[0] == 0)
-            _session.stopSession();
+            _sharedObjects.session.stopSession();
 
-        sendMessage(sessionStartResult[1], sessionStartResult[2]);
+        sendMessage(Session.MSG_UPDATE_DIALOG, sessionStartResult[1], sessionStartResult[2]);
     }
 
-    public synchronized void sendMessage(int arg1)
+    public synchronized void sendMessage(int what, int arg1)
     {
-        sendMessage(arg1, 0);
+        sendMessage(what, arg1, 0);
     }
 
-    public synchronized void sendMessage(int arg1, int arg2)
+    public synchronized void sendMessage(int what, int arg1, int arg2)
     {
         // Send a message with the results to the RunningSessionView
         // with the returned dialog type and message.
-        Message msg = Message.obtain(null, Session.MSG_UPDATE_DIALOG, arg1, arg2);
+        Message msg = Message.obtain(null, what, arg1, arg2);
         try
         {
             _sessionViewConnection.send(msg);

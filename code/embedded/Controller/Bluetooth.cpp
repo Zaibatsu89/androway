@@ -6,13 +6,13 @@
 #include "Bluetooth.h"
 
 // Changing the baudrate doesn't work yet..!!
-void Bluetooth::begin(long baudrate, String name, String password)
+void Bluetooth::begin(long baudrate, char name[], char password[])
 {
   // Start the NewSoftSerial connection with the given baudrate
   _mySerial.begin(baudrate);
   
   pinMode(_rstPin, OUTPUT);
-  pinMode(_dcdPin, INPUT);
+//  pinMode(_dcdPin, INPUT);  // At the moment the DCD pin is not used
   
   // Reset the bluetooth module so that the AT commands can be set to the module
   digitalWrite(_rstPin, LOW);
@@ -21,10 +21,10 @@ void Bluetooth::begin(long baudrate, String name, String password)
   delay(1000);
   
   // The AT commands for configuration of the bluetooth module
-  _mySerial.println("ATS10=0");                  // Echo the result of the commands yes (ATS10=1) or no (ATS10=0)
-  _mySerial.println("AT+BTNAME=" + name);  // The device name  
-  _mySerial.println("AT+BTKEY=" + password);     // The bluetooth password  
-  _mySerial.println("AT+UARTCONFIG,9600,N,1");   // The baudrate to communicate on
+  _mySerial.println("ATS10=0");                            // Echo the result of the commands yes (ATS10=1) or no (ATS10=0)
+  _mySerial.println(appendString("AT+BTNAME=", name));     // The device name
+  _mySerial.println(appendString("AT+BTKEY=", password));  // The bluetooth password  
+  _mySerial.println("AT+UARTCONFIG,9600,N,1");             // The baudrate to communicate on
   _mySerial.println("AT+BTMODE,3");
   _mySerial.println("AT+BTSCAN");
 
@@ -40,20 +40,12 @@ void Bluetooth::begin(long baudrate, String name, String password)
 }
 
 void Bluetooth::loop()
-{
-  // For temporary use, if no message was received yet, send a message to the Android device
-  if(_lastReceivedMessage == -1)
-  {
-    _mySerial.print("Waiting...");
-    
-    delay(4000);
-  }
-   
+{  
   // The time difference between the last received message time and the current time
-  long timeDiff = (millis() - _lastReceivedMessage);
-  
+  long receivedTimeDiff = (millis() - _lastReceivedMessage);
+
   // If we did not receive any message for the last maxMessageReceiveTime milliseconds, the connection is probably lost so we can go to auto (on hold).
-  if((_lastReceivedMessage != -1) && timeDiff > MAX_MESSAGE_RECEIVE_TIME)
+  if((_lastReceivedMessage != -1) && receivedTimeDiff > MAX_MESSAGE_RECEIVE_TIME)
   {
     // Handle connection lost stuff
     Serial.println("There was no message for more then 10 seconds. Was the connection was lost? Currently unhandled.");
@@ -63,12 +55,35 @@ void Bluetooth::loop()
     
     delay(2500);
   }
+  
+  // The time difference between the last sent message time and the current time
+  long sentTimeDiff = (millis() - _lastSentMessage);
+
+  // If we did not receive any message for the last maxMessageReceiveTime milliseconds, the connection is probably lost so we can go to auto (on hold).
+  if(_sendCallback != NULL && (_lastSentMessage != -1) && sentTimeDiff > _sendMessageInterval)
+  {
+    // The empty data to send along (seems lame, but now we can use the same BluetoothCallback type as for the receive callback).
+    char empty[1] = "";
+    
+    // Execute the attached callback function
+    (*_sendCallback)(empty);
+    
+    // Store this time as the last time a message was sent.
+    _lastSentMessage = millis();
+  }
 }
 
 // Use the given function as callback function
-void Bluetooth::attach(BluetoothCallback callback)
+void Bluetooth::attachReceiveCallback(BluetoothCallback callback)
 {
-  _callback = callback;
+  _receiveCallback = callback;
+}
+
+// Use the given function as callback function
+void Bluetooth::attachSendCallback(BluetoothCallback callback, unsigned long interval)
+{
+  _sendMessageInterval = interval;  // The interval for sending a message back (in ms)
+  _sendCallback = callback;
 }
 
 // Clear the receive buffer
@@ -92,9 +107,15 @@ void Bluetooth::receiveData()
   sei();
 }
 
+// Function for sending data messages to the connected device
+void Bluetooth::sendData(char* message)
+{
+  _mySerial.print(message);
+}
+
 // Handle the received character
 void Bluetooth::handleChar(char value)
-{  
+{
   _receiveBuffer[_receiveCounter] = value;  // Add the byte to the receive buffer
   _receiveCounter ++;
   
@@ -110,7 +131,12 @@ void Bluetooth::handleMessage()
   if(verifyMessage())
   {
     // We received a verified message, set the last received message time to the current time and make sure the led is turned off
-    _lastReceivedMessage = millis();    
+    _lastReceivedMessage = millis();
+    
+    // If no message was returned yet, set the time in millis so a message will be sent back.
+    if(_lastSentMessage == -1)
+      _lastSentMessage = millis();
+    
     digitalWrite(_ledPin, LOW);
     
     // The start and the end of the actual data in the complete message array (so without verification and message separator characters)
@@ -130,8 +156,8 @@ void Bluetooth::handleMessage()
     
     // If a callback function is attached, execute the callback function and pass the _receivedData array.
     // Otherwise print the received data array to the serial monitor (for debugging purposes?!)
-    if(_callback != NULL)
-      (*_callback)(_receivedData);
+    if(_receiveCallback != NULL)
+      (*_receiveCallback)(_receivedData);
     else
     {
       Serial.print(_receivedData);
@@ -170,4 +196,21 @@ boolean Bluetooth::verifyMessage()
     Serial.println("Message verification failed!");
   
   return result;
+}
+
+char* Bluetooth::floatToString(float floatVal)
+{
+  char buffer[8];
+  int wholeNumber = (floatVal - (int)floatVal) * 100;
+  sprintf(buffer, "%0d.%d", (int)floatVal, wholeNumber);
+  
+  return buffer;
+}
+
+char* Bluetooth::appendString(char baseString[], char appendString[])
+{
+  char buffer[40];
+  sprintf(buffer, "%0s%s", baseString, appendString);
+  
+  return buffer;
 }

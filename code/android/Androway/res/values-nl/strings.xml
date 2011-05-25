@@ -63,8 +63,6 @@
     <string name="get">Alles tonen</string>
     <string name="remove">Alles verwijderen</string>
     <string name="format">dd-MM-yyyy H:mm</string>
-    <string name="added">Log toegevoegd.</string>
-    <string name="removed">Alle logs zijn verwijderd.</string>
     <string name="empty">Er zijn geen logs.</string>
 
     <!-- Exception messages -->

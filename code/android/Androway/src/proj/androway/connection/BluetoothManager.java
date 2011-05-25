@@ -3,6 +3,7 @@ package proj.androway.connection;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.http.NameValuePair;
+import proj.androway.common.SharedObjects;
 
 /**
  * Class BluetoothManager sets up the bluetooth
@@ -24,17 +26,21 @@ public class BluetoothManager extends ConnectionManagerBase
     //common machine UUID that we need to communicate with Bluetooth module: 00001101-0000-1000-8000-00805F9B34FB
     private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final String VERIFICATION_STRING = "$ANDROWAY001";
-    private static final String MESSAGE_SEPARATOR = "~";
+    private static final char MESSAGE_SEPARATOR = '~';
+    private static final char VALUE_SEPARATOR = ',';
 
     private BluetoothAdapter _adapter;
     private ConnectedThread _connectedThread;
     private boolean _connected = false;
 
-    public synchronized void run()
+    public BluetoothManager(SharedObjects sharedObjects, Context context)
     {
+        super(sharedObjects, context);
     }
 
-    public synchronized boolean open(String address, ArrayList<NameValuePair> data)
+    public void run() { }
+
+    public boolean open(String address, ArrayList<NameValuePair> data)
     {
         boolean result = false;
         address = address.toUpperCase();
@@ -105,7 +111,7 @@ public class BluetoothManager extends ConnectionManagerBase
         return true;
     }
 
-    public synchronized void close(String address)
+    public void close(String address)
     {
         if (_connectedThread != null)
         {
@@ -114,29 +120,36 @@ public class BluetoothManager extends ConnectionManagerBase
         }
     }
 
-    public synchronized boolean checkConnection()
+    public boolean checkConnection()
     {
         return _connected;
     }
 
-    public synchronized boolean post(String address, ArrayList<NameValuePair> data)
+    public boolean post(String address, ArrayList<NameValuePair> data)
     {
-        String valuesToSend = "";
+        boolean result = false;
 
-        // Append the given values to the valuesToSend string
-        for(NameValuePair nameValuePair : data)
-            valuesToSend += nameValuePair.getValue();
+        if(checkConnection())
+        {
+            String valuesToSend = "";
 
-        // Add the verification string and message separator to the data
-        valuesToSend = VERIFICATION_STRING + valuesToSend + MESSAGE_SEPARATOR;
+            // Append the given values to the valuesToSend string
+            for(NameValuePair nameValuePair : data)
+                valuesToSend += nameValuePair.getValue();
 
-        // Write the data to the connect thread (send through bluetooth)
-        _connectedThread.write(valuesToSend.getBytes());
+            // Add the verification string and message separator to the data
+            valuesToSend = VERIFICATION_STRING + valuesToSend + MESSAGE_SEPARATOR;
 
-        return true;
+            // Write the data to the connect thread (send through bluetooth)
+            _connectedThread.write(valuesToSend.getBytes());
+
+            result = true;
+        }
+
+        return result;
     }
 
-    public synchronized Map<String, Object> get(String address, ArrayList<NameValuePair> params)
+    public Map<String, Object> get(String address, ArrayList<NameValuePair> params)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -174,6 +187,11 @@ public class BluetoothManager extends ConnectionManagerBase
         {
             byte[] buffer = new byte[1024];
             int bytes;
+            int verificationCounter = 0;
+            boolean continueVerifying = true;
+            boolean messageVerified = false;
+            ArrayList values = new ArrayList();
+            String value = "";
 
             // Keep listening to the InputStream while connected
             while (true)
@@ -183,8 +201,44 @@ public class BluetoothManager extends ConnectionManagerBase
                     // Read from the InputStream
                     bytes = _inStream.read(buffer);
 
-                    // Send the obtained bytes to the UI Activity
-                    //mHandler.obtainMessage(AndrowayControl.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                    // Construct a string from the valid bytes in the buffer
+                    String messageString = new String(buffer, 0, bytes);
+
+                    // Loop the received message string
+                    for(char c : messageString.toCharArray())
+                    {
+                        if(!messageVerified && c == VERIFICATION_STRING.charAt(verificationCounter))
+                        {
+                            verificationCounter ++;
+
+                            if(verificationCounter == VERIFICATION_STRING.length())
+                                messageVerified = true;
+                        }
+                        else if(messageVerified)
+                        {
+                            if(c == VALUE_SEPARATOR || c == MESSAGE_SEPARATOR)
+                            {
+                                // We reached either value- or message-separator, so the value is done. Store the value
+                                // in the values list, and reset the value.
+                                values.add(value);
+                                value = "";
+                            }
+
+                            if(c == MESSAGE_SEPARATOR)
+                            {
+                                // We've hit the message separator, so end of message. Handle it.
+                                _sharedObjects.session.handleBluetoothReceived(values);
+
+                                // When the message is done, reset the process variables for the next message
+                                verificationCounter = 0;
+                                messageVerified = false;
+                                values = new ArrayList();
+                                value = "";
+                            }                            
+                            else if(c != VALUE_SEPARATOR)
+                                value += c;
+                        }
+                    }
                 }
                 catch (IOException e)
                 {

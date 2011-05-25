@@ -64,8 +64,6 @@
     <string name="get">Show All</string>
     <string name="remove">Remove All</string>
     <string name="format">dd-MM-yyyy H:mm</string>
-    <string name="added">Log added.</string>
-    <string name="removed">All logs are removed.</string>
     <string name="empty">There are no logs.</string>
 
     <!-- Exception messages -->

@@ -31,12 +31,16 @@ public class BalanceBlock extends BlockComponent
 
     @Override
     public void updateView(String updateType, Map<String, Object> params)
-    {
-        int sensorType = (Integer)params.get(TiltControls.UPDATE_SENSOR_TYPE);
-        if(updateType.equals(BlockComponent.UPDATE_TYPE_TILT) && sensorType == Sensor.TYPE_ACCELEROMETER)
+    {        
+        if(updateType.equals(BlockComponent.UPDATE_TYPE_TILT))
         {
-            // Update the BalanceViewHandler
-            _balanceViewHandler.updateView(params);
+            int sensorType = (Integer)params.get(TiltControls.UPDATE_SENSOR_TYPE);
+
+            if(sensorType == Sensor.TYPE_ACCELEROMETER)
+            {
+                // Update the BalanceViewHandler
+                _balanceViewHandler.updateView(params);
+            }
         }
     }
 }

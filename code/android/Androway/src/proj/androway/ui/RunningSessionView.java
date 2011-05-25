@@ -45,6 +45,8 @@ import java.util.Map;
 import proj.androway.R;
 import proj.androway.common.SharedObjects;
 import proj.androway.database.DatabaseManagerBase;
+import proj.androway.main.IncomingData;
+import proj.androway.main.OutgoingData;
 import proj.androway.session.Session;
 import proj.androway.session.SessionService;
 import proj.androway.ui.block_component.DirectionBlock;
@@ -99,6 +101,8 @@ public class RunningSessionView extends ActivityBase
 
         _sharedObjects = (SharedObjects)this.getApplication();
         _sharedObjects.runningSessionView = this;
+        _sharedObjects.incomingData = new IncomingData();
+        _sharedObjects.outgoingData = new OutgoingData();
 
         /*
          * Create a screen bright wake-lock so that the screen stays on,
@@ -247,6 +251,10 @@ public class RunningSessionView extends ActivityBase
                 {
                     updateProcessDialog(msg.arg1, msg.arg2);
                     break;
+                }
+                case Session.MSG_UPDATE_SESSION_VIEWS:
+                {
+                    updateSessionDataViews();
                 }
                 default:
                     super.handleMessage(msg);
@@ -597,7 +605,7 @@ public class RunningSessionView extends ActivityBase
      * Update the block components that require data from the current running session
      * with the connected Segway.
      */
-    public void updateSessionDataRelatedViews()
+    public void updateSessionDataViews()
     {
         // Update all block components with the new data
         _updateBlockComponents(BlockComponent.UPDATE_TYPE_SESSION_DATA, new HashMap<String, Object>());

@@ -13,12 +13,12 @@ public class IncomingData
 {
     public int leftWheelSpeed;
     public int rightWheelSpeed;
-    public int tiltDegrees;
+    public float inclination;
 
     public IncomingData()
     {
         leftWheelSpeed = 0;
         rightWheelSpeed = 0;
-        tiltDegrees = 0;
+        inclination = 0.0f;
     }
 }

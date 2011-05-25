@@ -5,6 +5,7 @@ import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
 import proj.androway.R;
 import java.util.HashMap;
 import java.util.Map;
+import proj.androway.common.SharedObjects;
 
 /**
  * Class ConnectionFactory uses:
@@ -34,7 +35,7 @@ public final class ConnectionFactory
         return _connectionFactory;
     }
 
-    public static IConnectionManager acquireConnectionManager(Context context, String managerName) throws MaxPoolSizeReachedException
+    public static IConnectionManager acquireConnectionManager(SharedObjects sharedObjects, Context context, String managerName) throws MaxPoolSizeReachedException
     {
         if (_managerCount <= _maxPoolSize)
         {
@@ -45,9 +46,9 @@ public final class ConnectionFactory
             else
             {
                 if (managerName.equals(ConnectionManagerBase.TYPE_BLUETOOTH))
-                    connectionManager = new BluetoothManager();
+                    connectionManager = new BluetoothManager(sharedObjects, context);
                 else if (managerName.equals(ConnectionManagerBase.TYPE_HTTP))
-                    connectionManager = new HttpManager(context);
+                    connectionManager = new HttpManager(sharedObjects, context);
 
                 _connectionManagersCollection.put(managerName, connectionManager);
                 _managerCount++;

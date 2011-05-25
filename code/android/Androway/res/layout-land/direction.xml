@@ -22,6 +22,7 @@
             android:layout_marginTop="-100dip">
 
             <TextView
+                android:id="@+id/left_wheel_speed"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -40,6 +41,7 @@
                 android:text="--" />
                 
             <TextView
+                android:id="@+id/right_wheel_speed"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -59,9 +61,10 @@
         android:layout_marginTop="-164dip">
 
         <ImageView
+            android:id="@+id/direction_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dir_arrow_right" />
+            android:src="@drawable/dir_arrow_straight" />
 
         <ImageView
             android:layout_width="wrap_content"

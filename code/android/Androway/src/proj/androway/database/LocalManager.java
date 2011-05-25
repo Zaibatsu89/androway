@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import proj.androway.common.Constants;
 import java.util.HashMap;
 import java.util.Map;
+import proj.androway.common.SharedObjects;
 
 /**
  * Class LocalManager stores log data on the Android device.
@@ -20,8 +21,9 @@ public class LocalManager extends DatabaseManagerBase
 	private SQLiteDatabase _db;
 	private DatabaseHelper _dbHelper;
 
-	public LocalManager(Context context)
+	public LocalManager(SharedObjects sharedObjects, Context context)
 	{
+            super(sharedObjects, context);
             _dbHelper = new DatabaseHelper(context);
 	}
 
@@ -32,17 +34,17 @@ public class LocalManager extends DatabaseManagerBase
         {
             DatabaseHelper(Context context)
             {
-                super(context, Constants.DATABASE_NAME, null, 1);
+                super(context, Constants.LOG_DB_NAME, null, 1);
             }
 
             @Override
             public void onCreate(SQLiteDatabase db)
             {
                             // Temporary: for developer phone
-                            db.execSQL("DROP TABLE IF EXISTS " + Constants.DATABASE_TABLE);
+                            db.execSQL("DROP TABLE IF EXISTS " + Constants.LOG_DB_TABLE);
 
                 db.execSQL("CREATE TABLE " +
-                                    Constants.DATABASE_TABLE + " (" +
+                                    Constants.LOG_DB_TABLE + " (" +
                                     "id INTEGER PRIMARY KEY, " +
                                     "time TEXT NOT NULL, " +
                                     "subject TEXT NOT NULL, " +

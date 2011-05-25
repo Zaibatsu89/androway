@@ -1,7 +1,9 @@
 package proj.androway.connection;
 
+import android.content.Context;
 import java.util.ArrayList;
 import org.apache.http.NameValuePair;
+import proj.androway.common.SharedObjects;
 
 /**
  * ConnectionManagerBase is an extension of the IConnectionManager interface.
@@ -15,8 +17,17 @@ public abstract class ConnectionManagerBase implements IConnectionManager
     // All constants for the ConnectionManagers
     public static final String TYPE_BLUETOOTH = "bluetooth";
     public static final String TYPE_HTTP = "http";
+    
+    protected SharedObjects _sharedObjects;
+    protected Context _context;
 
-    // Should be all protected accessible methods (so not accessible from the outside)
+    public ConnectionManagerBase(SharedObjects sharedObjects, Context context)
+    {
+        _sharedObjects = sharedObjects;
+        _context = context;
+    }
+
+    // Abstract methods should be all protected accessible methods (so not accessible from the outside)
     // protected abstract void methodName();
 
     public boolean open(String address)

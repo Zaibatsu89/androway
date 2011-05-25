@@ -29,7 +29,8 @@ class Bluetooth
 {
   private:
     NewSoftSerial _mySerial;
-    BluetoothCallback _callback;
+    BluetoothCallback _receiveCallback;
+    BluetoothCallback _sendCallback;
     int _rxPin;
     int _txPin;
     int _rstPin;
@@ -37,6 +38,8 @@ class Bluetooth
     int _ledPin;
     int _receiveCounter;
     unsigned long _lastReceivedMessage;
+    unsigned long _lastSentMessage;
+    unsigned long _sendMessageInterval;
     char _receiveBuffer[BUFFER_LENGTH];
     char _receivedData[RECEIVED_DATA_LENGTH];
       
@@ -45,7 +48,8 @@ class Bluetooth
     Bluetooth(int rxPin, int txPin, int rstPin, int dcdPin, int ledPin) : _mySerial(rxPin, txPin)
     {
       // Store the given settings in the private variables
-      _callback = NULL;
+      _receiveCallback = NULL;
+      _sendCallback = NULL;
       _rxPin = rxPin;
       _txPin = txPin;
       _rstPin = rstPin;
@@ -55,19 +59,25 @@ class Bluetooth
       // Initialize some variables that are used by the class
       _receiveCounter = 0;
       _lastReceivedMessage = -1;
+      _lastSentMessage = -1;
       _receiveBuffer[BUFFER_LENGTH] = *"";
       _receivedData[RECEIVED_DATA_LENGTH] = *"";
+      _sendMessageInterval = 1500;  // The default interval for sending a message back (in ms)
     };
     
-    // Function for starting the bluetooth class and connection/module
-    void begin(long baudrate, String name, String password);
-    void loop();                              // The main loop for the bluetooth class
-    void attach(BluetoothCallback callback);  // Attach the given function as callback function
-    void clearBuffer();                       // Function that clears the receive buffer
-    void receiveData();                       // Function that handles the receiving of the bluetooth data
-    void handleChar(char value);              // Handle the received character
-    void handleMessage();                     // Handle the received message
-    boolean verifyMessage();                  // Verify the received message based on the verification string
+    void begin(long baudrate, char name[], char password[]);  // Function for starting the bluetooth class and connection/module
+    void loop();                                              // The main loop for the bluetooth class
+    void attachReceiveCallback(BluetoothCallback callback);   // Attach the given function as callback function for received data messages
+    void attachSendCallback(BluetoothCallback callback, unsigned long interval);  // Attach the given function as callback function for when it is time to send a new message
+    void clearBuffer();                                       // Function that clears the receive buffer
+    void receiveData();                                       // Function that handles the receiving of the bluetooth data
+    void sendData(char* message);                             // Function for sending data messages to the connected device
+    void handleChar(char value);                              // Handle the received character
+    void handleMessage();                                     // Handle the received message
+    boolean verifyMessage();                                  // Verify the received message based on the verification string
+    char* floatToString(float floatVal);                      // Convert the given float to a string
+    
+    char* appendString(char baseString[], char appendString[]);
 };
 
 #endif
