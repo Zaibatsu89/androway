@@ -338,6 +338,7 @@ public class RunningSessionView extends ActivityBase
                            }
                        });
 
+                Settings.START_SESSION_FAILED = true;
                 _failedAlert = builder.create();
                 _failedAlert.show();
 

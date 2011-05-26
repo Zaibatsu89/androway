@@ -85,27 +85,51 @@ public class BalanceViewHandler extends LinearLayout
             }
         }
 
+        if(Settings.DEVICE_ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        {
+            // Convert the sensor values to the actual speed and direction values
+            float direction = getAnswer(sensorA, sensorB, 0) * -9.8f;
+            float speed = getAnswer(sensorA, sensorB, 1) * -10.4f;
 
-        // Convert the sensor values to the actual speed and direction values
-        float direction = getAnswer(sensorA, sensorB, 0) * -9.8f;
-        float speed = getAnswer(sensorA, sensorB, 1) * -10.4f;
+            // Limit the maximum direction value
+            if(direction > 100)
+                direction = 100;
+            else if(direction < -100)
+                direction = -100;
 
-        // Limit the maximum direction value
-        if(direction > 100)
-            direction = 100;
-        else if(direction < -100)
-            direction = -100;
+            // Limit the maximum speed value
+            if(speed > 100)
+                speed = 100;
+            else if(speed < -100)
+                speed = -100;
 
-        // Limit the maximum speed value
-        if(speed > 100)
-            speed = 100;
-        else if(speed < -100)
-            speed = -100;
+            _direction = direction;
 
-        _direction = direction;
+            if (sensorC > 0 && direction != -100 && direction != 100)
+                _speed = speed;
+        }
+        else
+        {
+            float direction = getAnswer(sensorA, sensorC, 1) * 9.8f;
+            float speed = getAnswer(sensorA, sensorC, 0) * -10.4f;
 
-        if (sensorC > 0 && direction != -100 && direction != 100)
-            _speed = speed;
+            // Limit the maximum direction value
+            if(direction > 100)
+                direction = 100;
+            else if(direction < -100)
+                direction = -100;
+
+            // Limit the maximum speed value
+            if(speed > 100)
+                speed = 100;
+            else if(speed < -100)
+                speed = -100;
+
+            _direction = direction;
+
+            if (sensorB < 0 && direction != -100 && direction != 100)
+                _speed = speed;
+        }
 
         // Store the calculated direction and speed in the outgoingData object
         _sharedObjects.outgoingData.drivingDirection = _direction;

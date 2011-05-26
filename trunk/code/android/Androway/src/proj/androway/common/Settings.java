@@ -33,6 +33,7 @@ public class Settings
     public static boolean SESSION_RUNNING;
 
     public static boolean LANGUAGE_CHANGED = false;
+    public static boolean START_SESSION_FAILED = false;
 
     private static Context _context;
 

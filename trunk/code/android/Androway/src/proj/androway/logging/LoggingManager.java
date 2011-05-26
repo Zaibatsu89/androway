@@ -84,10 +84,7 @@ public class LoggingManager
 
     public void clearAll() throws NotSupportedQueryTypeException
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("DELETE FROM ");
-        builder.append(Constants.LOG_DB_TABLE);
-        String query = builder.toString();
+        String query = "DELETE FROM " + Constants.LOG_DB_TABLE;
         _myDbManager.executeNonQuery(Constants.LOG_DB_NAME, query);
     }
 
@@ -105,5 +102,11 @@ public class LoggingManager
         Map<String, Object> data = _myDbManager.getData(Constants.LOG_DB_NAME, query);
 
         return Integer.valueOf(((Map<String, Object>)data.get("row0")).get("COUNT(" + Constants.LOG_DB_ID_KEY + ")").toString()).equals(0);
+    }
+
+    public void destroyFailedSession(int sessionId, int userId) throws NotSupportedQueryTypeException
+    {
+        String query = "DELETE * FROM sessions WHERE session_id = " + sessionId + " AND user_id = " + userId;
+        _myDbManager.executeNonQuery(Constants.LOG_DB_NAME, query);
     }
 }

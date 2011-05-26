@@ -25,8 +25,8 @@ void Bot::handleMotion()
   int left = 0;
   int right = 0;
   
-  AF_DCMotor _leftMotor(3, MOTOR12_1KHZ);
-  AF_DCMotor _rightMotor(4, MOTOR12_1KHZ);
+  AF_DCMotor _leftMotor(_leftMotorNr, MOTOR12_1KHZ);
+  AF_DCMotor _rightMotor(_rightMotorNr, MOTOR12_1KHZ);
 
   if(!_incomingData.isOnHold && !_incomingData.stopSession)
   {
