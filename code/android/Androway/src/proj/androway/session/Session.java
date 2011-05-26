@@ -19,14 +19,15 @@ import proj.androway.common.Constants;
 import proj.androway.common.Exceptions.ConnectingBluetoothFailedException;
 import proj.androway.common.Exceptions.ConstructingLoggingManagerFailedException;
 import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
+import proj.androway.common.Exceptions.NotSupportedQueryTypeException;
 import proj.androway.common.Settings;
 import proj.androway.common.SharedObjects;
 import proj.androway.connection.ConnectionFactory;
 import proj.androway.connection.ConnectionManagerBase;
 import proj.androway.connection.IConnectionManager;
+import proj.androway.database.DatabaseFactory;
+import proj.androway.database.IDatabaseManager;
 import proj.androway.logging.LoggingManager;
-import proj.androway.main.IncomingData;
-import proj.androway.main.OutgoingData;
 import proj.androway.ui.RunningSessionView;
 
 /**
@@ -193,6 +194,22 @@ public class Session implements Runnable
      */
     public synchronized void stopSession()
     {
+        // This session failed to start, so if a session was created in the remote DB. Delete it.
+        if(Settings.START_SESSION_FAILED)
+        {
+            // Set the start session failed flag to false, because we handled it
+            Settings.START_SESSION_FAILED = false;
+            
+            try
+            {
+                _lm.destroyFailedSession(sessionId, userId);
+            }
+            catch (NotSupportedQueryTypeException ex)
+            {
+                Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         // Set the stopSession property to 1 (true), so the bot will properly stop.
         // Then perform a SendUpdateTask, to send the last update message.
         _sharedObjects.outgoingData.stopSession = 1;

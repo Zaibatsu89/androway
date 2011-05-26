@@ -5,6 +5,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import java.util.Map;
 import proj.androway.R;
 import proj.androway.common.SharedObjects;
@@ -32,6 +33,9 @@ public class InclinationBlock extends BlockComponent
         {
             _inclDegrees = _sharedObjects.incomingData.inclination;
             setInclinationRotation(_inclDegrees, _inclPreviousDegrees, 200, new RotationListener());
+
+            TextView inclinationLabel = (TextView)findViewById(R.id.inclination_degrees_label);
+            inclinationLabel.setText(_inclDegrees + "°");
         }
     }
 
