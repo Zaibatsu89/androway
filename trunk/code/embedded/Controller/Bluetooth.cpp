@@ -6,7 +6,7 @@
 #include "Bluetooth.h"
 
 // Changing the baudrate doesn't work yet..!!
-void Bluetooth::begin(long baudrate, char name[], char password[])
+void Bluetooth::begin(int baudrate, char name[], char password[])
 {
   // Start the NewSoftSerial connection with the given baudrate
   _mySerial.begin(baudrate);
@@ -36,30 +36,26 @@ void Bluetooth::begin(long baudrate, char name[], char password[])
   
   // The initialisation is done, we're nog connected yet. So while waiting for a connection, turn on the led.
   digitalWrite(_ledPin, HIGH);
-  Serial.println("-bluetooth setup done-");
 }
 
 void Bluetooth::loop()
-{  
+{
   // The time difference between the last received message time and the current time
   long receivedTimeDiff = (millis() - _lastReceivedMessage);
 
   // If we did not receive any message for the last maxMessageReceiveTime milliseconds, the connection is probably lost so we can go to auto (on hold).
   if((_lastReceivedMessage != -1) && receivedTimeDiff > MAX_MESSAGE_RECEIVE_TIME)
   {
-    // Handle connection lost stuff
-    Serial.println("There was no message for more then 10 seconds. Was the connection was lost? Currently unhandled.");
+    // The connection was lost?! Handle it properly.
     
     // We have no connection anymore so turn on the led
     digitalWrite(_ledPin, HIGH);
-    
-    delay(2500);
   }
   
   // The time difference between the last sent message time and the current time
   long sentTimeDiff = (millis() - _lastSentMessage);
 
-  // If we did not receive any message for the last maxMessageReceiveTime milliseconds, the connection is probably lost so we can go to auto (on hold).
+  // If we did not send any message for the last _sendMessageInterval, send a messa
   if(_sendCallback != NULL && (_lastSentMessage != -1) && sentTimeDiff > _sendMessageInterval)
   {
     // The empty data to send along (seems lame, but now we can use the same BluetoothCallback type as for the receive callback).
@@ -207,6 +203,7 @@ char* Bluetooth::floatToString(float floatVal)
   return buffer;
 }
 
+// Append the given append string to the base string and return the new string
 char* Bluetooth::appendString(char baseString[], char appendString[])
 {
   char buffer[40];

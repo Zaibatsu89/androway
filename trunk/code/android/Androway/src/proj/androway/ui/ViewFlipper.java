@@ -1,21 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package proj.androway.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 /**
- * This class doesn't do much but it is vital. The standard android ViewFlipper
+ * The ViewFlipper class doesn't do much but it is vital. The standard android ViewFlipper
  * crashes when switching the orientation of the application (manually or automatically).
- * When extending this custom ViewFlipper and using this in the layout, the orientation-switch
+ * When extending the default ViewFlipper and using this in the layout, the orientation-switch
  * bug is gone. Unclear why, because this class hardly does anything, but it works!
- * 
- * @author Tymen
- *
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class ViewFlipper extends android.widget.ViewFlipper
 {

@@ -11,8 +11,10 @@ import proj.androway.common.Constants;
 import proj.androway.main.ActivityBase;
 
 /**
- *
- * @author Tymen
+ * The ViewOldSessionView class is the web view for watching previous sessions on the mobile website
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class ViewOldSessionView extends ActivityBase
 {
@@ -27,6 +29,7 @@ public class ViewOldSessionView extends ActivityBase
         _webView = (WebView) findViewById(R.id.webview);
         _webView.getSettings().setJavaScriptEnabled(true);
         _webView.getSettings().setBuiltInZoomControls(true);
+        _webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         _webView.setWebViewClient(new MyWebViewClient());
         _webView.setWebChromeClient(new MyWebChromeClient());
         _webView.loadUrl(Constants.WEB_VIEW_URL);
@@ -44,6 +47,9 @@ public class ViewOldSessionView extends ActivityBase
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * Used for overriding the url loading
+     */
     private class MyWebViewClient extends WebViewClient
     {
         @Override
@@ -54,6 +60,9 @@ public class ViewOldSessionView extends ActivityBase
         }
     }
 
+    /**
+     * Used to update the custom progress bar
+     */
     private class MyWebChromeClient extends WebChromeClient
     {
         @Override

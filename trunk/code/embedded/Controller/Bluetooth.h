@@ -31,12 +31,12 @@ class Bluetooth
     NewSoftSerial _mySerial;
     BluetoothCallback _receiveCallback;
     BluetoothCallback _sendCallback;
-    int _rxPin;
-    int _txPin;
-    int _rstPin;
-    int _dcdPin;
-    int _ledPin;
-    int _receiveCounter;
+    byte _rxPin;
+    byte _txPin;
+    byte _rstPin;
+    byte _dcdPin;
+    byte _ledPin;
+    byte _receiveCounter;
     unsigned long _lastReceivedMessage;
     unsigned long _lastSentMessage;
     unsigned long _sendMessageInterval;
@@ -45,7 +45,7 @@ class Bluetooth
       
   public:
     // The constructor for the class, store the pin numbers and initialize the bluetooth software serial connection
-    Bluetooth(int rxPin, int txPin, int rstPin, int dcdPin, int ledPin) : _mySerial(rxPin, txPin)
+    Bluetooth(byte rxPin, byte txPin, byte rstPin, byte dcdPin, byte ledPin) : _mySerial(rxPin, txPin)
     {
       // Store the given settings in the private variables
       _receiveCallback = NULL;
@@ -65,19 +65,18 @@ class Bluetooth
       _sendMessageInterval = 1500;  // The default interval for sending a message back (in ms)
     };
     
-    void begin(long baudrate, char name[], char password[]);  // Function for starting the bluetooth class and connection/module
-    void loop();                                              // The main loop for the bluetooth class
-    void attachReceiveCallback(BluetoothCallback callback);   // Attach the given function as callback function for received data messages
+    void begin(int baudrate, char name[], char password[]);      // Function for starting the bluetooth class and connection/module
+    void loop();                                                 // The main loop for the bluetooth class
+    void attachReceiveCallback(BluetoothCallback callback);      // Attach the given function as callback function for received data messages
     void attachSendCallback(BluetoothCallback callback, unsigned long interval);  // Attach the given function as callback function for when it is time to send a new message
-    void clearBuffer();                                       // Function that clears the receive buffer
-    void receiveData();                                       // Function that handles the receiving of the bluetooth data
-    void sendData(char* message);                             // Function for sending data messages to the connected device
-    void handleChar(char value);                              // Handle the received character
-    void handleMessage();                                     // Handle the received message
-    boolean verifyMessage();                                  // Verify the received message based on the verification string
-    char* floatToString(float floatVal);                      // Convert the given float to a string
-    
-    char* appendString(char baseString[], char appendString[]);
+    void clearBuffer();                                          // Function that clears the receive buffer
+    void receiveData();                                          // Function that handles the receiving of the bluetooth data
+    void sendData(char* message);                                // Function for sending data messages to the connected device
+    void handleChar(char value);                                 // Handle the received character
+    void handleMessage();                                        // Handle the received message
+    boolean verifyMessage();                                     // Verify the received message based on the verification string
+    char* floatToString(float floatVal);                         // Convert the given float to a string
+    char* appendString(char baseString[], char appendString[]);  // Append the given append string to the base string and return the new string
 };
 
 #endif

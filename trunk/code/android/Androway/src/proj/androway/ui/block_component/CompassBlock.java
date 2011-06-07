@@ -14,10 +14,10 @@ import proj.androway.common.SharedObjects;
 import proj.androway.main.TiltControls;
 
 /**
- * The compass block
- * @author Tymen
- * @since 17-03-2011
- * @version 0.1
+ * The CompassBlock is the class for the compass view
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class CompassBlock extends BlockComponent
 {
@@ -29,6 +29,11 @@ public class CompassBlock extends BlockComponent
         super(context, sharedObjects, layoutId, BlockComponent.ID_BLOCK_1);
     }
 
+    /**
+     * Update the compass view
+     * @param updateType    The update type (UPDATE_TYPE_'update type')
+     * @param params        The parameters (new data)
+     */
     @Override
     public void updateView(String updateType, Map<String, Object> params)
     {
@@ -49,6 +54,13 @@ public class CompassBlock extends BlockComponent
         }
     }
 
+    /**
+     * Set the new rotation for the compass
+     * @param degrees           The absolute degrees for the rotation
+     * @param previousDegrees   The absolute degrees of the previous position
+     * @param duration          The duration of the animation
+     * @param rotationListener  The rotation listener
+     */
     private void setCompassRotation(float degrees, float previousDegrees, int duration, RotationListener rotationListener)
     {
         ImageView compassImage = (ImageView)findViewById(R.id.compass);

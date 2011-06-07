@@ -16,6 +16,9 @@
     <string name="ok">OK</string>
     <string name="invalid">unjildich!</string>
     <string name="stop_session">Stop Sessy</string>
+    <string name="battery_voltage_suffix">% restearjend</string>
+    <string name="log_online_toast">De data wurdt online opsleint</string>
+    <string name="log_local_toast">De data wurdt lokaal opsleint</string>
 
     <!-- Dialog string values (on session start) -->
     <string name="login_title">Dwaande mei ynloggen...</string>
@@ -56,6 +59,12 @@
     <string name="block2LockedSummary">Foarkom dat it underste blok kin ferskowe</string>
     <string name="orientationTitle">Apparaatoriïntaasje</string>
     <string name="orientationSummary">De gewinske apparaatoriïntaasje</string>
+    <string name="balanceOffsetTitle">Balâns offset</string>
+    <string name="balanceOffsetSummary">De fertikale balâns offset (\'gjin gong\' posysje)</string>
+    <string name="balanceOffsetText">% offset</string>
+    <string name="balanceSensitivityTitle">Balâns gefoelichheid</string>
+    <string name="balanceSensitivitySummary">De gefoelichheid fan de balâns bestjoering</string>
+    <string name="balanceSensitivityText">% ekstra gefoelichheid</string>
     <string name="languageTitle">Taal</string>
     <string name="languageSummary">De gewinske applikaasjetaal</string>
 
@@ -63,7 +72,6 @@
     <string name="add">Tafoegje</string>
     <string name="get">Alles sjen litte</string>
     <string name="remove">Alles ferwiderje</string>
-    <string name="format">dd-MM-yyyy H:mm</string>
     <string name="empty">Der binne gjin lochs.</string>
 
     <!-- Exception messages -->

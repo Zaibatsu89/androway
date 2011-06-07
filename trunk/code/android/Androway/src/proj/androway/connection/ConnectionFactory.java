@@ -1,65 +1,65 @@
 package proj.androway.connection;
 
+import proj.androway.connection.http.HttpManager;
+import proj.androway.connection.bluetooth.BluetoothManager;
 import android.content.Context;
 import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
 import proj.androway.R;
 import java.util.HashMap;
 import java.util.Map;
-import proj.androway.common.SharedObjects;
 
 /**
- * Class ConnectionFactory uses:
- *		the factory method pattern,
- *		the singleton pattern and
- *		the objectpool pattern.
- * Childclass IConnectionManager is the interface for
- * the classes BluetoothManager and HttpManager.
- * @author Rinse
- * @since 17-03-2011
- * @version 0.32
+ * The ConnectionFactory class is used for retreiving and managing the instances for different connections.
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public final class ConnectionFactory
 {
-    private static ConnectionFactory _connectionFactory;
     private static Map _connectionManagersCollection = new HashMap();
     private static int _managerCount = 0;
     private static int _maxPoolSize = 2;
 
-    private ConnectionFactory() {}
-
-    public ConnectionFactory getInstance()
+    /**
+     * Returns the desired IConnectionManager based on the given parameters
+     * @param context       The application context
+     * @param managerName   The name of the desired IConnectionManager
+     * @return The desired IConnectionManager
+     * @throws proj.androway.common.Exceptions.MaxPoolSizeReachedException Thrown when the 'object pool' exceeds the maximum pool size
+     */
+    public static IConnectionManager acquireConnectionManager(Context context, String managerName) throws MaxPoolSizeReachedException
     {
-        if (_connectionFactory == null)
-            _connectionFactory = new ConnectionFactory();
+        IConnectionManager connectionManager = null;
 
-        return _connectionFactory;
-    }
-
-    public static IConnectionManager acquireConnectionManager(SharedObjects sharedObjects, Context context, String managerName) throws MaxPoolSizeReachedException
-    {
-        if (_managerCount <= _maxPoolSize)
+        // Check if the manager allready exists in the object pool
+        if (_connectionManagersCollection.containsKey(managerName))
+            connectionManager = (IConnectionManager) _connectionManagersCollection.get(managerName);
+        else
         {
-            IConnectionManager connectionManager = null;
+            // The manager does not exist in the object pool yet, so create it
+            if (managerName.equals(ConnectionManagerBase.TYPE_BLUETOOTH))
+                connectionManager = new BluetoothManager( context);
+            else if (managerName.equals(ConnectionManagerBase.TYPE_HTTP))
+                connectionManager = new HttpManager(context);
 
-            if (_connectionManagersCollection.containsKey(managerName))
-                connectionManager = (IConnectionManager) _connectionManagersCollection.get(managerName);
-            else
+            // Check if by adding this manager, the object pool size will be exceeded or not
+            if (_managerCount + 1 <= _maxPoolSize)
             {
-                if (managerName.equals(ConnectionManagerBase.TYPE_BLUETOOTH))
-                    connectionManager = new BluetoothManager(sharedObjects, context);
-                else if (managerName.equals(ConnectionManagerBase.TYPE_HTTP))
-                    connectionManager = new HttpManager(sharedObjects, context);
-
+                // Store the created manager in the object pool
                 _connectionManagersCollection.put(managerName, connectionManager);
                 _managerCount++;
             }
-
-            return connectionManager;
+            else
+                throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
         }
-        else
-            throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
+
+        return connectionManager;
     }
 
+    /**
+     * Remove the IConnectionManager with the given manager name
+     * @param managerName   The name (key) of the IConnectionManager
+     */
     public static void releaseConnectionManager(String managerName)
     {
         if (_connectionManagersCollection.containsKey(managerName))
@@ -69,6 +69,10 @@ public final class ConnectionFactory
         }
     }
 
+    /**
+     * Set the maximum size of the object pool
+     * @param maxPoolSize   The maximum size of the object pool
+     */
     public static void setMaxPoolSize(int maxPoolSize)
     {
         _maxPoolSize = maxPoolSize;

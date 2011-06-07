@@ -13,16 +13,15 @@ import proj.androway.common.SharedObjects;
 import proj.androway.main.ActivityBase;
 
 /**
- * The main view of the system
- * @author Tymen en Rinse
- * @since 21-03-2011
- * @version 0.43
+ * The View class is the main (default) view of the application.
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class View extends ActivityBase
 {
     private SharedObjects _sharedObjects;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

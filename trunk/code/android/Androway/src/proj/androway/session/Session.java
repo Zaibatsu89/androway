@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package proj.androway.session;
 
 import android.content.Context;
@@ -19,30 +14,36 @@ import proj.androway.common.Constants;
 import proj.androway.common.Exceptions.ConnectingBluetoothFailedException;
 import proj.androway.common.Exceptions.ConstructingLoggingManagerFailedException;
 import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
-import proj.androway.common.Exceptions.NotSupportedQueryTypeException;
 import proj.androway.common.Settings;
 import proj.androway.common.SharedObjects;
+import proj.androway.connection.bluetooth.BluetoothManager;
+import proj.androway.connection.bluetooth.BluetoothManager.ReceivedDataListener;
 import proj.androway.connection.ConnectionFactory;
 import proj.androway.connection.ConnectionManagerBase;
+import proj.androway.connection.http.HttpManager;
 import proj.androway.connection.IConnectionManager;
-import proj.androway.database.DatabaseFactory;
-import proj.androway.database.IDatabaseManager;
+import proj.androway.database.DatabaseManagerBase;
 import proj.androway.logging.LoggingManager;
 import proj.androway.ui.RunningSessionView;
 
 /**
- *
- * @author Tymen
+ * The Controller class represents a session with the remote Androway. This class
+ * is used for starting, controlling and stopping the session with the Androway.
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class Session implements Runnable
 {
-    public static final int MSG_SET_VIEW = 0;
-    public static final int MSG_SET_VALUE = 1;
-    public static final int MSG_UPDATE_DIALOG = 2;
-    public static final int MSG_BLUETOOTH_POST = 3;
-    public static final int MSG_UPDATE_SESSION_VIEWS = 4;
+    /**
+     * The user id of the user running the current session
+     */
+    public int userId;
 
-    public static final String MSG_DATA_KEY = "data";
+    /**
+     * The session id of the current session
+     */
+    public int sessionId;
 
     private Context _context;
     private SharedObjects _sharedObjects;
@@ -50,14 +51,22 @@ public class Session implements Runnable
     private boolean _running = true;
     private LoggingManager _lm;
     private IConnectionManager _btManager;
+    private Timer _updateTimer;
+    private boolean _saveLog = true;
 
-    public int userId;
-    public int sessionId;
-
+    /**
+     * The constructor for the session. Initialize the session.
+     * @param context       The application context
+     * @param sharedObjects An instance of the common SharedObjects object
+     */
     public Session(Context context, SharedObjects sharedObjects)
     {
         _context = context;
         _sharedObjects = sharedObjects;
+
+        // Init the session id and the user id to -1, so we can check if it is an actual id or not.
+        sessionId = -1;
+        userId = -1;
     }
 
     public void run()
@@ -65,8 +74,15 @@ public class Session implements Runnable
         while(_running){}
     }
 
-    /*
-     * The logic for starting the Androway session
+    /**
+     * Start the session
+     * @param sessionService    A reference to the SessionService that created this session
+     * @return An integer array with the following format:
+     * <pre>
+     * [0] = successfullyStarted (value 0 || 1)
+     * [1] = dialogType (value can be either RunningSessionView.DIALOG_TYPE_BLUETOOTH || RunningSessionView.DIALOG_TYPE_DONE || RunningSessionView.DIALOG_TYPE_FAILED || RunningSessionView.DIALOG_TYPE_START)
+     * [2] = message (The string resource id. R.string.your_message_key
+     * </pre>
      */
     public synchronized int[] startSession(SessionService sessionService)
     {
@@ -82,22 +98,36 @@ public class Session implements Runnable
             // If it fails, it will throw an exception. The login failing will be handled in the catch block.
             _lm = new LoggingManager(_sharedObjects, _context, Settings.LOG_TYPE);
 
-            // If the login process is done, wait for two more seconds (otherwise it is going to fast)
-            long endTime = System.currentTimeMillis() + 2 * 1000;
+            // If the LoggingManager was succesfully created, and the log type is TYPE_HTTP,
+            // get and store the sessionId and the userId.
+            if(Settings.LOG_TYPE.equals(DatabaseManagerBase.TYPE_HTTP))
+            {
+                sessionId = HttpManager.sessionId;
+                userId = HttpManager.userId;
+            }
+
+            // If the login process is done, wait for 1.5 seconds (otherwise it is going to fast)
+            long endTime = System.currentTimeMillis() + 1500;
             while (System.currentTimeMillis() < endTime)
             {
                 try { wait(endTime - System.currentTimeMillis()); }catch (Exception e) { }
             }
 
             // The login succeeded (because we reached this line) so change the message to bluetooth connecting.
-            _sessionService.sendMessage(Session.MSG_UPDATE_DIALOG, RunningSessionView.DIALOG_TYPE_BLUETOOTH);
+            _sessionService.sendMessage(SessionService.MSG_UPDATE_DIALOG, RunningSessionView.DIALOG_TYPE_BLUETOOTH);
 
             // Try to open a connection with the given bluetooth address. If it fails, throw an exception.
             // The connection failing will be handled in the catch block.
-            _btManager = ConnectionFactory.acquireConnectionManager(_sharedObjects, _context, ConnectionManagerBase.TYPE_BLUETOOTH);
+            _btManager = ConnectionFactory.acquireConnectionManager(_context, ConnectionManagerBase.TYPE_BLUETOOTH);
 
             if(!_btManager.open("00:0b:53:13:20:c9")) //Settings.BLUETOOTH_ADDRESS
                 throw new ConnectingBluetoothFailedException(_context.getString(R.string.ConnectingBluetoothFailedException));
+
+            // Register the handleBluetoothReceived as onBluetoothReceivedData listener (callback function)
+            ((BluetoothManager)_btManager).onBluetoothReceivedData(new ReceivedDataListener()
+            {
+                public void handleData(ArrayList data) { handleBluetoothReceived(data); }
+            });
 
             // Set the dialog type to trigger when done
             dialogType = RunningSessionView.DIALOG_TYPE_DONE;
@@ -147,8 +177,8 @@ public class Session implements Runnable
             Settings.putSetting("sessionRunning", true);
 
             // Create a new timer, and schedule to execute the SendUpdateTask every UPDATE_INTERVAL
-            _sharedObjects.updateTimer = new Timer();
-            _sharedObjects.updateTimer.scheduleAtFixedRate(new SendUpdateTask(), 0, Constants.BT_UPDATE_INTERVAL);
+            _updateTimer = new Timer();
+            _updateTimer.scheduleAtFixedRate(new SendUpdateTask(), 0, Constants.BT_UPDATE_INTERVAL);
 
             // The session was successfully started
             successfullyStarted = 1;
@@ -158,39 +188,56 @@ public class Session implements Runnable
         return new int[]{successfullyStarted, dialogType, message};
     }
 
+    /**
+     * Post (send) the default defined bluetooth message
+     */
+    public synchronized void bluetoothPost()
+    {
+        // Execute/send the standard update message
+        new SendUpdateTask().run();
+    }
+
+    /**
+     * Post (send) the given data through bluetooth
+     * @param btData    The data to send
+     */
     public synchronized void bluetoothPost(String btData)
     {
-        ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();        
+        ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();
         data.add(new BasicNameValuePair("bluetoothData", btData));
 
-        if(_btManager != null)
+        if(_btManager != null && _btManager.checkConnection())
             _btManager.post("", data);
     }
 
-    public synchronized void handleBluetoothReceived(ArrayList values)
+    /**
+     * The function that is triggered by the event handler for received bluetooth data
+     * @param values    The received data
+     */
+    private synchronized void handleBluetoothReceived(ArrayList values)
     {
         if(values.size() > 0)
         {
             _sharedObjects.incomingData.leftWheelSpeed = Integer.parseInt((String)values.get(0));
             _sharedObjects.incomingData.rightWheelSpeed = Integer.parseInt((String)values.get(1));
             _sharedObjects.incomingData.inclination = Float.parseFloat((String)values.get(2));
+            _sharedObjects.incomingData.batteryVoltage = Integer.parseInt((String)values.get(3));
 
-            _sessionService.sendMessage(Session.MSG_UPDATE_SESSION_VIEWS, RunningSessionView.DIALOG_TYPE_BLUETOOTH);
+            _sessionService.sendMessage(SessionService.MSG_UPDATE_SESSION_VIEWS, RunningSessionView.DIALOG_TYPE_BLUETOOTH);
         }
-        /*
-        try
+
+        // New data was set, so create a new log (1 of 2 times)
+        if(_saveLog)
         {
             _lm.addLog();
+            _saveLog = false;
         }
-        catch (NotSupportedQueryTypeException ex)
-        {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        else
+            _saveLog = true;
     }
 
-    /*
-     * The logic for stopping the session
+    /**
+     * Stop the current session
      */
     public synchronized void stopSession()
     {
@@ -200,40 +247,37 @@ public class Session implements Runnable
             // Set the start session failed flag to false, because we handled it
             Settings.START_SESSION_FAILED = false;
             
-            try
-            {
+            if(_lm != null)
                 _lm.destroyFailedSession(sessionId, userId);
-            }
-            catch (NotSupportedQueryTypeException ex)
-            {
-                Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
         // Set the stopSession property to 1 (true), so the bot will properly stop.
-        // Then perform a SendUpdateTask, to send the last update message.
+        // Then perform a bluetoothPost, to send the last update message.
         _sharedObjects.outgoingData.stopSession = 1;
 
-        // If the bluetooth is connected, send a stop message
-        if(_btManager != null && _btManager.checkConnection())
-            new SendUpdateTask().run();
+        bluetoothPost();
 
         // Set the session running setting to false
         Settings.putSetting("sessionRunning", false);
         _running = false;
     }
 
-    // The task class for updating the data through bluetooth to the remote bot
+    /**
+     * The SendUpdateTask class for sending the default update message through bluetooth
+     */
     class SendUpdateTask extends TimerTask
     {
         public void run()
         {
+            // Assemble the message
             String valuesToSend = "";
             valuesToSend += Float.toString(_sharedObjects.outgoingData.drivingDirection) + ",";
             valuesToSend += Float.toString(_sharedObjects.outgoingData.drivingSpeed) + ",";
+            valuesToSend += Short.toString(_sharedObjects.outgoingData.do360) + ",";
             valuesToSend += Short.toString(_sharedObjects.outgoingData.onHold) + ",";
             valuesToSend += Short.toString(_sharedObjects.outgoingData.stopSession);
 
+            // Post (send) the assembled message to the Androway
             bluetoothPost(valuesToSend);
         }
     }

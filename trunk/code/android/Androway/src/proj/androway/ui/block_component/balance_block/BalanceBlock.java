@@ -10,10 +10,10 @@ import proj.androway.common.SharedObjects;
 import proj.androway.main.TiltControls;
 
 /**
- * The balance block
- * @author Tymen
- * @since 04-04-2011
- * @version 0.21
+ * The BalanceBlock is the class for showing the phone balance view
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class BalanceBlock extends BlockComponent
 {
@@ -29,6 +29,11 @@ public class BalanceBlock extends BlockComponent
         balanceWrapper.addView(_balanceViewHandler);
     }
 
+    /**
+     * Update the balance block
+     * @param updateType    The update type (UPDATE_TYPE_'update type')
+     * @param params        The parameters (new data)
+     */
     @Override
     public void updateView(String updateType, Map<String, Object> params)
     {        

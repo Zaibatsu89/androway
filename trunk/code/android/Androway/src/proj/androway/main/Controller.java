@@ -7,7 +7,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import java.util.TimerTask;
 import proj.androway.common.Settings;
 import proj.androway.R;
 import proj.androway.common.Constants;
@@ -16,11 +15,12 @@ import proj.androway.ui.RunningSessionView;
 import proj.androway.ui.View;
 
 /**
- * Class Controller connects with the following packages:
- * Common, Connection, Logging, UI and class TiltControls.
- * @author Rinse
- * @since 10-02-2011
- * @version 0.1
+ * The Controller class is the center class of the application. This is the first Activity
+ * that will always be called when the application starts. It will then decide what activity
+ * needs to be launched.
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class Controller extends Activity
 {
@@ -41,12 +41,15 @@ public class Controller extends Activity
     {
         // Load the application settings and put them in the variables
         Settings.initSettings(Controller.this);
-        _launchLastStoredActivity();
+        launchLastStoredActivity();
         
         super.onStart();
     }
 
-    private void _launchLastStoredActivity()
+    /**
+     * Launch the last avtive (stored) activity
+     */
+    private void launchLastStoredActivity()
     {
         Class<?> activityClass;
 
@@ -61,11 +64,18 @@ public class Controller extends Activity
             activityClass = View.class;
         }
 
+        // If the activity to start is the RunningSessionView and there is no session running, start the View instead.
+        if(activityClass.equals(RunningSessionView.class) && !Settings.SESSION_RUNNING)
+            activityClass = View.class;
+
         startActivity(new Intent(this, activityClass));
     }
 
-    /*
-     * Update the existing session notification
+    /**
+     * Update the existing notification with the given information
+     * @param ticker    The notification ticker text
+     * @param title     The notification title
+     * @param message   The notification message
      */
     public void updateNotification(String ticker, String title, String message)
     {
@@ -79,11 +89,18 @@ public class Controller extends Activity
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID, notification);
     }
 
+    /**
+     * Remove the existing notification
+     */
     public void removeNotification()
     {
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(Constants.NOTIFICATION_ID);
     }
 
+    /**
+     * Start a new session and show the RunningSessionView (will just show the view if a session is allready running).
+     * This also starts the foreground session service
+     */
     public void runSession()
     {
         // Start the activity before the session is started!
@@ -94,6 +111,9 @@ public class Controller extends Activity
             this.startService(new Intent(this, SessionService.class));
     }
 
+    /**
+     * Stop the currently running session and its foreground service
+     */
     public void stopSession()
     {
         // Stop the session service and return to the main view

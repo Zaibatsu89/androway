@@ -28,12 +28,21 @@ public final class R {
         public static final int slide_right_out=0x7f040010;
     }
     public static final class array {
+        public static final int balance_offset_values=0x7f060004;
         public static final int language_names=0x7f060002;
         public static final int language_values=0x7f060003;
         public static final int orientation_names=0x7f060000;
         public static final int orientation_values=0x7f060001;
     }
     public static final class attr {
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int valueType=0x7f010000;
     }
     public static final class drawable {
         public static final int action_item_selected=0x7f020000;
@@ -65,59 +74,65 @@ public final class R {
         public static final int compass=0x7f02001a;
         public static final int dialog_devider_h=0x7f02001b;
         public static final int dialog_devider_v=0x7f02001c;
-        public static final int dir_arrow_left=0x7f02001d;
-        public static final int dir_arrow_right=0x7f02001e;
-        public static final int dir_arrow_straight=0x7f02001f;
-        public static final int direction_bg=0x7f020020;
-        public static final int exit_icon=0x7f020021;
-        public static final int exit_icon_normal=0x7f020022;
-        public static final int exit_icon_selected=0x7f020023;
-        public static final int first_locked=0x7f020024;
-        public static final int first_second_locked=0x7f020025;
-        public static final int ic_dialog_bluetooth=0x7f020026;
-        public static final int ic_dialog_login=0x7f020027;
-        public static final int ic_menu_exit=0x7f020028;
-        public static final int ic_menu_info=0x7f020029;
-        public static final int ic_menu_settings=0x7f02002a;
-        public static final int ic_menu_stop=0x7f02002b;
-        public static final int inclination_bg=0x7f02002c;
-        public static final int launcher_icon=0x7f02002d;
-        public static final int lego_wheel=0x7f02002e;
-        public static final int log_local_icon=0x7f02002f;
-        public static final int log_web_icon=0x7f020030;
-        public static final int notification_icon=0x7f020031;
-        public static final int progress_bar=0x7f020032;
-        public static final int quickcontact_arrow_down=0x7f020033;
-        public static final int quickcontact_arrow_up=0x7f020034;
-        public static final int quickcontact_bottom_frame=0x7f020035;
-        public static final int quickcontact_disambig_bottom_bg=0x7f020036;
-        public static final int quickcontact_disambig_divider=0x7f020037;
-        public static final int quickcontact_drop_shadow=0x7f020038;
-        public static final int quickcontact_photo_frame=0x7f020039;
-        public static final int quickcontact_slider_background=0x7f02003a;
-        public static final int quickcontact_slider_btn=0x7f02003b;
-        public static final int quickcontact_slider_btn_normal=0x7f02003c;
-        public static final int quickcontact_slider_btn_on=0x7f02003d;
-        public static final int quickcontact_slider_btn_pressed=0x7f02003e;
-        public static final int quickcontact_slider_btn_selected=0x7f02003f;
-        public static final int quickcontact_slider_grip_left=0x7f020040;
-        public static final int quickcontact_slider_grip_right=0x7f020041;
-        public static final int quickcontact_top_frame=0x7f020042;
-        public static final int second_locked=0x7f020043;
-        public static final int segway_body_direction=0x7f020044;
-        public static final int segway_body_inclination=0x7f020045;
-        public static final int settings_icon=0x7f020046;
-        public static final int settings_icon_normal=0x7f020047;
-        public static final int settings_icon_selected=0x7f020048;
-        public static final int start_session_icon=0x7f020049;
-        public static final int start_session_icon_normal=0x7f02004a;
-        public static final int start_session_icon_selected=0x7f02004b;
-        public static final int title_bar_bg=0x7f02004c;
-        public static final int title_text=0x7f02004d;
-        public static final int transparent=0x7f02004e;
-        public static final int view_old_session_icon=0x7f02004f;
-        public static final int view_old_session_icon_normal=0x7f020050;
-        public static final int view_old_session_icon_selected=0x7f020051;
+        public static final int dir_arrow_360_left=0x7f02001d;
+        public static final int dir_arrow_360_right=0x7f02001e;
+        public static final int dir_arrow_left=0x7f02001f;
+        public static final int dir_arrow_right=0x7f020020;
+        public static final int dir_arrow_straight=0x7f020021;
+        public static final int direction_bg=0x7f020022;
+        public static final int do_360_active_icon=0x7f020023;
+        public static final int do_360_icon=0x7f020024;
+        public static final int exit_icon=0x7f020025;
+        public static final int exit_icon_normal=0x7f020026;
+        public static final int exit_icon_selected=0x7f020027;
+        public static final int first_locked=0x7f020028;
+        public static final int first_second_locked=0x7f020029;
+        public static final int ic_dialog_bluetooth=0x7f02002a;
+        public static final int ic_dialog_login=0x7f02002b;
+        public static final int ic_menu_exit=0x7f02002c;
+        public static final int ic_menu_info=0x7f02002d;
+        public static final int ic_menu_settings=0x7f02002e;
+        public static final int ic_menu_stop=0x7f02002f;
+        public static final int inclination_bg=0x7f020030;
+        public static final int launcher_icon=0x7f020031;
+        public static final int lego_wheel=0x7f020032;
+        public static final int log_local_icon=0x7f020033;
+        public static final int log_web_icon=0x7f020034;
+        public static final int notification_icon=0x7f020035;
+        public static final int on_hold_active_icon=0x7f020036;
+        public static final int on_hold_icon=0x7f020037;
+        public static final int progress_bar=0x7f020038;
+        public static final int quickcontact_arrow_down=0x7f020039;
+        public static final int quickcontact_arrow_up=0x7f02003a;
+        public static final int quickcontact_bottom_frame=0x7f02003b;
+        public static final int quickcontact_disambig_bottom_bg=0x7f02003c;
+        public static final int quickcontact_disambig_divider=0x7f02003d;
+        public static final int quickcontact_drop_shadow=0x7f02003e;
+        public static final int quickcontact_photo_frame=0x7f02003f;
+        public static final int quickcontact_slider_background=0x7f020040;
+        public static final int quickcontact_slider_btn=0x7f020041;
+        public static final int quickcontact_slider_btn_normal=0x7f020042;
+        public static final int quickcontact_slider_btn_on=0x7f020043;
+        public static final int quickcontact_slider_btn_pressed=0x7f020044;
+        public static final int quickcontact_slider_btn_selected=0x7f020045;
+        public static final int quickcontact_slider_grip_left=0x7f020046;
+        public static final int quickcontact_slider_grip_right=0x7f020047;
+        public static final int quickcontact_top_frame=0x7f020048;
+        public static final int second_locked=0x7f020049;
+        public static final int segway_body_direction=0x7f02004a;
+        public static final int segway_body_inclination=0x7f02004b;
+        public static final int settings_icon=0x7f02004c;
+        public static final int settings_icon_normal=0x7f02004d;
+        public static final int settings_icon_selected=0x7f02004e;
+        public static final int start_session_icon=0x7f02004f;
+        public static final int start_session_icon_normal=0x7f020050;
+        public static final int start_session_icon_selected=0x7f020051;
+        public static final int title_bar_bg=0x7f020052;
+        public static final int title_text=0x7f020053;
+        public static final int transparent=0x7f020054;
+        public static final int view_old_session_icon=0x7f020055;
+        public static final int view_old_session_icon_normal=0x7f020056;
+        public static final int view_old_session_icon_selected=0x7f020057;
     }
     public static final class id {
         public static final int arrow_down=0x7f0a0010;
@@ -129,33 +144,34 @@ public final class R {
         public static final int block1_flipper=0x7f0a0012;
         public static final int block2=0x7f0a0013;
         public static final int block2_flipper=0x7f0a0014;
-        public static final int blocked_block=0x7f0a001a;
-        public static final int bluetooth_button=0x7f0a0017;
+        public static final int blocked_block=0x7f0a001b;
         public static final int compass=0x7f0a0004;
         public static final int direction_arrow=0x7f0a0007;
+        public static final int do_360_button=0x7f0a0018;
         public static final int footer=0x7f0a000f;
         public static final int header2=0x7f0a000b;
         public static final int icon=0x7f0a0000;
         public static final int inclination_degrees_label=0x7f0a0008;
         public static final int left_wheel_speed=0x7f0a0005;
         public static final int log_web_button=0x7f0a0015;
-        public static final int main_progress_bar=0x7f0a0019;
-        public static final int menu_quit_session=0x7f0a0024;
-        public static final int menu_settings=0x7f0a0023;
+        public static final int main_progress_bar=0x7f0a001a;
+        public static final int menu_quit_session=0x7f0a0025;
+        public static final int menu_settings=0x7f0a0024;
+        public static final int on_hold_button=0x7f0a0017;
         public static final int right_wheel_speed=0x7f0a0006;
         public static final int scroll=0x7f0a000d;
         public static final int segway_body=0x7f0a0009;
-        public static final int start_session=0x7f0a001b;
-        public static final int start_session_icon=0x7f0a001c;
-        public static final int start_session_text=0x7f0a001d;
+        public static final int start_session=0x7f0a001c;
+        public static final int start_session_icon=0x7f0a001d;
+        public static final int start_session_text=0x7f0a001e;
         public static final int title=0x7f0a0001;
-        public static final int titlebar=0x7f0a0018;
+        public static final int titlebar=0x7f0a0019;
         public static final int tracks=0x7f0a000e;
-        public static final int view_old_session=0x7f0a001e;
-        public static final int view_old_session_icon=0x7f0a001f;
-        public static final int view_settings=0x7f0a0020;
-        public static final int view_settings_icon=0x7f0a0021;
-        public static final int webview=0x7f0a0022;
+        public static final int view_old_session=0x7f0a001f;
+        public static final int view_old_session_icon=0x7f0a0020;
+        public static final int view_settings=0x7f0a0021;
+        public static final int view_settings_icon=0x7f0a0022;
+        public static final int webview=0x7f0a0023;
         public static final int window_tint=0x7f0a000a;
     }
     public static final class layout {
@@ -176,39 +192,46 @@ public final class R {
         public static final int running_session_menu=0x7f090000;
     }
     public static final class string {
-        public static final int ConnectingBluetoothFailedException=0x7f07003d;
-        public static final int ConstructingLoggingManagerFailedException=0x7f07003c;
-        public static final int HttpGetRequestFailedException=0x7f07003b;
-        public static final int HttpPostRequestFailedException=0x7f07003a;
-        public static final int MapIsEmptyException=0x7f070039;
+        public static final int ConnectingBluetoothFailedException=0x7f070045;
+        public static final int ConstructingLoggingManagerFailedException=0x7f070044;
+        public static final int HttpGetRequestFailedException=0x7f070043;
+        public static final int HttpPostRequestFailedException=0x7f070042;
+        public static final int MapIsEmptyException=0x7f070041;
         /**  Exception messages 
  Exception messages 
  Exception messages 
          */
-        public static final int MaxPoolSizeReachedException=0x7f070037;
-        public static final int NotSupportedQueryTypeException=0x7f070038;
+        public static final int MaxPoolSizeReachedException=0x7f07003f;
+        public static final int NotSupportedQueryTypeException=0x7f070040;
         /**  UI Settings View 
  UI Settings View 
  UI Settings View 
          */
-        public static final int accountSettings=0x7f07001d;
+        public static final int accountSettings=0x7f070020;
         /**  Logging 
  Logging 
  Logging 
          */
-        public static final int add=0x7f070032;
+        public static final int add=0x7f07003b;
         public static final int app_label=0x7f070001;
         public static final int app_name=0x7f070000;
-        public static final int block1LockedSummary=0x7f07002b;
-        public static final int block1LockedTitle=0x7f07002a;
-        public static final int block2LockedSummary=0x7f07002d;
-        public static final int block2LockedTitle=0x7f07002c;
-        public static final int bluetoothInvalid=0x7f070027;
-        public static final int bluetoothSummary=0x7f070026;
-        public static final int bluetoothTitle=0x7f070025;
-        public static final int bluetooth_failed_message=0x7f070015;
-        public static final int bluetooth_message=0x7f070011;
-        public static final int bluetooth_title=0x7f070010;
+        public static final int balanceOffsetSummary=0x7f070034;
+        public static final int balanceOffsetText=0x7f070035;
+        public static final int balanceOffsetTitle=0x7f070033;
+        public static final int balanceSensitivitySummary=0x7f070037;
+        public static final int balanceSensitivityText=0x7f070038;
+        public static final int balanceSensitivityTitle=0x7f070036;
+        public static final int battery_voltage_suffix=0x7f07000e;
+        public static final int block1LockedSummary=0x7f07002e;
+        public static final int block1LockedTitle=0x7f07002d;
+        public static final int block2LockedSummary=0x7f070030;
+        public static final int block2LockedTitle=0x7f07002f;
+        public static final int bluetoothInvalid=0x7f07002a;
+        public static final int bluetoothSummary=0x7f070029;
+        public static final int bluetoothTitle=0x7f070028;
+        public static final int bluetooth_failed_message=0x7f070018;
+        public static final int bluetooth_message=0x7f070014;
+        public static final int bluetooth_title=0x7f070013;
         /**  UI 
  UI 
  UI 
@@ -216,50 +239,51 @@ public final class R {
         public static final int choose_action=0x7f070002;
         public static final int connect=0x7f070006;
         public static final int disconnect=0x7f070007;
-        public static final int emailInvalid=0x7f070021;
-        public static final int emailSummary=0x7f070020;
-        public static final int emailTitle=0x7f07001f;
-        public static final int empty=0x7f070036;
-        public static final int error_message=0x7f070013;
-        public static final int error_title=0x7f070012;
+        public static final int emailInvalid=0x7f070024;
+        public static final int emailSummary=0x7f070023;
+        public static final int emailTitle=0x7f070022;
+        public static final int empty=0x7f07003e;
+        public static final int error_message=0x7f070016;
+        public static final int error_title=0x7f070015;
         public static final int exit_app=0x7f07000a;
-        public static final int format=0x7f070035;
-        public static final int get=0x7f070033;
+        public static final int get=0x7f07003c;
         public static final int invalid=0x7f07000c;
-        public static final int languageSummary=0x7f070031;
-        public static final int languageTitle=0x7f070030;
-        public static final int left_during_login=0x7f070016;
-        public static final int logOnlineSummary=0x7f070029;
-        public static final int logOnlineTitle=0x7f070028;
-        public static final int login_failed_message=0x7f070014;
-        public static final int login_message=0x7f07000f;
+        public static final int languageSummary=0x7f07003a;
+        public static final int languageTitle=0x7f070039;
+        public static final int left_during_login=0x7f070019;
+        public static final int logOnlineSummary=0x7f07002c;
+        public static final int logOnlineTitle=0x7f07002b;
+        public static final int log_local_toast=0x7f070010;
+        public static final int log_online_toast=0x7f07000f;
+        public static final int login_failed_message=0x7f070017;
+        public static final int login_message=0x7f070012;
         /**  Dialog string values (on session start) 
  Dialog string values (on session start) 
  Dialog string values (on session start) 
          */
-        public static final int login_title=0x7f07000e;
+        public static final int login_title=0x7f070011;
         public static final int ok=0x7f07000b;
-        public static final int orientationSummary=0x7f07002f;
-        public static final int orientationTitle=0x7f07002e;
-        public static final int passwordInvalid=0x7f070024;
-        public static final int passwordSummary=0x7f070023;
-        public static final int passwordTitle=0x7f070022;
-        public static final int remove=0x7f070034;
-        public static final int session_hold_message=0x7f07001c;
-        public static final int session_hold_ticker=0x7f07001a;
-        public static final int session_hold_title=0x7f07001b;
+        public static final int orientationSummary=0x7f070032;
+        public static final int orientationTitle=0x7f070031;
+        public static final int passwordInvalid=0x7f070027;
+        public static final int passwordSummary=0x7f070026;
+        public static final int passwordTitle=0x7f070025;
+        public static final int remove=0x7f07003d;
+        public static final int session_hold_message=0x7f07001f;
+        public static final int session_hold_ticker=0x7f07001d;
+        public static final int session_hold_title=0x7f07001e;
         public static final int settings=0x7f070008;
         public static final int show_running_session=0x7f070004;
         public static final int start_new_session=0x7f070003;
-        public static final int start_session_message=0x7f070019;
+        public static final int start_session_message=0x7f07001c;
         /**  Notification string values 
  Notification string values 
  Notification string values 
          */
-        public static final int start_session_ticker=0x7f070017;
-        public static final int start_session_title=0x7f070018;
+        public static final int start_session_ticker=0x7f07001a;
+        public static final int start_session_title=0x7f07001b;
         public static final int stop_session=0x7f07000d;
-        public static final int systemSettings=0x7f07001e;
+        public static final int systemSettings=0x7f070021;
         public static final int view_old_session=0x7f070005;
         public static final int view_settings=0x7f070009;
     }
@@ -288,4 +312,33 @@ public final class R {
     public static final class xml {
         public static final int settings=0x7f050000;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a SliderPreference.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #SliderPreference_valueType proj.androway:valueType}</code></td><td></td></tr>
+           </table>
+           @see #SliderPreference_valueType
+         */
+        public static final int[] SliderPreference = {
+            0x7f010000
+        };
+        /**
+          <p>This symbol is the offset where the {@link proj.androway.R.attr#valueType}
+          attribute's value can be found in the {@link #SliderPreference} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:valueType
+        */
+        public static final int SliderPreference_valueType = 0;
+    };
 }

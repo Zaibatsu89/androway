@@ -22,10 +22,18 @@
         style="@style/StatusBarMiddle" />
 
     <ImageButton
-        android:id="@+id/bluetooth_button"
+        android:id="@+id/on_hold_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/bluetooth_icon"
+        android:src="@drawable/on_hold_active_icon"
+        android:layout_weight="0.25"
+        style="@style/StatusBarMiddle" />
+
+    <ImageButton
+        android:id="@+id/do_360_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/do_360_icon"
         android:layout_weight="0.25"
         style="@style/StatusBarRight" />
 

@@ -11,10 +11,10 @@ import proj.androway.R;
 import proj.androway.common.SharedObjects;
 
 /**
- * The inclination block
- * @author Tymen
- * @since 17-03-2011
- * @version 0.1
+ * The InclinationBlock is the class that shows the inclination of the Androway
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class InclinationBlock extends BlockComponent
 {
@@ -26,6 +26,11 @@ public class InclinationBlock extends BlockComponent
         super(context, sharedObjects, layoutId, BlockComponent.ID_BLOCK_1);
     }
 
+    /**
+     * Update the inclination block
+     * @param updateType    The update type (UPDATE_TYPE_'update type')
+     * @param params        The parameters (new data)
+     */
     @Override
     public void updateView(String updateType, Map<String, Object> params)
     {
@@ -39,6 +44,13 @@ public class InclinationBlock extends BlockComponent
         }
     }
 
+    /**
+     * Set the new rotation for the inclination
+     * @param degrees           The absolute degrees for the rotation
+     * @param previousDegrees   The absolute degrees of the previous position
+     * @param duration          The duration of the animation
+     * @param rotationListener  The rotation listener
+     */
     private void setInclinationRotation(float degrees, float previousDegrees, int duration, RotationListener rotationListener)
     {
         ImageView inclinationImage = (ImageView)findViewById(R.id.segway_body);

@@ -15,6 +15,9 @@
     <string name="exit_app">Afsluiten</string>
     <string name="ok">OK</string>
     <string name="invalid">ongeldig!</string>
+    <string name="battery_voltage_suffix">% resterend</string>
+    <string name="log_online_toast">De data wordt online opgeslagen</string>
+    <string name="log_local_toast">De data wordt lokaal opgeslagen</string>
 
     <!-- Dialog string values (on session start) -->
     <string name="login_title">Bezig met inloggen...</string>
@@ -55,6 +58,12 @@
     <string name="block2LockedSummary">Voorkom dat het onderste blok kan verschuiven</string>
     <string name="orientationTitle">Apparaatoriëntatie</string>
     <string name="orientationSummary">De gewenste apparaatoriëntatie</string>
+    <string name="balanceOffsetTitle">Balans offset</string>
+    <string name="balanceOffsetSummary">De verticale balans offset (\'nul snelheid\' positie)</string>
+    <string name="balanceOffsetText">% offset</string>
+    <string name="balanceSensitivityTitle">Balans gevoeligheid</string>
+    <string name="balanceSensitivitySummary">De gevoeligheid van de balans besturing</string>
+    <string name="balanceSensitivityText">% extra gevoeligheid</string>
     <string name="languageTitle">Taal</string>
     <string name="languageSummary">De gewenste applicatietaal</string>
 
@@ -62,7 +71,6 @@
     <string name="add">Toevoegen</string>
     <string name="get">Alles tonen</string>
     <string name="remove">Alles verwijderen</string>
-    <string name="format">dd-MM-yyyy H:mm</string>
     <string name="empty">Er zijn geen logs.</string>
 
     <!-- Exception messages -->

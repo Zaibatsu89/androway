@@ -19,4 +19,10 @@
         <item>nl</item>
         <item>fy</item>
     </string-array>
+
+    <string-array name="balance_offset_values">
+        <item>0</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
 </resources>

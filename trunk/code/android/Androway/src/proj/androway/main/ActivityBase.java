@@ -1,47 +1,61 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package proj.androway.main;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Display;
 import proj.androway.common.Settings;
 import proj.androway.ui.View;
 
 /**
- *
- * @author Tymen
+ * The ActivityBase class is a base class for the view Activities. It has some basic behavior
+ * that is needed for all view Activities (f.e. it loads the application settings, handles
+ * the last visited activity and overrides the back button behavior).
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class ActivityBase extends Activity
 {
+    /**
+     * After creating the Activity (super) load the application settings
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+        // When creating the Activity, load the application settings
         Settings.initSettings(this.getBaseContext());
     }
 
+    /**
+     * After resuming the Activity (super) load the application settings
+     */
     @Override
     protected void onResume()
     {
         super.onResume();
+
+        // When resuming the Activity, load the application settings
         Settings.initSettings(this.getBaseContext());
     }
 
+    /**
+     * When pausing store this Activity's class name as the last active Activity
+     */
     @Override
     protected void onPause()
     {
         super.onPause();
 
-        // When going into pause, store this Activity class name as the last active Activity
+        // When pausing, store this Activity class name as the last active Activity, so that
+        // when we return we can show this Activity again.
         Settings.putSetting("lastActivity", getClass().getName());
     }
 
+    /**
+     * Custom back-button handling. Return to the last (stored) active Activity.
+     */
     @Override
     public void onBackPressed()
     {
@@ -63,6 +77,7 @@ public class ActivityBase extends Activity
             }
         }
 
+        // Start the Activity
         this.startActivity(new Intent(this.getApplicationContext(), returnTo));
 
         return;

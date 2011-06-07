@@ -1,4 +1,6 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androway_ui="http://schemas.android.com/apk/res/proj.androway">
 
     <PreferenceCategory android:title="@string/accountSettings">
         <EditTextPreference
@@ -62,6 +64,26 @@
             android:entryValues="@array/orientation_values"
             android:defaultValue="portrait"/>
 
+        <proj.androway.ui.SliderPreference
+            android:key="1"
+            android:name="@string/balanceOffsetTitle"
+            android:summary="@string/balanceOffsetSummary"
+            android:title="@string/balanceOffsetTitle"
+            android:text="@string/balanceOffsetText"
+            android:max="100"
+            android:stepSize="5"
+            android:defaultValue="75"/>
+
+        <proj.androway.ui.SliderPreference
+            android:key="2"
+            android:name="@string/balanceSensitivityTitle"
+            android:summary="@string/balanceSensitivitySummary"
+            android:title="@string/balanceSensitivityTitle"
+            android:text="@string/balanceSensitivityText"
+            android:max="100"
+            android:stepSize="5"
+            android:defaultValue="35"/>
+
         <ListPreference
             android:name="@string/languageTitle"
             android:summary="@string/languageSummary"
@@ -70,5 +92,6 @@
             android:entries="@array/language_names"
             android:entryValues="@array/language_values"
             android:defaultValue="gb"/>
+            
     </PreferenceCategory>
 </PreferenceScreen>
