@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="node7" href="$d3/de0/classproj_1_1androway_1_1common_1_1_shared_objects.html" title="proj.androway.common.SharedObjects" alt="" coords="455,291,702,317"/>
+<area shape="rect" id="node13" href="$da/dc2/classproj_1_1androway_1_1main_1_1_controller.html" title="proj.androway.main.Controller" alt="" coords="1029,201,1222,228"/>
+<area shape="rect" id="node18" href="$d3/df9/classproj_1_1androway_1_1session_1_1_session.html" title="proj.androway.session.Session" alt="" coords="1485,471,1688,497"/>
+<area shape="rect" id="node23" href="$d4/ded/classproj_1_1androway_1_1logging_1_1_logging_manager.html" title="proj.androway.logging.LoggingManager" alt="" coords="1002,471,1249,497"/>
+<area shape="rect" id="node30" href="$d1/d12/classproj_1_1androway_1_1session_1_1_session_service.html" title="proj.androway.session.SessionService" alt="" coords="1003,595,1247,621"/>
+<area shape="rect" id="node11" href="$d7/d13/classproj_1_1androway_1_1connection_1_1bluetooth_1_1_incoming_data.html" title="proj.androway.connection.bluetooth.IncomingData" alt="" coords="5,291,315,317"/>
+<area shape="rect" id="node20" href="$d6/d0b/interfaceproj_1_1androway_1_1connection_1_1_i_connection_manager.html" title="proj.androway.connection.IConnectionManager" alt="" coords="980,420,1271,447"/>
+<area shape="rect" id="node26" href="$d6/de6/interfaceproj_1_1androway_1_1database_1_1_i_database_manager.html" title="proj.androway.database.IDatabaseManager" alt="" coords="443,449,714,476"/>
+<area shape="rect" id="node40" href="$db/df8/classproj_1_1androway_1_1connection_1_1bluetooth_1_1_outgoing_data.html" title="proj.androway.connection.bluetooth.OutgoingData" alt="" coords="5,341,315,368"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$df/dc6/classproj_1_1androway_1_1main_1_1_activity_base.html" title="proj.androway.main.ActivityBase" alt="" coords="493,295,704,321"/>
+<area shape="rect" id="node24" href="$da/dc2/classproj_1_1androway_1_1main_1_1_controller.html" title="proj.androway.main.Controller" alt="" coords="198,44,391,71"/>
+<area shape="rect" id="node10" href="$db/d0f/classproj_1_1androway_1_1main_1_1_tilt_controls.html" title="proj.androway.main.TiltControls" alt="" coords="763,656,965,683"/>
+<area shape="rect" id="node16" href="$d2/d41/interfaceproj_1_1androway_1_1main_1_1_tilt_controls_1_1_tilt_data_changed_listener.html" title="proj.androway.main.TiltControls.TiltDataChangedListener" alt="" coords="121,656,469,683"/>
+<area shape="rect" id="node18" href="$d3/de0/classproj_1_1androway_1_1common_1_1_shared_objects.html" title="proj.androway.common.SharedObjects" alt="" coords="741,72,987,99"/>
+<area shape="rect" id="node28" href="$d3/df9/classproj_1_1androway_1_1session_1_1_session.html" title="proj.androway.session.Session" alt="" coords="1629,275,1832,301"/>
+<area shape="rect" id="node33" href="$d4/ded/classproj_1_1androway_1_1logging_1_1_logging_manager.html" title="proj.androway.logging.LoggingManager" alt="" coords="1217,204,1463,231"/>
+<area shape="rect" id="node40" href="$d1/d12/classproj_1_1androway_1_1session_1_1_session_service.html" title="proj.androway.session.SessionService" alt="" coords="1218,336,1462,363"/>
+<area shape="rect" id="node22" href="$d7/d13/classproj_1_1androway_1_1connection_1_1bluetooth_1_1_incoming_data.html" title="proj.androway.connection.bluetooth.IncomingData" alt="" coords="140,196,449,223"/>
+<area shape="rect" id="node30" href="$d6/d0b/interfaceproj_1_1androway_1_1connection_1_1_i_connection_manager.html" title="proj.androway.connection.IConnectionManager" alt="" coords="1195,387,1485,413"/>
+<area shape="rect" id="node36" href="$d6/de6/interfaceproj_1_1androway_1_1database_1_1_i_database_manager.html" title="proj.androway.database.IDatabaseManager" alt="" coords="729,185,999,212"/>
+<area shape="rect" id="node50" href="$db/df8/classproj_1_1androway_1_1connection_1_1bluetooth_1_1_outgoing_data.html" title="proj.androway.connection.bluetooth.OutgoingData" alt="" coords="140,95,449,121"/>
+</map>
