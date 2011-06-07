@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$db/dcc/classproj_1_1androway_1_1ui_1_1block__component_1_1_block_component.html" title="proj.androway.ui.block_component.BlockComponent" alt="" coords="963,109,1288,136"/>
+<area shape="rect" id="node41" href="$d5/d4c/classproj_1_1androway_1_1ui_1_1block__component_1_1balance__block_1_1_balance_view_handler.html" title="proj.androway.ui.block_component.balance_block.BalanceViewHandler" alt="" coords="909,58,1341,85"/>
+<area shape="rect" id="node6" href="$d3/de0/classproj_1_1androway_1_1common_1_1_shared_objects.html" title="proj.androway.common.SharedObjects" alt="" coords="455,385,702,412"/>
+<area shape="rect" id="node12" href="$da/dc2/classproj_1_1androway_1_1main_1_1_controller.html" title="proj.androway.main.Controller" alt="" coords="1029,429,1222,456"/>
+<area shape="rect" id="node17" href="$d3/df9/classproj_1_1androway_1_1session_1_1_session.html" title="proj.androway.session.Session" alt="" coords="1611,532,1813,558"/>
+<area shape="rect" id="node22" href="$d4/ded/classproj_1_1androway_1_1logging_1_1_logging_manager.html" title="proj.androway.logging.LoggingManager" alt="" coords="1002,644,1249,670"/>
+<area shape="rect" id="node29" href="$d1/d12/classproj_1_1androway_1_1session_1_1_session_service.html" title="proj.androway.session.SessionService" alt="" coords="1003,221,1247,248"/>
+<area shape="rect" id="node10" href="$d7/d13/classproj_1_1androway_1_1connection_1_1bluetooth_1_1_incoming_data.html" title="proj.androway.connection.bluetooth.IncomingData" alt="" coords="5,385,315,412"/>
+<area shape="rect" id="node19" href="$d6/d0b/interfaceproj_1_1androway_1_1connection_1_1_i_connection_manager.html" title="proj.androway.connection.IConnectionManager" alt="" coords="980,593,1271,620"/>
+<area shape="rect" id="node25" href="$d6/de6/interfaceproj_1_1androway_1_1database_1_1_i_database_manager.html" title="proj.androway.database.IDatabaseManager" alt="" coords="443,652,714,678"/>
+<area shape="rect" id="node39" href="$db/df8/classproj_1_1androway_1_1connection_1_1bluetooth_1_1_outgoing_data.html" title="proj.androway.connection.bluetooth.OutgoingData" alt="" coords="5,436,315,462"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$df/d4f/classproj_1_1androway_1_1database_1_1_database_manager_base.html" title="proj.androway.database.DatabaseManagerBase" alt="" coords="376,31,675,57"/>
+<area shape="rect" id="node4" href="$d6/de6/interfaceproj_1_1androway_1_1database_1_1_i_database_manager.html" title="proj.androway.database.IDatabaseManager" alt="" coords="6,5,277,32"/>
+<area shape="rect" id="node8" href="$d6/d0b/interfaceproj_1_1androway_1_1connection_1_1_i_connection_manager.html" title="proj.androway.connection.IConnectionManager" alt="" coords="380,81,671,108"/>
+</map>
