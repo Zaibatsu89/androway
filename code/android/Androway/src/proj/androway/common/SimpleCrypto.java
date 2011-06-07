@@ -1,5 +1,6 @@
 package proj.androway.common;
 
+import android.text.TextUtils;
 import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -13,6 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
  * ...
  * String cleartext = SimpleCrypto.decrypt(masterpassword, crypto)
  * </pre>
+ * @author ferenc.hechler
  */
 public class SimpleCrypto
 {
@@ -27,7 +29,7 @@ public class SimpleCrypto
 
     public static String decrypt(String seed, String encrypted) throws Exception
     {
-        if(!encrypted.isEmpty())
+        if(!TextUtils.isEmpty(encrypted))
         {
             byte[] rawKey = getRawKey(seed.getBytes());
             byte[] enc = toByte(encrypted);

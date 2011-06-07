@@ -4,13 +4,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Class Utilities is.
- * @author Rinse
- * @since 10-02-2011
- * @version 0.1
+ * The Utilities class contains common utilities that are used throughout the whole application
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class Utilities
 {
+    /**
+     * Encode the given string using the unique device id
+     * @param toEncode  The string to encode
+     * @return The encoded string
+     */
     public static String encodeString(String toEncode)
     {
         String result = null;
@@ -27,6 +32,11 @@ public class Utilities
         return result;
     }
 
+    /**
+     * Decode the given string using the unique device id
+     * @param toDecode  The string to decode
+     * @return The decoded string
+     */
     public static String decodeString(String toDecode)
     {
         String result = null;

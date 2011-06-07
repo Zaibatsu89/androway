@@ -12,17 +12,29 @@ import proj.androway.ui.block_component.BlockComponent;
 import proj.androway.R;
 
 /**
- * The custom gesture class which is detects flings and triggers the paired flipper
- * @author Tymen
- * @since 18-02-2011
- * @version 0.4
+ * The FlingDetector class is a custom gesture class which is detects flings and triggers the paired ViewFlipper
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class FlingDetector extends SimpleOnGestureListener
 {
+    /**
+     * The minimal swipe distance for recognition
+     */
     private static final int _SWIPE_MIN_DISTANCE = 120;
+
+    /**
+     * The maximum swipe offset of the path for recognition
+     */
     private static final int _SWIPE_MAX_OFF_PATH = 250;
+
+    /**
+     * The minimum swipe velocity for recognition
+     */
     private static final int _SWIPE_THRESHOLD_VELOCITY = 200;
 
+    // The used animations
     private Animation _slideLeftIn;
     private Animation _slideLeftOut;
     private Animation _slideRightIn;
@@ -32,6 +44,12 @@ public class FlingDetector extends SimpleOnGestureListener
     private ViewFlipper _flipper;
     private Vibrator _vibrator;
 
+    /**
+     * The constructor for the FlingDetector. Bind the given ViewFlipper to this FlingDetector.
+     * @param context   The application context
+     * @param blockId   The id of the flipper block (BlockComponent.ID_BLOCK_ #)
+     * @param flipper   The ViewFlipper to bind to the FlingDetector
+     */
     public FlingDetector(Context context, int blockId, ViewFlipper flipper)
     {
         _blockId = blockId;
@@ -55,6 +73,7 @@ public class FlingDetector extends SimpleOnGestureListener
             if (Math.abs(e1.getY() - e2.getY()) > _SWIPE_MAX_OFF_PATH)
                 return false;
 
+            // Check if this block is locked. If so, return false (break), otherwise proceed.
             switch(_blockId)
             {
                 case BlockComponent.ID_BLOCK_1:
@@ -96,13 +115,16 @@ public class FlingDetector extends SimpleOnGestureListener
         return false;
     }
 
+    /**
+     * Perform a vibrateEffect that corresponds with the sliding effect of the ViewFlipper
+     */
     public void vibrateEffect()
     {
         long[] pattern =
         {
             0,  // Start immediately
-            50, // Vibrate a long time
-            550,// Pause a short time
+            50, // Vibrate a short time
+            550,// Pause a long time
             50  // Vibrate a short time
         };
 

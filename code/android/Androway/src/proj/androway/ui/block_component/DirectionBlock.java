@@ -11,13 +11,16 @@ import proj.androway.R;
 import proj.androway.common.SharedObjects;
 
 /**
- * The inclination block
- * @author Tymen
- * @since 17-03-2011
- * @version 0.1
+ * The DirectionBlock is the class that shows the direction block of the Androway (left, right, straight etc.)
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class DirectionBlock extends BlockComponent
 {
+    /**
+     * The offset for when we show the 'going-straight' arrow
+     */
     private static final int CENTER_SPEED_OFFSET = 5;
     
     private TextView _leftWheelLabel;
@@ -34,6 +37,11 @@ public class DirectionBlock extends BlockComponent
         _directionArrowImage = (ImageView)findViewById(R.id.direction_arrow);
     }
 
+    /**
+     * Update the direction block
+     * @param updateType    The update type (UPDATE_TYPE_'update type')
+     * @param params        The parameters (new data)
+     */
     @Override
     public void updateView(String updateType, Map<String, Object> params)
     {
@@ -47,8 +55,13 @@ public class DirectionBlock extends BlockComponent
             _leftWheelLabel.setText(String.valueOf(leftWheelSpeed) + "%");
             _rightWheelLabel.setText(String.valueOf(rightWheelSpeed) + "%");
 
-            // Decide what image resource to use (left || right || straight)
-            if(leftWheelSpeed < rightWheelSpeed - CENTER_SPEED_OFFSET)
+            // Decide what image resource to use
+            // (360 clockwise || 360 counterclockwise || left || right || straight)
+            if(leftWheelSpeed < 0 && Math.abs(leftWheelSpeed) == rightWheelSpeed)
+                arrowImageId = R.drawable.dir_arrow_360_left; // A 360 to the left (counterclockwise)
+            else if(rightWheelSpeed < 0 && Math.abs(rightWheelSpeed) == leftWheelSpeed)
+                arrowImageId = R.drawable.dir_arrow_360_right; // A 360 to the right (clockwise)
+            else if(leftWheelSpeed < rightWheelSpeed - CENTER_SPEED_OFFSET)
                  arrowImageId = R.drawable.dir_arrow_left; // Going left
             else if(rightWheelSpeed < leftWheelSpeed - CENTER_SPEED_OFFSET)
                 arrowImageId = R.drawable.dir_arrow_right; // Going right

@@ -23,19 +23,19 @@ public class ActionItem
     /**
      * Constructor
      *
-     * @param _icon {@link Drawable} action _icon
+     * @param icon {@link Drawable} action _icon
      */
     public ActionItem(Drawable icon) {
-            this._icon = icon;
+        this._icon = icon;
     }
 
     /**
      * Set action _title
      *
-     * @param _title action _title
+     * @param title action _title
      */
     public void setTitle(String title) {
-            this._title = title;
+        this._title = title;
     }
 
     /**
@@ -44,16 +44,16 @@ public class ActionItem
      * @return action _title
      */
     public String getTitle() {
-            return this._title;
+        return this._title;
     }
 
     /**
      * Set action _icon
      *
-     * @param _icon {@link Drawable} action _icon
+     * @param icon {@link Drawable} action _icon
      */
     public void setIcon(Drawable icon) {
-            this._icon = icon;
+        this._icon = icon;
     }
 
     /**

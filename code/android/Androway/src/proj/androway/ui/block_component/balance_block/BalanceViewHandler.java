@@ -16,10 +16,10 @@ import proj.androway.common.SharedObjects;
 import proj.androway.main.TiltControls;
 
 /**
- * Class View for drawing the balance in the UI.
- * @author Tymen en Rinse
- * @since 04-04-2011
- * @version 0.51
+ * The BalanceViewHandler class for drawing the phone balance
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public class BalanceViewHandler extends LinearLayout
 {
@@ -30,6 +30,11 @@ public class BalanceViewHandler extends LinearLayout
     private SharedObjects _sharedObjects;
     private static final int _imgBgMargin = 5;
 
+    /**
+     * The constructor for the BalanceViewHandler
+     * @param context       The application context
+     * @param sharedObjects An instance of the common SharedObjects object
+     */
     public BalanceViewHandler(Context context, SharedObjects sharedObjects)
     {
         super(context);
@@ -46,6 +51,10 @@ public class BalanceViewHandler extends LinearLayout
         this.addView(_moveArrow);
     }
 
+    /**
+     * Update the balance view
+     * @param params    The parameters (new data)
+     */
     public void updateView(Map params)
     {
         float azimuth = (Float)params.get(TiltControls.UPDATE_AZIMUTH);
@@ -91,44 +100,82 @@ public class BalanceViewHandler extends LinearLayout
             float direction = getAnswer(sensorA, sensorB, 0) * -9.8f;
             float speed = getAnswer(sensorA, sensorB, 1) * -10.4f;
 
+            // Process the desired balance sensitivity
+            if(direction != 0)
+                direction *= Settings.BALANCE_CONTROL_SENSITIVITY;
+
             // Limit the maximum direction value
             if(direction > 100)
                 direction = 100;
             else if(direction < -100)
                 direction = -100;
 
-            // Limit the maximum speed value
-            if(speed > 100)
-                speed = 100;
-            else if(speed < -100)
-                speed = -100;
-
+            // Store the calculated direction
             _direction = direction;
-
+            
             if (sensorC > 0 && direction != -100 && direction != 100)
+            {
+                // Handle the desired offset
+                speed -= Settings.BALANCE_CONTROL_OFFSET;
+
+                // If an offset is set, the angle used for accelleration is smaller. So multiply the speed.
+                if(Settings.BALANCE_CONTROL_OFFSET > 0 && speed > 0 && speed < 100)
+                    speed *= 100f / ((100f - (float)Settings.BALANCE_CONTROL_OFFSET));
+                
+                // Process the desired balance sensitivity
+                if(speed != 0)
+                    speed *= Settings.BALANCE_CONTROL_SENSITIVITY;
+
+                // Limit the maximum speed value
+                if(speed > 100)
+                    speed = 100;
+                else if(speed < -100)
+                    speed = -100;
+
+                // Store the calculated speed
                 _speed = speed;
+            }
         }
         else
         {
             float direction = getAnswer(sensorA, sensorC, 1) * 9.8f;
             float speed = getAnswer(sensorA, sensorC, 0) * -10.4f;
 
+            // Process the desired balance sensitivity
+            if(direction != 0)
+                direction *= Settings.BALANCE_CONTROL_SENSITIVITY;
+
             // Limit the maximum direction value
             if(direction > 100)
                 direction = 100;
             else if(direction < -100)
                 direction = -100;
 
-            // Limit the maximum speed value
-            if(speed > 100)
-                speed = 100;
-            else if(speed < -100)
-                speed = -100;
-
+            // Store the calculated direction
             _direction = direction;
 
             if (sensorB < 0 && direction != -100 && direction != 100)
+            {
+                // Handle the desired offset
+                speed -= Settings.BALANCE_CONTROL_OFFSET;
+
+                // If an offset is set, the angle used for accelleration is smaller. So multiply the speed.
+                if(Settings.BALANCE_CONTROL_OFFSET > 0 && speed > 0 && speed < 100)
+                    speed *= 100f / ((100f - (float)Settings.BALANCE_CONTROL_OFFSET));
+
+                // Process the desired balance sensitivity
+                if(speed != 0)
+                    speed *= Settings.BALANCE_CONTROL_SENSITIVITY;
+
+                // Limit the maximum speed value
+                if(speed > 100)
+                    speed = 100;
+                else if(speed < -100)
+                    speed = -100;
+
+                // Store the calculated speed
                 _speed = speed;
+            }
         }
 
         // Store the calculated direction and speed in the outgoingData object
@@ -138,6 +185,13 @@ public class BalanceViewHandler extends LinearLayout
         this.invalidate();
     }
 
+    /**
+     * Calculates a position based on the given coördinates
+     * @param value1    The first coördinate-axis value
+     * @param value2    The second coördinate-axis value
+     * @param which     Which type to use
+     * @return The new calculated position
+     */
     private float getAnswer(float value1, float value2, int which)
     {
         float diff = Math.abs(Math.abs(value1) - Math.abs(value2));
@@ -178,7 +232,7 @@ public class BalanceViewHandler extends LinearLayout
                 break;
         }
 
-        /**
+        /*
          * Calculate the size of the rectangle to draw based on the width and
          * height of the parent layout.
          *
@@ -227,8 +281,7 @@ public class BalanceViewHandler extends LinearLayout
         newLayoutParams.setMargins(gridX, gridY, 0, 0);
         _moveArrow.setLayoutParams(newLayoutParams);
         _moveArrow.requestLayout();
-
-
+        
         // Set the new layout parameters for the inner linear element (the draw component).
         // This element is placed linear below the outer element so for correct
         // positioning a negative margin is set, to position it exactly on top of the outer element.

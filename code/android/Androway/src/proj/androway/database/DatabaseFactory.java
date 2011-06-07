@@ -1,66 +1,67 @@
 package proj.androway.database;
 
+import proj.androway.database.http.HttpManager;
+import proj.androway.database.sqlite.SqLiteManager;
 import android.app.Application;
 import android.content.Context;
 import proj.androway.common.Exceptions.MaxPoolSizeReachedException;
 import proj.androway.R;
 import java.util.HashMap;
 import java.util.Map;
-import proj.androway.common.SharedObjects;
 
 /**
- * Class DatabaseFactory uses:
- *		the factory method pattern,
- *		the singleton pattern and
- *		the objectpool pattern.
- * Childclass IDatabaseManager is the interface for
- * the classes LocalManager and HttpManager.
- * @author Rinse
- * @since 17-03-2011
- * @version 0.41
+ * The DatabaseFactory class is used for retreiving and managing the instances for
+ * different databases and database types.
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
  */
 public final class DatabaseFactory extends Application
 {
-    private static DatabaseFactory _databaseFactory;
     private static Map _databaseManagersCollection = new HashMap();
     private static int _managerCount = 0;
     private static int _maxPoolSize = 2;
 
-    private DatabaseFactory() {}
-
-    public static DatabaseFactory getInstance()
+    /**
+     * Returns the desired IConnectionManager based on the given parameters
+     * @param context       The application context
+     * @param managerName   The name of the desired IDatabaseManager
+     * @return The desired IDatabaseManager
+     * @throws proj.androway.common.Exceptions.MaxPoolSizeReachedException Thrown when the 'object pool' exceeds the maximum pool size
+     */
+    public static IDatabaseManager acquireDatabaseManager(Context context, String managerName) throws MaxPoolSizeReachedException
     {
-        if (_databaseFactory == null)
-            _databaseFactory = new DatabaseFactory();
+        IDatabaseManager databaseManager = null;
 
-        return _databaseFactory;
-    }
-
-    public static IDatabaseManager acquireDatabaseManager(SharedObjects sharedObjects, Context context, String managerName) throws MaxPoolSizeReachedException
-    {
-        if (_managerCount <= _maxPoolSize)
+        // Check if the manager allready exists in the object pool
+        if (_databaseManagersCollection.containsKey(managerName))
+            databaseManager = (IDatabaseManager) _databaseManagersCollection.get(managerName);
+        else
         {
-            IDatabaseManager databaseManager = null;
+            // The manager does not exist in the object pool yet, so create it
+            if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
+                databaseManager = new HttpManager(context);
+            else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
+                databaseManager = new SqLiteManager(context);
 
-            if (_databaseManagersCollection.containsKey(managerName))
-                databaseManager = (IDatabaseManager) _databaseManagersCollection.get(managerName);
-            else
+            // Check if by adding this manager, the object pool size will be exceeded or not
+            if (_managerCount + 1 <= _maxPoolSize)
             {
-                if (managerName.equals(DatabaseManagerBase.TYPE_HTTP))
-                    databaseManager = new HttpManager(sharedObjects, context);
-                else if (managerName.equals(DatabaseManagerBase.TYPE_LOCAL))
-                    databaseManager = new LocalManager(sharedObjects, context);
-
+                // Store the created manager in the object pool
                 _databaseManagersCollection.put(managerName, databaseManager);
                 _managerCount++;
             }
-
-            return databaseManager;
+            else
+                throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
         }
-        else
-            throw new MaxPoolSizeReachedException(context.getString(R.string.MaxPoolSizeReachedException));
+
+        return databaseManager;
     }
 
+    /**
+     * Remove the IDatabaseManager with the given manager name
+     * @param managerName   The name (key) of the IDatabaseManager
+     */
     public static void releaseDatabaseManager(String managerName)
     {
         if (_databaseManagersCollection.containsKey(managerName))
@@ -70,6 +71,10 @@ public final class DatabaseFactory extends Application
         }
     }
 
+    /**
+     * Set the maximum size of the object pool
+     * @param maxPoolSize   The maximum size of the object pool
+     */
     public static void setMaxPoolSize(int maxPoolSize)
     {
         _maxPoolSize = maxPoolSize;

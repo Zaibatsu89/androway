@@ -25,9 +25,43 @@ import proj.androway.main.Controller;
  */
 public class SessionService extends Service
 {
+    /**
+     * The message-type key is for binding messenger of the view and the service. Also used to start the session.
+     */
+    public static final int MSG_SET_VIEW = 0;
+
+    /**
+     * This message-type key is for triggering a dialog update
+     */
+    public static final int MSG_UPDATE_DIALOG = 1;
+
+    /**
+     * This message-type key is for triggering a bluetooth post
+     */
+    public static final int MSG_BLUETOOTH_POST = 2;
+
+    /**
+     * This message-type key is for triggering an update of all session-data related views
+     */
+    public static final int MSG_UPDATE_SESSION_VIEWS = 3;
+
+    /**
+     * There is data attached with the MSG_BLUETOOTH_POST message
+     */
+    public static final int BT_DATA_NOT_ATTACHED = 0;
+
+    /**
+     * There is data attached with the MSG_BLUETOOTH_POST message
+     */
+    public static final int BT_DATA_ATTACHED = 1;
+
+    /**
+     * If there is BT_DATA_ATTACHED, the data can be fetched with this key
+     */
+    public static final String BT_DATA_KEY = "data";
+    
     private Messenger _sessionViewConnection = null;
     private final Messenger _messenger = new Messenger(new IncomingHandler());
-
     private Thread _sessionThread;
     private SharedObjects _sharedObjects;
 
@@ -64,8 +98,9 @@ public class SessionService extends Service
     @Override
     public void onDestroy()
     {
-        // Stop the session
+        // Stop the session and when it is stopped, set the object reference to null
         _sharedObjects.session.stopSession();
+        _sharedObjects.session = null;
         
         // The whole try-catch block is used to remove the session as a foreground service
         try
@@ -79,7 +114,7 @@ public class SessionService extends Service
     }
 
     /**
-     * Handler of incoming messages from clients.
+     * Handler of incoming messages from session view client
      */
     class IncomingHandler extends Handler
     {
@@ -88,7 +123,7 @@ public class SessionService extends Service
         {
             switch (msg.what)
             {
-                case Session.MSG_SET_VIEW:
+                case MSG_SET_VIEW:
                 {
                     if(_sessionViewConnection == null)
                     {
@@ -109,9 +144,14 @@ public class SessionService extends Service
 
                     break;
                 }
-                case Session.MSG_BLUETOOTH_POST:
+                case MSG_BLUETOOTH_POST:
                 {
-                    _sharedObjects.session.bluetoothPost(msg.getData().getString(Session.MSG_DATA_KEY));
+                    // If any data is attached, send the bluetooth with the given data. Otherwise send standard message.
+                    if(msg.arg1 == BT_DATA_ATTACHED)
+                        _sharedObjects.session.bluetoothPost(msg.getData().getString(BT_DATA_KEY));
+                    else
+                        _sharedObjects.session.bluetoothPost();
+
                     break;
                 }
                 default:
@@ -140,14 +180,25 @@ public class SessionService extends Service
         if(sessionStartResult[0] == 0)
             _sharedObjects.session.stopSession();
 
-        sendMessage(Session.MSG_UPDATE_DIALOG, sessionStartResult[1], sessionStartResult[2]);
+        sendMessage(MSG_UPDATE_DIALOG, sessionStartResult[1], sessionStartResult[2]);
     }
 
+    /**
+     * Send a message back to the client
+     * @param what  The message subject
+     * @param arg1  The first message argument
+     */
     public synchronized void sendMessage(int what, int arg1)
     {
         sendMessage(what, arg1, 0);
     }
 
+    /**
+     * Send a message back to the client
+     * @param what  The message subject
+     * @param arg1  The first message argument
+     * @param arg2  The second message argument
+     */
     public synchronized void sendMessage(int what, int arg1, int arg2)
     {
         // Send a message with the results to the RunningSessionView
@@ -170,6 +221,13 @@ public class SessionService extends Service
         return _messenger.getBinder();
     }
 
+    /**
+     * Get the notification for the service. Used to start the service in the foreground.
+     * @param tickerText    The notification ticker text
+     * @param title     The notification title
+     * @param message   The notification message
+     * @return The notification
+     */
     public Notification getNotification(String tickerText, String title, String message)
     {
         // Create the notification intent

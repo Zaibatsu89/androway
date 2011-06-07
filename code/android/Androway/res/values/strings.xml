@@ -16,6 +16,9 @@
     <string name="ok">OK</string>
     <string name="invalid">invalid!</string>
     <string name="stop_session">Stop Session</string>
+    <string name="battery_voltage_suffix">% left</string>
+    <string name="log_online_toast">The data is being stored online</string>
+    <string name="log_local_toast">The data is being stored locally</string>
 
     <!-- Dialog string values (on session start) -->
     <string name="login_title">Logging in...</string>
@@ -56,6 +59,12 @@
     <string name="block2LockedSummary">Prevent the bottom block from sliding</string>
     <string name="orientationTitle">Device orientation</string>
     <string name="orientationSummary">The preferred device orientation</string>
+    <string name="balanceOffsetTitle">Balance offset</string>
+    <string name="balanceOffsetSummary">The vertical balance offset (\'zero speed\' position)</string>
+    <string name="balanceOffsetText">% offset</string>
+    <string name="balanceSensitivityTitle">Balance sensitivity</string>
+    <string name="balanceSensitivitySummary">The sensitivity of the balance control</string>
+    <string name="balanceSensitivityText">% extra sensitivity</string>
     <string name="languageTitle">Language</string>
     <string name="languageSummary">The preferred application language</string>
 
@@ -63,7 +72,6 @@
     <string name="add">Add</string>
     <string name="get">Show All</string>
     <string name="remove">Remove All</string>
-    <string name="format">dd-MM-yyyy H:mm</string>
     <string name="empty">There are no logs.</string>
 
     <!-- Exception messages -->

@@ -14,6 +14,12 @@ import proj.androway.common.Settings;
 import proj.androway.common.SettingsValidator;
 import proj.androway.common.Utilities;
 
+/**
+ * The SettingsView class is the view for the application settings
+ * @author Rinse Cramer & Tymen Steur
+ * @since 06-06-2011
+ * @version 0.5
+ */
 public class SettingsView extends PreferenceActivity implements OnPreferenceChangeListener
 {
     private Preference _encryptedPasswordPreference;
@@ -43,6 +49,9 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
         Preference passwordPref = (Preference)findPreference("userPassword");
         Preference bluetoothPref = (Preference)findPreference("bluetoothAddress");
         Preference languagePref = (Preference)findPreference("appLanguage");
+
+        // TEMP: allways blocked, because local logging is not implemented
+        ((Preference)findPreference("httpLogging")).setEnabled(false);
         
         // If the session is currently running, block some settings. Otherwise bind change listeners.
         if(Settings.SESSION_RUNNING)
@@ -106,6 +115,11 @@ public class SettingsView extends PreferenceActivity implements OnPreferenceChan
         return result;
     }
 
+    /**
+     * Show an alert with the given title and message
+     * @param titleId   The title resource id (R.string.your_title_id)
+     * @param messageId The message resource id (R.string.your_message_id)
+     */
     private void showInvalidAlert(int titleId, int messageId)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
