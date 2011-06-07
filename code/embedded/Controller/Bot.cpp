@@ -160,9 +160,14 @@ int Bot::getBatteryVoltage()
     averageTotal += batteryVoltage;
   }
   
-  // Get the average value based on the average total and map
-  // the result to a percentage value. Return the result.
-  return mapFloat((averageTotal / VOLTAGE_AVERAGE_SPREAD), 0, 3, 0, 100);
+  // Get the average value based on the average total and map the result to a percentage value.
+  int result = mapFloat((averageTotal / VOLTAGE_AVERAGE_SPREAD), 0, 3.5, 0, 100);
+  
+  // If the value is smaller then zero, make it zero
+  if(result < 0)
+    result = 0;
+
+  return result;
 }
 
 // Handles the stopping of the current session
