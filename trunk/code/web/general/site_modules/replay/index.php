@@ -15,7 +15,6 @@ if(isset($_REQUEST["module_id"]))
 <link rel="stylesheet" href="styles/jquery.svg.css" />
 
 <script type="text/javascript" src="scripts/lib/jquery.svg.pack.js"></script>
-<script type="text/javascript" src="scripts/lib/jquery.svganim.pack.js"></script>
 <script type="text/javascript" src="site_modules/replay/svg.js"></script>
 
 <div id="svg_frame"></div>

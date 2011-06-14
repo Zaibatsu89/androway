@@ -27,17 +27,18 @@ if(isset($_REQUEST["action"]))
 				
 				foreach ($sessions as $session)
 				{
+					$user = new User($session->data["user_id"]);
+					
 					$rows[] = array
 					(
-						"id" => $session->data["id"],
+						"id" => $session->data["session_id"],
 						"cell" => array
 						(
-							$session->data["name"],
+							$session->data["session_id"],
+							ucwords($user->data["name"]),
 							date("d-m-y",$session->data["date_time"])." ".date("G:i",$session->data["date_time"]),
-							$session->data["user_id"],
-							'showReplay',
 							'showLogs',
-							'edit',
+							//'edit',
 							'remove'
 						)
 					);

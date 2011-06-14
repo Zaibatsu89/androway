@@ -64,22 +64,21 @@ function loadPage(pageId)
 	if (!isDefined(pageId))
 		pageId = false;
 	
+	$.mobile.pageLoading(false);
+	
 	$.getJSON('webservices/siteService.php', { action : 'loadPage', page_id : pageId }, function(pageData)
 	{
 		document.title = website_title + pageData.page_title;
-		$('#page').find('div[data-role=header]').html('<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">' + document.title + '</h1>');
+		$('#pageMain').find('div[data-role=header]').html('<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">' + document.title + '</h1>');
 		
-		$('#content').empty();
 		processPageModules(pageData.modules);
 	});
-	
-	$('#page').find('div[data-role=header]').page();
 }
 
 function processPageModules(modules)
 {
 	$.each(modules, function(i, module)
-	{		
+	{
 		var moduleFunction = 'load' + ucFirst(module.tag) + '(' + stringify(module.data) + ');';
 		
 		// Execute the generated function
@@ -92,10 +91,8 @@ function loadModuleData(moduleName, moduleData, callback)
 	if (!isDefined(callback))
 		callback = function(){};
 	
-	$.getJSON('webservices/siteService.php', { action: 'loadModule', module_name : moduleName, id : eval('moduleData.' + moduleName + '_id') }, function(data)
+	$.getJSON('webservices/siteService.php', { action: 'loadModule', module_name : moduleName, id : eval('moduleData.' + moduleName + '_id'), module_data : moduleData }, function(data)
 	{
 		callback(data);
 	});
-	
-	$('#page').find('div[data-role=header]').page();
 }

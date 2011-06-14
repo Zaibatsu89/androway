@@ -12,24 +12,10 @@ require_once("model.php");
 class Replay extends Model
 {
 	private $replayTable = "logs";
-	private $replaySessionIdClmn = "session_id";
-	private $replayTimeClmn = "time";
-	private $replaySubjectClmn = "subject";
-	private $replayMessageClmn = "message";
 	
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "id", "replay", true);
-	}
-	
-	public function playReplay()
-	{
-		
-	}
-	
-	public function pauseReplay()
-	{	
-		
 	}
 	
 	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit, User $user)

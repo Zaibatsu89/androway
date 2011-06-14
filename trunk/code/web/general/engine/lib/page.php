@@ -25,7 +25,7 @@ class Page extends Model
 	}
 
 	protected function getChildren()
-	{		
+	{
 		$dbRows = self::$db->getData("SELECT * FROM page WHERE parent_id = " . $this->data["id"]);
 		$children = array();
 		

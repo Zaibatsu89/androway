@@ -4,38 +4,106 @@ var idCircleA = 'circleA';
 var idCircleB = 'circleB';
 
 var path;
-var androwayCoordinates = [];
+var androwayCoordinates;
 
-var angle = 0;
-var heading = 0;
+var lineScale;
+var angle;
+var heading;
 
-var xMin = 0;
-var xMax = 0;
-var yMin = 0;
-var yMax = 0;
+var xMinPrev;
+var xMaxPrev;
+var yMinPrev;
+var yMaxPrev;
 
-var scale = 1;
+var xMin;
+var xMax;
+var yMin;
+var yMax;
+
+var xMinDiff;
+var yMaxDiff;
+var yMinDiff;
+var yMaxDiff;
+
+var xTotalPrev;
+var yTotalPrev;
+var xTotal;
+var yTotal;
+var xTotalDiff;
+var yTotalDiff;
+
+var xChange;
+var yChange;
+
+var scale;
+var margin;
+
+var xScale;
+var yScale;
+
+var scaleWidth;
+var scaleHeight;
+
+var xMargin;
+var yMargin;
+
+var scaleLock = false;
 
 $.fn.initSVG = function()
-{	
-	var parentWidth = $(this).parent().width() - 5;
-	var parentHeight = Math.round(parentWidth / 16 * 5);
+{
+	idAll = 'all';
+	idPath = 'path';
+	idCircleA = 'circleA';
+	idCircleB = 'circleB';
 	
-	$(this).width(parentWidth).height(parentHeight);
-	$(this).svg();
+	androwayCoordinates = [];
 	
-	var svg = $('#svg_frame').svg('get');
-	var defs = svg.defs();
-	var rectFill = svg.rect(0, 0, 0, 0, {fill: 'white', width: '100%', height: '100%'});
+	lineScale = 1;
+	angle = 0;
+	heading = 0;
 	
-	var all = svg.group({id: idAll, transform: 'translate(0 0) scale(' + scale + ')'});
+	xMinPrev = 0;
+	xMaxPrev = 0;
+	yMinPrev = 0;
+	yMaxPrev = 0;
 	
-	path = svg.createPath();
-	svg.path(all, path, {id: idPath, stroke: '#D90000', strokeWidth: 1});
+	xMin = 0;
+	xMax = 0;
+	yMin = 0;
+	yMax = 0;
+	
+	xMinDiff = 0;
+	yMaxDiff = 0;
+	yMinDiff = 0;
+	yMaxDiff = 0;
+	
+	xTotalPrev = 0;
+	yTotalPrev = 0;
+	xTotal = 0;
+	yTotal = 0;
+	xTotalDiff = 0;
+	yTotalDiff = 0;
+	
+	xChange = 0;
+	yChange = 0;
+	
+	scale = 1;
+	margin = 20;
+	
+	xScale = 1;
+	yScale = 1;
+	
+	scaleWidth = 0;
+	scaleHeight = 0;
+	
+	xMargin = 0;
+	yMargin = 0;
+	
+	scaleLock = false;
 }
 
-function move(left, right)
-{
+$.fn.move = function(left, right)
+{ 
 	var svg = $('#svg_frame').svg('get');
 	var all = svg.getElementById(idAll);
 	
@@ -65,7 +133,7 @@ function move(left, right)
 	var xAfter = androwayCoordinates['center'].x;
 	var yAfter = androwayCoordinates['center'].y;
 	
-	svg.circle(all, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 3, {heading: heading % 360, fill: '#666', id: idCircleB});
+	svg.circle(all, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 5, {heading: heading % 360, fill: '#666', id: idCircleB});
 	
 	var p = svg.getElementById(idPath);
 	var move = path.move(xBefore, yBefore).line(xAfter, yAfter);
@@ -74,12 +142,17 @@ function move(left, right)
 	
 	if ($('#' + idCircleA).length <= 0)
 		
-		svg.circle(all, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 4, {fill: 'black', id: idCircleA});
+		svg.circle(all, androwayCoordinates['center'].x, androwayCoordinates['center'].y, 7, {fill: 'black', id: idCircleA});
 	else
 	{
 		var circleA = svg.getElementById(idCircleA);
 		svg.change(circleA, {cx: androwayCoordinates['center'].x, cy: androwayCoordinates['center'].y});
 	}
+	
+	xMinPrev = xMin;
+	xMaxPrev = xMax;
+	yMinPrev = yMin;
+	yMaxPrev = yMax;
 	
 	if (androwayCoordinates['center'].x < xMin)
 		xMin = androwayCoordinates['center'].x;
@@ -90,9 +163,12 @@ function move(left, right)
 	if (androwayCoordinates['center'].y > yMax)
 		yMax = androwayCoordinates['center'].y;
 	
-	checkBorders();
+	xMinDiff = xMin - xMinPrev;
+	xMaxDiff = xMax - xMaxPrev;
+	yMinDiff = yMin - yMinPrev;
+	yMaxDiff = yMax - yMaxPrev;
 	
-	console.log('xMin: ' + xMin, 'xMax: ' + xMax, 'yMin: ' + yMin, 'yMax: ' + yMax);
+	checkBorders();
 }
 
 function setHeading(left, right)
@@ -109,12 +185,14 @@ function setHeading(left, right)
 
 function getX(left, right)
 {
-	return 0.5 * (left + right) * Math.sin(heading * Math.PI / 180);
+	var speed = (Math.abs(left) + Math.abs(right)) / 2;
+	return lineScale * speed / 200 * (left + right) * Math.sin(heading * Math.PI / 180);
 }
 
 function getY(left, right)
-{	
-	return -0.5 * (left + right) * Math.cos(heading * Math.PI / 180);
+{
+	var speed = (Math.abs(left) + Math.abs(right)) / 2;
+	return -lineScale * speed / 200 * (left + right) * Math.cos(heading * Math.PI / 180);
 }
 
 function checkBorders()
@@ -122,170 +200,93 @@ function checkBorders()
 	var svg = $('#svg_frame').svg('get');
 	var all = svg.getElementById(idAll);
 	
-	var xTotal = Math.abs(xMin - xMax);
-	var yTotal = Math.abs(yMin - yMax);
-	
 	var width = $('#svg_frame').width();
 	var height = $('#svg_frame').height();
 	
+	xTotalPrev = xTotal;
+	yTotalPrev = yTotal;
+	xTotal = Math.abs(xMin - xMax);
+	yTotal = Math.abs(yMin - yMax);
+	xTotalDiff = Math.abs(xTotal - xTotalPrev);
+	yTotalDiff = Math.abs(yTotal - yTotalPrev);
+	
 	if (typeof(androwayCoordinates['center']) != 'undefined')
 	{
-		var zoomedIn = false;
-		var margin = 20;
-		
-		var xChange = 0;
-		var yChange = 0;
-		
-		margin *= scale;
-		xTotal += (2 * margin);
-		yTotal += (2 * margin);
-		
-		var scaledWidth = (scale == 1 ? width : width * Math.pow(scale, -1));
-		
-		if (xMin < 0 + margin)
+		if (!scaleLock)
 		{
-			// xMin is out of the canvas
-			console.log('1.       xMin < 0 + margin:                     ' + xMin + ' < ' + margin);
-			
-			if (xTotal < scaledWidth)
-			{
-				console.log('1.1.     xTotal < scaledWidth:                  ' + xTotal + ' < ' + scaledWidth);
-				
-				xChange = Math.abs(xMin) + margin;
-				console.log('1.1.1.   xChange = abs(xMin) + margin:          ' + xChange + ' = ' + Math.abs(xMin) + ' + ' + margin);
-			}
-			else
-			{
-				console.log('1.2.     xTotal >= scaledWidth:                 ' + xTotal + ' >= ' + scaledWidth);
-				
-				// Scale
-				var xScaleDiff = scaledWidth - xTotal;
-				console.log('1.2.1.   xScaleDiff = scaledWidth - xTotal:     ' + xScaleDiff + ' = ' + scaledWidth + ' - ' + xTotal);
-				
-				scale += xScaleDiff / scaledWidth;
-				console.log('1.2.2.   scale += xScaleDiff / scaledWidth:     ' + scale + ' += ' + xScaleDiff + ' / ' + scaledWidth);
-				
-				xChange = width / 2 - 0.5 * margin;
-				console.log('1.2.3.   xChange = width / 2 - 0.5 * margin:   ' + xChange + ' = ' + width + ' / 2' + ' - ' + 0.5 * margin);
-			}
-		}
-		else if (xMax > width - margin)
-		{
-			// xMax is out of the canvas
-			console.log('2.       xMax > width - margin:                 ' + xMax + ' > ' + width + ' - ' + margin);
-			
-			if (xTotal < scaledWidth)
-			{
-				console.log('2.1.     xTotal < scaledWidth:                  ' + xTotal + ' < ' + scaledWidth);
-				
-				xChange = width - Math.abs(xMax) - margin;
-				console.log('2.1.1.   xChange = width - abs(xMax) - margin:  ' + xChange + ' = ' + width + '-' + Math.abs(xMax) + ' - ' + margin);
-			}
-			else
-			{
-				console.log('2.2.     xTotal >= scaledWidth:                 ' + xTotal + ' >= ' + scaledWidth);
-				
-		 		//Scale
-		 		var xScaleDiff = scaledWidth - xTotal;
-				console.log('2.2.1.   xScaleDiff = xTotal - scaledWidth:     ' + xScaleDiff + ' = ' + xTotal + ' - ' + scaledWidth);
-				
-				scale += xScaleDiff / scaledWidth;
-				console.log('2.2.2.   scale += xScaleDiff / scaledWidth:     ' + scale + ' += ' + xScaleDiff + ' / ' + scaledWidth);
-				
-				xChange = -(width / 2) + 1.5 * margin;
-				console.log('2.2.3.   xChange = -(width / 2) + 1.5 * margin: ' + xChange + ' = -(' + width + ' / 2)' + ' + ' + 1.5 * margin);
-			}
+			if (xScale < yScale)
+				xMargin = margin / xScale;
+			else if (xScale > yScale)
+				yMargin = margin / yScale;
 		}
 		
-		var scaledHeight = (scale == 1 ? height : height * Math.pow(scale, -1));
+		var scaledWidth = width * (1 / scale);
+		var scaledHeight = height * (1 / scale);
 		
-		if (yMin < 0 + margin)
-		{
-			// yMin is out of the canvas						
-			console.log('3.       yMin < 0 + margin:                     ' + yMin + ' < ' + margin);
-			
-			if (yTotal < scaledHeight)
-			{
-				console.log('3.1.     yTotal < scaledHeight:                 ' + yTotal + ' < ' + scaledHeight);
-				
-				if (Math.abs(yMin) < Math.abs(yMax))
-				{
-					yChange = Math.abs(yMin) + margin;
-					console.log('3.1.1.   yChange = abs(yMin) + margin:          ' + yChange + ' = ' + Math.abs(yMin) + ' + ' + margin);
-				}
-				else
-				{
-					yChange = Math.abs(yMax) - margin;
-					console.log('3.1.2.   yChange = abs(yMax) - margin:          ' + yChange + ' = ' + Math.abs(yMax) + ' - ' + margin);
-				}
-			}
-			else
-			{
-				console.log('3.2.     yTotal >= scaledHeight:                ' + yTotal + ' >= ' + scaledHeight);
-				
-				// Scale
-				var yScaleDiff = scaledHeight - yTotal;
-				console.log('3.2.1.   yScaleDiff = scaledHeight - yTotal:    ' + yScaleDiff + ' = ' + scaledHeight + ' - ' + yTotal);
-				
-				scale += yScaleDiff / scaledHeight;
-				console.log('3.2.2.   scale += yScaleDiff / scaledHeight:    ' + scale + ' += ' + yScaleDiff + ' / ' + scaledHeight);
-				
-				if (Math.abs(yMin) > Math.abs(yMax) - 2 * margin)
-				{
-					yChange = (height / 2) + yScaleDiff + (2 * margin);
-					console.log('3.2.3.1. yChange = height / 2 - 0.5 * margin:   ' + yChange + ' = ' + height + ' / 2' + ' - ' + 0.5 * margin);
-				}
-				else
-				{
-					yChange = 0;
-					console.log('3.2.3.2. yChange = ?: ' + yChange);
-				}
-			}
-		}
-		else if(yMax > height - margin)
-		{
-			// yMax is out of the canvas
-			console.log('4.       yMax > height - margin:                ' + yMax + ' > ' + height + ' - ' + margin);
-			
-			if (yTotal < scaledHeight)
-			{
-				console.log('4.1.     yTotal < scaledHeight:                 ' + yTotal + ' < ' + scaledHeight);
-				
-				yChange = height - Math.abs(yMax) - margin;
-				console.log('4.1.1.   yChange = height - abs(yMax) - margin: ' + yChange + ' = ' + height + '-' + Math.abs(yMax) + ' - ' + margin);
-			}
-			else
-			{
-				console.log('4.2.     yTotal >= scaledHeight:                ' + yTotal + ' >= ' + scaledHeight);
-				
-		 		//Scale
-		 		var yScaleDiff = scaledHeight - yTotal;
-				console.log('4.2.1.   yScaleDiff = scaledHeight - yTotal:    ' + yScaleDiff + ' = ' + scaledHeight + ' - ' + yTotal);
-				
-				scale += yScaleDiff / scaledHeight;
-				console.log('4.2.2.   scale += yScaleDiff / scaledHeight:    ' + scale + ' += ' + yScaleDiff + ' / ' + scaledHeight);
-				
-				yChange = -(height / 2) + 1.5 * margin;
-				console.log('4.2.3.   yChange = -(height / 2) + 1.5 * margin:' + yChange + ' = -(' + height + ' / 2)' + ' + ' + 1.5 * margin);
-			}
+		var xScaleDiff = scaledWidth * scale + xTotal - 2 * xMargin;
+		var yScaleDiff = scaledHeight * scale + yTotal - 2 * yMargin;
+		
+		if (!scaleLock)
+		{	
+			xScale = width / xScaleDiff;
+			yScale = height / yScaleDiff;
 		}
 		
-		var scaleWidth = 0;
-		var scaleHeight = 0;
+		if (xMin <= 0 + xMargin)
+		{
+			xTotal -= xTotalDiff + xMinDiff;
+			xChange = -(width / 2) + xTotal * xScale + 0.5 * xMargin + margin;
+		}
+		else if (xMax >= width - xMargin)
+		{
+			xTotal -= xTotalDiff + -xMaxDiff;
+			xChange = width / 2 - xTotal * xScale + 0.5 * xMargin - margin;
+		}
 		
-		if (scale < 0.31)
-			scale = 0.31;
-//		if (scale > 3.5)
-//			scale = 3.5;
+		if (yMin <= 0 + yMargin)
+		{
+			yTotal -= yTotalDiff + yMinDiff;
+			yChange = -(height / 2) + yTotal * yScale + 0.5 * yMargin + margin;
+		}
+		else if (yMax >= height - yMargin)
+		{
+			yTotal -= yTotalDiff + -yMaxDiff;
+			yChange = height / 2 - yTotal * yScale + 0.5 * yMargin - margin;
+		}
+		
+		if (!scaleLock)
+		{			
+			if (xScale <= yScale)
+				scale = xScale;
+			else
+				scale = yScale;
+		}
 		
 		if (scale != 1)
 		{
-			scaleWidth = ((width - width * scale) - margin) / 2;
-			scaleHeight = ((height - height * scale) - margin) / 2;
+			scaleWidth = ((width - width * scale) - xMargin) / 2;
+			scaleHeight = ((height - height * scale) - yMargin) / 2;
 		}
 		
-		svg.change(all, {transform: 'translate(' + (xChange + scaleWidth) + ', ' + (yChange + scaleHeight) + ') scale(' + scale + ')'});	
+		if (xTotal > width)
+		{
+			scaleLock = true;
+			scaleWidth = 0;
+			if (Math.abs(xMin) > Math.abs(xMax))
+				xChange = (width / 2 * xScale) + xTotal * xScale;
+			else
+				xChange = (width / 2 * xScale) - xTotal * xScale;
+		}
+		if (yTotal > height)
+		{
+			scaleLock = true;
+			scaleHeight = 0;
+			if (Math.abs(yMin) > Math.abs(yMax))
+				yChange = (height / 2 * yScale) + yTotal * yScale;
+			else
+				yChange = (height / 2 * yScale) - yTotal * yScale;
+		}
+		
+		svg.change(all, {transform: 'translate(' + (xChange + scaleWidth) + ', ' + (yChange + scaleHeight) + ') scale(' + scale + ')'});
 	}
-	
-	console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
 }

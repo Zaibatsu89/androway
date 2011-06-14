@@ -1,10 +1,26 @@
-<form id="editLogForm">
-	<fieldset>
+<form id="editLogForm" class="uniForm">
+	<fieldset class="inlineLabels">
 		<input type="hidden" name="action" value="editLog" />
 		<input type="hidden" name="id" id="val_id" />
-		Subject: <input type="name" name="subject" id="val_subject" /><br />
-		Message: <input type="name" name="message" id="val_message" /><br />
-		<input type="button" value="Cancel" class="cancel_edit_form" />
-		<input type="button" value="Submit" class="save_edit_form" />
+		
+		<div class="ctrlHolder">
+			<label for="val_left_wheel">Left wheel</label>
+			<input type="text" name="left_wheel" id="val_left_wheel"/>
+		</div>
+		
+		<div class="ctrlHolder">
+			<label for="val_right_wheel">Right wheel</label>
+			<input type="text" name="right_wheel" id="val_right_wheel"/>
+		</div>
+		
+		<div class="ctrlHolder">
+			<label for="val_inclination">Inclination</label>
+			<input type="text" name="inclination" id="val_inclination"/>
+		</div>
+		
+		<div class="buttonHolder">
+			<input class="button save_edit_form" type="button" value="Submit"/>
+			<input class="button cancel_edit_form" type="button" value="Cancel"/>
+		</div>
 	</fieldset>
 </form>

@@ -28,13 +28,14 @@ if(isset($_REQUEST["action"]))
 				{
 					$rows[] = array
 					(
-						"id" => $log->data["id"],
+						"id" => $log->data["log_id"],
 						"cell" => array
 						(
 							$log->data["session_id"],
-							$log->data["time"],
-							$log->data["subject"],
-							$log->data["message"],
+							date("d-m-Y",$log->data["time"])." ".date("G:i:s",$log->data["time"]),
+							$log->data["left_wheel"],
+							$log->data["right_wheel"],
+							$log->data["inclination"],
 							'edit',
 							'remove'
 						)

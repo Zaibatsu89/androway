@@ -1,5 +1,7 @@
 <?php
 
+require_once("commonFunctions.php");
+
 /*
  * Name: Tymen Steur
  * Date: 25-03-2011

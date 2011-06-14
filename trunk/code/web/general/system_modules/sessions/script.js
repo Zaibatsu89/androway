@@ -4,31 +4,25 @@ function initSessionsModule()
 	({
 		moduleName: 'sessions',
 		url: 'system_modules/sessions/sessionsService.php',
-		showReplay: true,
 		showLogsRow: true,
-		editRow: true,
+		editRow: false,
 		removeRow: true,
 		colModel:
 		[
-			{display: 'name', name : 'name', width : 140, sortable : true, align: 'left'},
-			{display: 'date/time', name : 'date_time', width : 140, sortable : true, align: 'left'},
-			{display: 'user id', name : 'user_id', width : 80, sortable : true, align: 'left'},
-			{display: '', name : 'show_replay', width : 40, sortable : false, align: 'center'},
+		 	{display: 'id', name : 'session_id', width : 80, sortable : true, align: 'left'},
+		 	{display: 'user', name : 'user_id', width : 80, sortable : true, align: 'left'},
+			{display: 'date / time', name : 'date_time', width : 140, sortable : true, align: 'left'},
 			{display: '', name : 'show_module', width : 40, sortable : false, align: 'center'},
-			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
+			//{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],
 		searchitems :
 		[
-			{display: 'name', name : 'name'}
-		],
-		sortname: 'date_time',
+	 		{display: 'id', name : 'session_id', isdefault: true}
+	 	],
+		sortname: 'session_id',
 		sortorder: 'desc',
 		onSuccess: function(){ },
-		onShowReplay: function(scope)
-		{
-			onShowReplay($(scope).attr('id'));
-		},
 		onShowLogs: function(scope)
 		{
 			onShowSessionLogs($(scope).attr('id'));
@@ -57,7 +51,7 @@ function onEditSession(sessionId)
 	var idName = 'editSession';
 	
 	// Show the edit session dialog
-	loadModuleDialog('system_modules/sessions/window.php', idName, 600, 200, function()
+	loadModuleDialog('system_modules/sessions/window.php', idName, 'Edit Session', 600, 200, function()
 	{
 		// Check if the session id is defined, if so load the existing session data into the form for editing
 		if(isDefined(sessionId))
@@ -86,11 +80,6 @@ function onEditSession(sessionId)
 			$('#editSession').dialog('destroy');
 		});
 	});
-}
-
-function onShowReplay(sessionId)
-{
-	startModule('replay', 'dialog', sessionId);
 }
 
 function onShowSessionLogs(sessionId)

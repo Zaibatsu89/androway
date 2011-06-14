@@ -1,27 +1,26 @@
 @charset "UTF-8";
 /* CSS Document */
 
-.flexigrid .show_replay
+.flexigrid div
 {
-	background: yellow !important;
-	cursor: pointer;
+    font-size: 11px;
 }
 
 .flexigrid .show_module
 {
-	background: blue !important;
+	background: url(../images/view.png) center center no-repeat !important;
 	cursor: pointer;
 }
 
 .flexigrid .edit
 {
-	background: green !important;
+	background: url(../images/edit.png) center center no-repeat !important;
 	cursor: pointer;
 }
 
 .flexigrid .remove
 {
-	background: red !important;
+	background: url(../images/remove.png) center center no-repeat !important;
 	cursor: pointer;
 }
 

@@ -1,20 +1,41 @@
-<form id="editUserForm">
-	<fieldset>
+<form id="editUserForm" class="uniForm">
+	<fieldset class="inlineLabels">
 		<input type="hidden" name="action" value="editUser" />
 		<input type="hidden" name="id" id="val_id" />
-		Name: <input type="name" name="name" id="val_name" /><br />
-		Email: <input type="email" name="email" id="val_email" /><br />
-		Change password: <input type="checkbox" name="change_password" id="val_change_password" checked="true" onChange="triggerPassword(true);" /><br />
+		
+		<div class="ctrlHolder">
+			<label for="val_name">Name</label>
+			<input type="text" id="val_name" name="name">
+		</div>		
+		<div class="ctrlHolder">
+			<label for="val_email">Email</label>
+			<input type="text" id="val_email" name="email">
+		</div>		
+		<div class="ctrlHolder">
+			<label for="val_change_password">Change password</label>
+			<input type="checkbox" name="change_password" id="val_change_password" checked="true" onChange="triggerPassword(true);" />
+		</div>		
 		<div id="changePassword">
-			Password: <input type="password" name="password" id="val_password" /><br />
-			Repeat password: <input type="password" name="confirm_password" id="val_confirm_password" /><br />
+			<div class="ctrlHolder">
+				<label for="val_password">Password</label>
+				<input type="password" name="password" id="val_password" />
+			</div>
+			<div class="ctrlHolder">
+				<label for="val_confirm_password">Repeat password</label>
+				<input type="password" name="confirm_password" id="val_confirm_password" />
+			</div>
+		</div>		
+		<div class="ctrlHolder">
+			<label for="val_level">Level</label>			
+			<select name="level" id="val_level">
+				<option value="0">administrator</option>
+				<option value="2">moderator</option>
+				<option value="4">user</option>
+			</select>
+		</div>		
+		<div class="buttonHolder">
+			<input type="button" value="Submit" class="button save_edit_form">
+			<input type="button" value="Cancel" class="button cancel_edit_form">
 		</div>
-		Level:<select name="level" id="val_level">
-			<option value="0">administrator</option>
-			<option value="2">moderator</option>
-			<option value="4">user</option>
-		</select><br />
-		<input type="button" value="Cancel" class="cancel_edit_form" />
-		<input type="button" value="Submit" class="save_edit_form" />
 	</fieldset>
 </form>
