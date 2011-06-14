@@ -19,18 +19,21 @@ function initLogsModule(moduleId)
 		colModel:
 		[
 			{display: 's. id', name : 'session_id', width : 40, sortable : true, align: 'left'},
-			{display: 'date/time', name : 'time', width : 130, sortable : true, align: 'left'},
-			{display: 'subject', name : 'subject', width : 130, sortable : true, align: 'left'},
-			{display: 'message', name : 'message', width : 130, sortable : true, align: 'left'},
+			{display: 'date / time', name : 'time', width : 130, sortable : true, align: 'left'},
+			{display: 'left wheel', name : 'left_wheel', width : 70, sortable : true, align: 'left'},
+			{display: 'right wheel', name : 'right_wheel', width : 70, sortable : true, align: 'left'},
+			{display: 'inclination', name : 'inclination', width : 70, sortable : true, align: 'left'},
 			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],
 		searchitems :
 		[
-			{display: 'subject', name : 'subject', isdefault: true},
-			{display: 'message', name : 'message'}
+		 	{display: 'session id', name : 'session_id', isdefault: true},
+			{display: 'left wheel', name : 'left_wheel'},
+			{display: 'right wheel', name : 'right_wheel'},
+			{display: 'inclination', name : 'inclination'}
 		],
-		sortname: 'time',
+		sortname: 'session_id',
 		sortorder: 'desc',
 		onSuccess: function(){ },
 		onEdit: function(scope)
@@ -53,11 +56,11 @@ function initLogsModule(moduleId)
 }
 
 function onEditLog(logId)
-{	
+{
 	var idName = 'editLog';
 	
 	// Show the edit log dialog
-	loadModuleDialog('system_modules/logs/window.php', idName, 600, 200, function()
+	loadModuleDialog('system_modules/logs/window.php', idName, 'Edit Log', 600, 250, function()
 	{
 		// Check if the log id is defined, if so load the existing log data into the form for editing
 		if(isDefined(logId))

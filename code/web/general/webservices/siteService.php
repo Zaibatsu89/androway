@@ -56,14 +56,29 @@ switch($_REQUEST["action"])
 		break;
 	}
 	case "loadModule":
-	{		
+	{
 		require_once("../site_modules/" . $_REQUEST["module_name"] . "/class.php");
 		
 		// Should be CamelCase instead of ucfirst
 		$moduleClass = ucfirst($_REQUEST["module_name"]);
 		
 		$instance = new $moduleClass($_REQUEST["id"]);
-		$result = $instance->loadData();
+		$result = $instance->loadData($_REQUEST["module_data"]);
+		
+		echo json_encode($result);
+		
+		break;
+	}
+	case "loadModuleData":
+	{
+		require_once("../site_modules/" . $_REQUEST["module_name"] . "/class.php");
+		
+		// Should be CamelCase instead of ucfirst
+		$moduleClass = ucfirst($_REQUEST["module_name"]);
+		$functionName = $_REQUEST["function_name"];
+		
+		$instance = new $moduleClass($_REQUEST["module_id"]);
+		$result = $instance->$functionName($_REQUEST["row_id"]);
 		
 		echo json_encode($result);
 		

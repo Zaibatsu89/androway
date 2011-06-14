@@ -14,52 +14,41 @@ class Log extends Model
 	private $logTable = "logs";
 	private $logSessionIdClmn = "session_id";
 	private $logTimeClmn = "time";
-	private $logSubjectClmn = "subject";
-	private $logMessageClmn = "message";
+	private $logLeftWheelClmn = "left_wheel";
+	private $logRightWheelClmn = "right_wheel";
+	private $logInclinationClmn = "inclination";
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "id", "logs", true);
+		parent::__construct($id, "log_id", "logs", true);
 	}
 	
-	public function editLog($subject, $message)
-	{
-		$time = date("d-m-Y",time())." ".date("G:i",time());
+	public function editLog($subject, $message, $leftWheel, $rightWheel, $inclination)
+	{		
+		$id = $this->data["log_id"];
 		
-		$existingLog = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE $this->logSubjectClmn = '$subject';");
+		// Update the log in the database
+		self::$dbAlternative->executeNonQuery("UPDATE ".$this->dbTable." SET $this->logTimeClmn = '". (time() * 1000) ."', $this->logLeftWheelClmn = $leftWheel, $this->logRightWheelClmn = $rightWheel, $this->logInclinationClmn = $inclination WHERE log_id = $id;");
 		
-		if ((!empty($existingLog) && $this->data["subject"] == $subject) || empty($existingLog))
-		{
-			$id = $this->data["id"];
-			
-			// Update the log in the database
-			self::$dbAlternative->executeNonQuery("UPDATE ".$this->dbTable." SET $this->logTimeClmn = '$time', $this->logSubjectClmn = '$subject', $this->logMessageClmn = '$message' WHERE id = $id;");
-			
-			// Store the new log data in the objects data variable
-			$dbData = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE $this->logSubjectClmn = '$subject'");
-					
-			if (!empty($dbData))
-				$this->data = $dbData[0];
-		
-			return true;
-		}
-		else
-		{
-			echo "A log with this name already exists.";
-			return false;
-		}
+		// Store the new log data in the objects data variable
+		$dbData = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE log_id = $id;");
+				
+		if (!empty($dbData))
+			$this->data = $dbData[0];
+	
+		return true;
 	}
 	
 	public function removeLog()
 	{	
 		if(!empty($this->data))
 		{		
-			$logExists = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";");
+			$logExists = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE log_id = ".$this->data["log_id"].";");
 			
 			if (!empty($logExists))
 			{
 				// Remove the log from the database
-				self::$dbAlternative->executeNonQuery("DELETE FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";");
+				self::$dbAlternative->executeNonQuery("DELETE FROM ".$this->dbTable." WHERE log_id = ".$this->data["log_id"].";");
 			
 				return true;
 			}
@@ -80,7 +69,7 @@ class Log extends Model
 			if($query != "" && $qtype != "")
 				$sqlQuery = "AND log.$qtype LIKE '%$query%'";
 			
-			$completeQuery = "SELECT log.* FROM logs AS log, sessions AS session WHERE log.session_id = session.id AND session.user_id = " . $user->data["id"] . " $sqlQuery ORDER BY $sortname $sortorder LIMIT $start, $limit";
+			$completeQuery = "SELECT log.* FROM logs AS log, sessions AS session WHERE log.session_id = session.session_id AND session.user_id = " . $user->data["id"] . " $sqlQuery ORDER BY $sortname $sortorder LIMIT $start, $limit";
 		}
 		else
 		{
@@ -96,7 +85,7 @@ class Log extends Model
 		
 		foreach ($rows as $row)
 		{
-			$logs[] = new Log($row["id"]);
+			$logs[] = new Log($row["log_id"]);
 		}
 		
 		return $logs;

@@ -10,7 +10,7 @@ function initUsersModule()
 		[
 			{display: 'name', name : 'name', width : 140, sortable : true, align: 'left'},
 			{display: 'email', name : 'email', width : 160, sortable : true, align: 'left'},
-			{display: 'date/time', name : 'date_time', width : 140, sortable : true, align: 'left'},
+			{display: 'date / time', name : 'date_time', width : 130, sortable : true, align: 'left'},
 			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],
@@ -46,7 +46,7 @@ function onEditUser(userId)
 	var idName = 'editUser';
 	
 	// Show the edit user dialog
-	loadModuleDialog('system_modules/users/window.php', idName, 600, 200, function()
+	loadModuleDialog('system_modules/users/window.php', idName, 'Edit User', 600, 360, function()
 	{
 		// Check if the user id is defined, if so load the existing user data into the form for editing
 		if(isDefined(userId))

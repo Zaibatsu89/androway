@@ -89,7 +89,7 @@ function loadDialog(dialogId, dialogWidth, dialogHeight, callback)
 	callback();
 }
 
-function loadModuleDialog(url, dialogId, dialogWidth, dialogHeight, callback, moduleId)
+function loadModuleDialog(url, dialogId, title, dialogWidth, dialogHeight, callback, moduleId)
 {
 	if(!isDefined(moduleId))
 		moduleId = '';
@@ -109,7 +109,8 @@ function loadModuleDialog(url, dialogId, dialogWidth, dialogHeight, callback, mo
 		dialogElement.dialog
 		({
 			width: dialogWidth,
-			height: dialogHeight
+			height: dialogHeight,
+			title: title
 		});
 		
 		callback();

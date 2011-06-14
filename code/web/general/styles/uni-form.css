@@ -1,0 +1,152 @@
+@import "uni-form-generic.css";
+/* Your styles below */
+/* Keep in mind that wherever you see "Required property" it means that the property must exist, adjust it's value to your liking */
+
+/* Generals */
+.uniForm
+{
+	width: 70%;
+  	margin: auto;
+}
+
+.uniForm fieldset
+{
+	margin:1em 0;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.uniForm fieldset legend
+{
+  color:#000; /* Reset IE */
+  font-weight:bold;
+  font-size:120%;
+}
+
+.uniForm .ctrlHolder/* This is the main unit that contains our form elements */
+{
+	padding:7px;
+	border-bottom: 1px solid #ccc;
+}
+
+.uniForm .buttonHolder
+{
+	padding: 7px;
+  	text-align:right; /* Recommended */
+}
+
+form .button
+{
+	background: url("../images/jquery_ui/ui-bg_gloss-wave_25_333333_500x100.png") repeat-x 50% 50% #333333;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	display: block;
+	color: #fff;
+	font-weight: bold;
+	width: 100px;
+	height: 30px;
+	float: right;
+	margin-right: 10px;
+}
+
+form .button:hover
+{
+	text-decoration: underline;
+	background: url("../images/jquery_ui/ui-bg_gloss-wave_25_333333_500x100.png") repeat-x 50% 50% #333333;
+}
+
+.buttonHolder
+{
+	padding: 7px;
+  	text-align:right; /* Recommended */
+}
+
+.button
+{
+	background: url('/img/framework/assets.png') 0px -93px repeat-x;
+	border: 1px solid #7BAAD9;
+	cursor: pointer;
+	display: block;
+	color: #fff;
+	font-weight: bold;
+	width: 100px;
+	height: 30px;
+	float: right;
+	margin-right: 10px;
+}
+
+.button:hover
+{
+	text-decoration: underline;
+	background: url('/img/framework/assets.png') 0px -124px repeat-x;
+}
+
+.uniForm .focused
+{
+	color: #fff;
+	background: url("../images/jquery_ui/ui-bg_gloss-wave_25_333333_500x100.png") repeat-x 50% 50% #333333;
+}
+
+/* .inlineLabels */
+.uniForm .inlineLabels label,
+.uniForm .inlineLabels .label{
+  width:45%; /* Required property */
+}
+.uniForm .inlineLabels .textInput,
+.uniForm .inlineLabels .fileUpload{
+  width:45%; /* Required property */
+}
+.uniForm .inlineLabels .selectInput{
+  width:45%; /* Required property */
+}
+.uniForm .inlineLabels textarea{
+  width:45%; /* Required property */
+  height:8em; 
+}
+.uniForm .inlineLabels .formHint{
+  margin-top:0;
+  margin-left:47%; 
+}
+.uniForm .multiField{
+	margin-left: 47%;
+}
+
+/* .blockLabels */
+.uniForm .blockLabels .textInput,
+.uniForm .blockLabels .fileUpload{
+  width:53%; /* Required property */
+}
+
+.uniForm .blockLabels .selectInput{
+  display:block;
+  width:53.5%; /* Required property */
+}
+.uniForm .blockLabels textarea{
+  width:53%; /* Required property */
+  height:12em; 
+}
+.uniForm .blockLabels .formHint{
+  width:45%; /* Required property */
+}
+
+/* Columns */
+.uniForm .col{
+  width:47.9%; /* Required property */
+  margin:0 2% 0 0; 
+}
+.uniForm .columnLeft{
+  width:49%; /* Required property */
+}
+.uniForm .columnRight{
+  width:49%; /* Required property */
+}
+
+/* Messages */
+.uniForm .error
+{
+	margin-top:0;
+	left: 47%;
+	color: #F44040;
+	font-size: 10px;
+}

@@ -12,7 +12,7 @@ class DatabaseManager
 {
 	private $databaseType = "mysql";
 	private $hostName = "localhost";
-	private $dbName = null;
+	public $dbName = null;
 	private $userName = null;
 	private $password = null;
 		
@@ -28,7 +28,7 @@ class DatabaseManager
 	}
 	
 	public function executeNonQuery($query)
-	{
+	{		
 		try
 		{
 			$this->pdoDb->exec($query);
@@ -38,7 +38,7 @@ class DatabaseManager
 			$this->pdoDb->rollback();
 			echo $query . '<br />' . $e->getMessage();
 		}
-	}
+	}	
 	
 	public function executeSecureNonQuery($query, $values)
 	{
@@ -58,13 +58,13 @@ class DatabaseManager
 	 * Result is an array with key value pairs.
 	 * $result as $key => $value
 	 */
-	public function getData($query, $dbName = null)
+	public function getData($query)
 	{
 		$result = array();
 		
 		try
-		{
-			$rows = $this->pdoDb->query($query);		
+		{		
+			$rows = $this->pdoDb->query($query);
 			
 			if(!empty($rows))
 			{

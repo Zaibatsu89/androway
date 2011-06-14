@@ -18,7 +18,27 @@ class Session extends Model
 	
 	public function __construct($id = null)
 	{
-		parent::__construct($id, "id", "sessions", true);
+		parent::__construct($id, "session_id", "sessions", true);
+	}
+	
+	public function createSession($userId)
+	{
+		$dateTime = time();
+		
+		// Insert the new session into the database
+		self::$dbAlternative->executeNonQuery("INSERT INTO $this->dbTable ($this->sessionDateTimeClmn, $this->sessionUserClmn) VALUES ($dateTime, $userId);");
+		
+		// Get the new session data and store it in the objects data variable
+		$dbData = self::$dbAlternative->getData("SELECT * FROM $this->dbTable WHERE $this->sessionUserClmn = $userId ORDER BY $this->sessionDateTimeClmn DESC LIMIT 1;");
+		
+		if(!empty($dbData))
+		{
+			$this->data = $dbData[0];
+			
+			return true;
+		}
+		else
+			return false;
 	}
 	
 	public function editSession($name)
@@ -84,13 +104,13 @@ class Session extends Model
 				$sqlQuery .= " AND user_id = " . $user->data["id"];
 		}
 		
-		$rows = self::$dbAlternative->getData("SELECT * FROM sessions $sqlQuery ORDER BY $sortname $sortorder LIMIT $start, $limit");
+		$rows = self::$dbAlternative->getData("SELECT * FROM sessions $sqlQuery ORDER BY $sortname $sortorder LIMIT $start, $limit");		
 		
 		$sessions = array();
 		
 		foreach ($rows as $row)
 		{
-			$sessions[] = new Session($row["id"]);
+			$sessions[] = new Session($row["session_id"]);
 		}
 		
 		return $sessions;

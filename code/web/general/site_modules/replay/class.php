@@ -16,14 +16,14 @@ class Replay extends Model
 		parent::__construct($id, "replay_id", "module_replay", false);
 	}
 	
-	public function loadData()
-	{		
+	public function loadData($parentId)
+	{
 		$dbToUse = self::$db;
 		
 		if($this->data["database"] == "alternative")
 			$dbToUse = self::$dbAlternative;
 
-		return $dbToUse->getData("SELECT ".$this->data["child_columns"] ." FROM ".$this->data["child_table"]);
+		return $dbToUse->getData("SELECT ".$this->data["child_columns"] ." FROM ".$this->data["child_table"]." WHERE ".$this->data["parent_id"] ." = ".$parentId." ORDER BY ".$this->data["child_id"]." ASC");
 	}
 }
 

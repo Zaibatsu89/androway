@@ -10,11 +10,37 @@ button
 	width: 87px;
 	margin: 2px auto;
 }
+
 #svg_code
 {
 	font-family: sans-serif;
 }
+
 #svg_frame
 {
 	border: 1px solid;
+}
+
+#percentageBox
+{
+	width:250px;
+	border:1px solid #000;
+	height:17px;
+}
+
+#percentageBar
+{
+	background-image:-moz-linear-gradient(top,#ffc501,#dd9b00);
+	background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#ffc501),color-stop(1,#dd9b00));
+	height:17px;
+	color:#000;
+}
+
+#percentageText
+{
+	width: 100%;
+	height: 100%;
+	margin-top: -16px;
+	text-align: center;
+	font-size: 12px;
 }
