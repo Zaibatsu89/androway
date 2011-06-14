@@ -23,12 +23,12 @@ class Log extends Model
 		parent::__construct($id, "log_id", "logs", true);
 	}
 	
-	public function editLog($subject, $message, $leftWheel, $rightWheel, $inclination)
-	{		
+	public function editLog($leftWheel, $rightWheel, $inclination)
+	{	
 		$id = $this->data["log_id"];
 		
 		// Update the log in the database
-		self::$dbAlternative->executeNonQuery("UPDATE ".$this->dbTable." SET $this->logTimeClmn = '". (time() * 1000) ."', $this->logLeftWheelClmn = $leftWheel, $this->logRightWheelClmn = $rightWheel, $this->logInclinationClmn = $inclination WHERE log_id = $id;");
+		self::$dbAlternative->executeNonQuery("UPDATE ".$this->dbTable." SET $this->logLeftWheelClmn = $leftWheel, $this->logRightWheelClmn = $rightWheel, $this->logInclinationClmn = $inclination WHERE log_id = $id;");
 		
 		// Store the new log data in the objects data variable
 		$dbData = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE log_id = $id;");
@@ -45,8 +45,10 @@ class Log extends Model
 		{		
 			$logExists = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE log_id = ".$this->data["log_id"].";");
 			
-			if (!empty($logExists))
+			if(!empty($logExists))
 			{
+				var_dump("DELETE FROM ".$this->dbTable." WHERE log_id = ".$this->data["log_id"].";");
+				
 				// Remove the log from the database
 				self::$dbAlternative->executeNonQuery("DELETE FROM ".$this->dbTable." WHERE log_id = ".$this->data["log_id"].";");
 			

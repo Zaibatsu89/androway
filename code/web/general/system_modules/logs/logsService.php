@@ -9,8 +9,8 @@ require_once("../../engine/lib/log.php");
 
 /*
  * Name: Rinse Cramer
- * Date: 31-03-2011
- * Version: 0.1
+ * Date: 14-06-2011
+ * Version: 0.5
  * 
  * Class to serve the log
  */
@@ -26,13 +26,20 @@ if(isset($_REQUEST["action"]))
 				
 				foreach ($logs as $log)
 				{
+					$time = $log->data["time"];
+                        
+    				if (strlen($time) > 10)
+      					$time = round($time / 1000);
+                        
+          			$time = date("d-m-Y",$time)." ".date("G:i:s",$time);
+					
 					$rows[] = array
 					(
 						"id" => $log->data["log_id"],
 						"cell" => array
 						(
 							$log->data["session_id"],
-							date("d-m-Y",$log->data["time"])." ".date("G:i:s",$log->data["time"]),
+							$time,
 							$log->data["left_wheel"],
 							$log->data["right_wheel"],
 							$log->data["inclination"],
@@ -78,8 +85,7 @@ if(isset($_REQUEST["action"]))
 		{
 			if (isset($_REQUEST["id"]) && !empty($_REQUEST["id"]))
 			{
-				$log = new Log($_REQUEST["id"]);
-				
+				$log = new Log($_REQUEST["id"]);				
 				$log->removeLog();
 			}
 		
@@ -101,14 +107,14 @@ if(isset($_REQUEST["action"]))
 		}
 		case "editLog":
 		{
-			if(isset($_REQUEST["id"]))
+			if(isset($_REQUEST["log_id"]))
 			{
 				$log = null;
 				
-				if($_REQUEST["id"] != "")
+				if($_REQUEST["log_id"] != "")
 				{
-					$log = new Log($_REQUEST["id"]);
-					$log->editLog($_REQUEST["subject"], $_REQUEST["message"]);
+					$log = new Log($_REQUEST["log_id"]);
+					$log->editLog($_REQUEST["left_wheel"], $_REQUEST["right_wheel"], $_REQUEST["inclination"]);
 				}
 			}
 			

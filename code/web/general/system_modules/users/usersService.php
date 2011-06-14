@@ -9,8 +9,8 @@ require_once("../../engine/lib/user.php");
 
 /*
  * Name: Tymen Steur
- * Date: 29-03-2011
- * Version: 0.1
+ * Date: 14-06-2011
+ * Version: 0.5
  * 
  * Class to serve the user
  */
@@ -25,7 +25,29 @@ if(isset($_REQUEST["action"]))
 				$rows = array();
 				
 				foreach ($users as $user)
-				{	
+				{
+					$userLevel = "";
+					
+					switch($user->data["level"])
+					{
+						case 0:
+							$userLevel = "administrator";
+							break;
+						case 2:
+							$userLevel = "moderator";
+							break;
+						case 4:
+							$userLevel = "user";
+							break;
+					}
+					
+					$time = $user->data["date_time"];
+                        
+    				if (strlen($time) > 10)
+      					$time = round($time / 1000);
+                        
+          			$time = date("d-m-Y",$time)." ".date("G:i",$time);
+					
 					$rows[] = array
 					(
 						"id" => $user->data["id"],
@@ -33,7 +55,8 @@ if(isset($_REQUEST["action"]))
 						(
 							$user->data["name"],
 							$user->data["email"],
-							date("d-m-y",$user->data["date_time"])." ".date("G:i",$user->data["date_time"]),
+							$time,
+							$userLevel,
 							'edit',
 							'remove'
 						)
@@ -59,12 +82,13 @@ if(isset($_REQUEST["action"]))
 			if (!$rp) $rp = 10;
 			
 			$start = (($page - 1) * $rp);
+			$user = $sessionHandler->getCurrentUser();
 			
 			$json = array
 			(
 				"page" => $page,
-				"total" => User::total($qtype, $query, $sortname, $sortorder),
-				"rows" => getRows(User::loadSorted($qtype, $query, $sortname, $sortorder, $start, $rp))
+				"total" => User::total($qtype, $query, $sortname, $sortorder, $user),
+				"rows" => getRows(User::loadSorted($qtype, $query, $sortname, $sortorder, $start, $rp, $user))
 			);
 			
 			echo json_encode($json);

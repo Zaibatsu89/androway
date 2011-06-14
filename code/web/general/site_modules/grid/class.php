@@ -41,6 +41,7 @@ class Grid extends Model
 				{
 					// Extract the actual object name from the key
 					$objectName = substr($key, 0, strpos($key, "_id"));
+					
 					$objectNameCamel = toCamelCase($objectName, true);
 					
 					// Create an object based on the extracted name
@@ -48,7 +49,10 @@ class Grid extends Model
 					{
 						$object = new $objectNameCamel($value);
 					
-						$dbRow[$objectName] = $object->data;
+						if ($objectName != "user")
+							$dbRow[$objectName] = $object->data;
+						else
+							$dbRow[$objectName] = $object->data["name"];
 					}
 					catch (Exception $e)
 					{
@@ -62,7 +66,7 @@ class Grid extends Model
 			if (strlen($time) > 10)
 				$time = round($time / 1000);
 			
-			$time = date("d-m-Y",$time)." ".date("G:i:s",$time);
+			$time = date("d-m-Y",$time)." ".date("G:i",$time);
 			
 			$dbRow["date_time"] = $time;
 			

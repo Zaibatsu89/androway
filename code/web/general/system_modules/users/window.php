@@ -1,3 +1,10 @@
+<?php
+require_once("../../init.php");
+init();
+handleAuth(true);
+require_once("../../engine/lib/user.php");
+?>
+
 <form id="editUserForm" class="uniForm">
 	<fieldset class="inlineLabels">
 		<input type="hidden" name="action" value="editUser" />
@@ -24,7 +31,15 @@
 				<label for="val_confirm_password">Repeat password</label>
 				<input type="password" name="confirm_password" id="val_confirm_password" />
 			</div>
-		</div>		
+		</div>
+		
+		<?php
+		
+		$user = $sessionHandler->getCurrentUser();
+		
+		if($user->data["level"] == 0)
+		{
+		?>
 		<div class="ctrlHolder">
 			<label for="val_level">Level</label>			
 			<select name="level" id="val_level">
@@ -32,7 +47,13 @@
 				<option value="2">moderator</option>
 				<option value="4">user</option>
 			</select>
-		</div>		
+		</div>
+		<?
+		}
+		
+		?>
+		
+				
 		<div class="buttonHolder">
 			<input type="button" value="Submit" class="button save_edit_form">
 			<input type="button" value="Cancel" class="button cancel_edit_form">

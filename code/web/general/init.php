@@ -54,7 +54,7 @@ function handleAuth($redirect)
 		if(!$loggedIn)
 		{
 			 //User is not logged in, so redirect to root
-			header("Location: /site_index.php");
+			header("Location: /");
 			die();
 		}
 	}
