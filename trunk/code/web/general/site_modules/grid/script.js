@@ -49,7 +49,7 @@ function loadGrid(data)
 		$('.ui-dialog .ui-title').each(function()
 		{
 			if(columnData[i].user != null)
-				userName = columnData[i].user.name;
+				userName = columnData[i].user;
 				
 			var dialogTitle = ucFirst(userName) + ' - ' + columnData[i].date_time;
 			
@@ -155,7 +155,7 @@ function createGrid(gridData, rows)
 		if(i != 'grid_data')
 		{
 			if(row.user != null)
-				userName = row.user.name;
+				userName = row.user;
 			
 			gridString +=	'<li data-role="fieldcontain" class="grid-row ui-li ui-li-static ui-body-c ui-field-contain ui-body ui-br">'
 						+		'<input type="hidden" id="' + gridData.grid_id + 'ChildColumns" value="' + gridData.child_columns + '">'

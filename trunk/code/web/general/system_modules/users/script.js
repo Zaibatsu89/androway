@@ -8,9 +8,10 @@ function initUsersModule()
 		removeRow: true,
 		colModel:
 		[
-			{display: 'name', name : 'name', width : 140, sortable : true, align: 'left'},
-			{display: 'email', name : 'email', width : 160, sortable : true, align: 'left'},
-			{display: 'date / time', name : 'date_time', width : 130, sortable : true, align: 'left'},
+			{display: 'name', name : 'name', width : 90, sortable : true, align: 'left'},
+			{display: 'email', name : 'email', width : 150, sortable : true, align: 'left'},
+			{display: 'date / time', name : 'date_time', width : 100, sortable : true, align: 'left'},
+			{display: 'level', name : 'level', width: 80, sortable : true, align: 'left'},
 			{display: '', name : 'edit', width : 40, sortable : false, align: 'center'},
 			{display: '', name : 'remove', width : 40, sortable : false, align: 'center'}
 		],

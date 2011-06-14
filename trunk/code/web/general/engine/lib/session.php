@@ -41,10 +41,8 @@ class Session extends Model
 			return false;
 	}
 	
-	public function editSession($name)
-	{
-		$dateTime = time();
-		
+	public function editSession($id)
+	{		
 		$existingSession = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE $this->sessionNameClmn = '$name';");
 		
 		if ((!empty($existingSession) && $this->data["name"] == $name) || empty($existingSession))
@@ -52,7 +50,7 @@ class Session extends Model
 			$id = $this->data["id"];
 			
 			// Update the session in the database
-			self::$dbAlternative->executeNonQuery("UPDATE ".$this->dbTable." SET $this->sessionNameClmn = '$name', $this->sessionDateTimeClmn = $dateTime WHERE id = $id;");
+			self::$dbAlternative->executeNonQuery("UPDATE ".$this->dbTable." SET $this->sessionNameClmn = '$name', WHERE id = $id;");
 			
 			// Store the new session data in the objects data variable
 			$dbData = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE $this->sessionNameClmn = '$name'");
@@ -73,12 +71,12 @@ class Session extends Model
 	{	
 		if(!empty($this->data))
 		{		
-			$sessionExists = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";");
+			$sessionExists = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE session_id = ".$this->data["session_id"].";");
 			
 			if (!empty($sessionExists))
 			{
 				// Remove the session from the database
-				self::$dbAlternative->executeNonQuery("DELETE FROM ".$this->dbTable." WHERE id = ".$this->data["id"].";");
+				self::$dbAlternative->executeNonQuery("DELETE FROM ".$this->dbTable." WHERE session_id = ".$this->data["session_id"].";");
 			
 				return true;
 			}

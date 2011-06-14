@@ -23,7 +23,27 @@ class Replay extends Model
 		if($this->data["database"] == "alternative")
 			$dbToUse = self::$dbAlternative;
 
-		return $dbToUse->getData("SELECT ".$this->data["child_columns"] ." FROM ".$this->data["child_table"]." WHERE ".$this->data["parent_id"] ." = ".$parentId." ORDER BY ".$this->data["child_id"]." ASC");
+		$childRows = $dbToUse->getData("SELECT ".$this->data["child_columns"] ." FROM ".$this->data["child_table"]." WHERE ".$this->data["parent_id"] ." = ".$parentId." ORDER BY ".$this->data["child_id"]." ASC");
+		
+		$resultArray = array();
+		
+		foreach($childRows as $childRow)
+		{
+			$time = $childRow["time"];
+			
+			if (strlen($time) > 10)
+				$time = round($time / 1000);
+			
+			$date = date("d-m-Y",$time);
+			$time = date("G:i:s",$time);
+			
+			$childRow["date"] = $date;
+			$childRow["time"] = $time;
+			
+			$resultArray[] = $childRow;
+		}
+		
+		return $resultArray;
 	}
 }
 

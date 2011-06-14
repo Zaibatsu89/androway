@@ -10,8 +10,8 @@ require_once("../../engine/lib/user.php");
 
 /*
  * Name: Rinse Cramer
- * Date: 30-03-2011
- * Version: 0.11
+ * Date: 14-06-2011
+ * Version: 0.5
  * 
  * Class to serve the session
  */
@@ -29,6 +29,13 @@ if(isset($_REQUEST["action"]))
 				{
 					$user = new User($session->data["user_id"]);
 					
+					$time = $session->data["date_time"];
+                        
+    				if (strlen($time) > 10)
+      					$time = round($time / 1000);
+                        
+          			$time = date("d-m-Y",$time)." ".date("G:i",$time);
+					
 					$rows[] = array
 					(
 						"id" => $session->data["session_id"],
@@ -36,7 +43,7 @@ if(isset($_REQUEST["action"]))
 						(
 							$session->data["session_id"],
 							ucwords($user->data["name"]),
-							date("d-m-y",$session->data["date_time"])." ".date("G:i",$session->data["date_time"]),
+							$time,
 							'showLogs',
 							//'edit',
 							'remove'

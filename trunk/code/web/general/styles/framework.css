@@ -38,7 +38,6 @@ body
 	width: auto;
 	height: 31px;
 	background-color: #666;
-	display: none;
 }
 
 #main_menu .menu_item
@@ -68,12 +67,17 @@ body
 {
 	width: 100%;
 	height: 100%;
-	background: #7A7A7A url("../images/panel_bg.png") 31px 0px repeat-x;
+	background: #B1B1B1 url("../images/panel_bg.png") 0px 31px repeat-x;
 }
 
 .panel-bg .panel-logo
 {
+	position: relative;
 	width: 685px;
 	height: 108px;
-	margin: auto;
+	left: 50%;
+	top: 50%;
+	margin-left: -342.5px;
+	margin-top: -54px;
+	background: url("../images/management_panel_logo.png") no-repeat;
 }

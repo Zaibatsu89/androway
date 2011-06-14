@@ -33,11 +33,11 @@ function initLogsModule(moduleId)
 			{display: 'right wheel', name : 'right_wheel'},
 			{display: 'inclination', name : 'inclination'}
 		],
-		sortname: 'session_id',
+		sortname: (isDefined(moduleId) && moduleId != ' ' && moduleId != '' ? 'time' : 'session_id'),
 		sortorder: 'desc',
 		onSuccess: function(){ },
 		onEdit: function(scope)
-		{			
+		{
 			onEditLog($(scope).attr('id'));
 		},
 		onRemove: function(scope)

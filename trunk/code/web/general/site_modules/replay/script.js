@@ -6,7 +6,7 @@ var isPaused = false;
 
 function loadReplay(element)
 {
-	$.getJSON('webservices/siteService.php', { action: 'loadModuleData', module_name : 'replay', function_name: 'loadData', module_id : 1, row_id: element.attr('name')}, function(data)
+	$.getJSON('webservices/siteService.php', {action: 'loadModuleData', module_name : 'replay', function_name: 'loadData', module_id : 1, row_id: element.attr('name')}, function(data)
 	{
 		dataForReplay = data;
 		
@@ -18,7 +18,7 @@ function loadReplay(element)
 			+	'</div>'
 		);
 		
-		$('#replayPage .page-header').empty().append('<h1>Replay ' + element.attr('name') + '</h1>');
+		$('#replayPage .page-header').empty().append('<h1>Replay ' + element.attr('name') + ' || ' + dataForReplay[0].date + '</h1>');
 		$('#replayPage .page-content').empty().append
 		(
 				'<input type="hidden" id="replayWrapperId" value="' + element.attr('name') + '"/>'

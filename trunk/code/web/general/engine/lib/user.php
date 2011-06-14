@@ -133,12 +133,20 @@ class User extends Model
 		return $password;
 	}
 	
-	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit)
+	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit, User $user)
 	{
 		$sqlQuery = "";
 		
 		if($query != "" && $qtype != "")
 			$sqlQuery = "WHERE $qtype LIKE '%$query%'";
+
+		if($user->data["level"] > 0)
+		{
+			if(empty($sqlQuery))
+				$sqlQuery = "WHERE id = " . $user->data["id"];
+			else
+				$sqlQuery .= " AND id = " . $user->data["id"];
+		}
 		
 		$rows = self::$db->getData("SELECT * FROM users $sqlQuery ORDER BY $sortname $sortorder LIMIT $start, $limit");
 		
@@ -152,12 +160,20 @@ class User extends Model
 		return $users;
 	}
 		
-	public static function total($qtype, $query, $sortname, $sortorder)
+	public static function total($qtype, $query, $sortname, $sortorder, User $user)
 	{
 		$sqlQuery = "";
 		
 		if($query != "" && $qtype != "")
 			$sqlQuery = "WHERE $qtype LIKE '%$query%'";
+			
+		if($user->data["level"] > 0)
+		{
+			if(empty($sqlQuery))
+				$sqlQuery = "WHERE id = " . $user->data["id"];
+			else
+				$sqlQuery .= " AND id = " . $user->data["id"];
+		}
 		
 		$rows = self::$db->getData("SELECT * FROM users $sqlQuery");
 		

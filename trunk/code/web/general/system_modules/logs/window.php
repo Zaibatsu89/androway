@@ -1,7 +1,7 @@
 <form id="editLogForm" class="uniForm">
 	<fieldset class="inlineLabels">
 		<input type="hidden" name="action" value="editLog" />
-		<input type="hidden" name="id" id="val_id" />
+		<input type="hidden" name="log_id" id="val_log_id" />
 		
 		<div class="ctrlHolder">
 			<label for="val_left_wheel">Left wheel</label>
