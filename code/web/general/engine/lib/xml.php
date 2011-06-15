@@ -1,11 +1,13 @@
 <?php
-
-/*
- * Name: Rinse Cramer
- * Date: 06-04-2011
- * Version: 0.1
- * 
- * Class for converting a xml file to an php array
+/**
+ * Convert a xml file into a php array
+ * @name Rinse Cramer
+ * @date 07-04-2011
+ * @version 0.5
+ * @param string $url			URL of xml file.
+ * @param int $get_attributes	Which attributes to get.
+ * @param string $priority		Priority string.
+ * @return						XML array.
  */
 function xml2array($url, $get_attributes = 1, $priority = 'tag')
 {

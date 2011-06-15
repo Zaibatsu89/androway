@@ -1,21 +1,27 @@
 <?php
-
 require_once("lib/model.php");
-
-/*
- * Name: Rinse Cramer
- * Date: 17-05-2011
- * Version: 0.1
- * 
- * Class for replay registration
+/**
+ * Class for loading replay data.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 class Replay extends Model
 {
+	/**
+	 * Constructor.
+	 * @param int $id	ID.
+	 */
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "replay_id", "module_replay", false);
 	}
 	
+	/**
+	 * Load replay data.
+	 * @param int $parentId Session ID.
+	 * @return Data array. 
+	 */
 	public function loadData($parentId)
 	{
 		$dbToUse = self::$db;

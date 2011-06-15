@@ -1,15 +1,17 @@
 <?php
-
-/*
- * Name: Rinse Cramer & Tymen Steur
- * Date: 18-03-2011
- * Version: 1.2
- * 
- * Static class Redirect for handling the mobile and global website redirection.
- * Use function handleRedirect.
+/**
+ * Static class handles the mobile and global website redirection.
+ * @author Rinse Cramer & Tymen Steur
+ * @date 30-03-2011
+ * @version 0.5
  */
 class Redirect
 {
+	/**
+	 * Handle redirect.
+	 * @param string $mobileUrl	Mobile website URL.
+	 * @param string $globalUrl	Global website URL.
+	 */
 	public static function handleRedirect($mobileUrl, $globalUrl)
 	{
 		$device	= Redirect::detectDevice();
@@ -27,6 +29,10 @@ class Redirect
 		}
 	}
 	
+	/**
+	 * Detect device from web browser user agent.
+	 * @return Device is mobile?
+	 */
 	private static function detectDevice()
 	{
 		$deviceIsMobile	= false;
@@ -105,7 +111,11 @@ class Redirect
 	  
 		return $deviceIsMobile;
 	}
-
+	
+	/**
+	 * Detect domain from web browser http host.
+	 * @return Domain is mobile?
+	 */
 	private static function detectDomain()
 	{
 		$domainIsMobile	= false;

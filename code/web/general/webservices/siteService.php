@@ -1,16 +1,12 @@
 <?php
-
 require_once("../init.php");
-
 init(false);
 handleAuth(false);
-
-/*
- * Name: Rinse Cramer
- * Date: 08-04-2011
- * Version: 0.11
- * 
- * Service to serve the site
+/**
+ * Service for website. Returns json because the Android Androway application requires it.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 switch($_REQUEST["action"])
 {

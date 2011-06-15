@@ -1,26 +1,44 @@
 <?php
-
 require_once("model.php");
-
-/*
- * Name: Rinse Cramer
- * Date: 30-03-2011
- * Version: 0.12
- * 
- * Class for session registration
+/**
+ * Class for session registration.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 class Session extends Model
 {
+	/**
+	 * Database table name of sessions.
+	 */
 	private $sessionTable = "sessions";
+	/**
+	 * Database column name of name.
+	 */
 	private $sessionNameClmn = "name";
+	/**
+	 * Database column name of date/time.
+	 */
 	private $sessionDateTimeClmn = "date_time";
+	/**
+	 * Database column name of user ID.
+	 */
 	private $sessionUserClmn = "user_id";
 	
+	/**
+	 * Constructor.
+	 * @param int $id ID.
+	 */
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "session_id", "sessions", true);
 	}
 	
+	/**
+	 * Create new session.
+	 * @param int $userId	User ID.
+	 * @return				True, if successful. False, otherwise.
+	 */
 	public function createSession($userId)
 	{
 		$dateTime = time();
@@ -41,6 +59,11 @@ class Session extends Model
 			return false;
 	}
 	
+	/**
+	 * Edit existing session.
+	 * @param int $id	Session ID.
+	 * @return			True, if successful. False, otherwise.
+	 */
 	public function editSession($id)
 	{		
 		$existingSession = self::$dbAlternative->getData("SELECT * FROM ".$this->dbTable." WHERE $this->sessionNameClmn = '$name';");
@@ -67,6 +90,10 @@ class Session extends Model
 		}
 	}
 	
+	/**
+	 * Remove existing session.
+	 * @return True, if successful. False, otherwise.
+	 */
 	public function removeSession()
 	{	
 		if(!empty($this->data))
@@ -87,6 +114,17 @@ class Session extends Model
 			return false;
 	}
 	
+	/**
+	 * Load sorted data from query.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param int $start		First row.
+	 * @param int $limit		Number of rows.
+	 * @param User $user		User.
+	 * @return					Sessions array.
+	 */
 	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit, User $user)
 	{
 		$sqlQuery = "";
@@ -113,7 +151,16 @@ class Session extends Model
 		
 		return $sessions;
 	}
-		
+	
+	/**
+	 * Get number of data rows.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column name to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param User $user		User.
+	 * @return					Number of sessions.
+	 */
 	public static function total($qtype, $query, $sortname, $sortorder, User $user)
 	{
 		$sqlQuery = "";

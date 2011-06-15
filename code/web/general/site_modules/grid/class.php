@@ -1,22 +1,28 @@
 <?php
-
 require_once("lib/log.php");
 require_once("lib/model.php");
-
-/*
- * Name: Tymen Steur & Rinse Cramer
- * Date: 12-04-2011
- * Version: 0.12
- * 
- * Class for page registration
+/**
+ * Class for loading grid data.
+ * @author Tymen Steur & Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 class Grid extends Model
 {
+	/**
+	 * Constructor.
+	 * @param int $id	ID.
+	 */
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "grid_id", "module_grid", false);
 	}
 	
+	/**
+	 * Load grid data.
+	 * @param mixed $data Data from logs table.
+	 * @return Data array. 
+	 */
 	public function loadData($data)
 	{
 		$dbToUse = self::$db;
@@ -88,6 +94,11 @@ class Grid extends Model
 		return $resultArray;
 	}
 	
+	/**
+	 * Load grid child data.
+	 * @param int $rowId Row ID.
+	 * @return Data array. 
+	 */
 	public function loadChildData($rowId)
 	{
 		$dbToUse = self::$db;

@@ -1,10 +1,8 @@
 <?php
-
-require_once("../../init.php");
-init();
-handleAuth(true);
-require_once("../../engine/lib/user.php");
-
+	require_once("../../init.php");
+	init();
+	handleAuth(true);
+	require_once("../../engine/lib/user.php");
 ?>
 
 <script type="text/javascript">

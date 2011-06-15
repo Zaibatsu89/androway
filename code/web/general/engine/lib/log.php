@@ -1,28 +1,54 @@
 <?php
-
 require_once("model.php");
-
-/*
- * Name: Rinse Cramer
- * Date: 31-03-2011
- * Version: 0.1
- * 
- * Class for log registration
+/**
+ * Class for log registration.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 class Log extends Model
 {
+	/**
+	 * Database table name of logs.
+	 */
 	private $logTable = "logs";
+	/**
+	 * Database column name of session ID.
+	 */
 	private $logSessionIdClmn = "session_id";
+	/**
+	 * Database column name of date/time.
+	 */
 	private $logTimeClmn = "time";
+	/**
+	 * Database column name of left wheel.
+	 */
 	private $logLeftWheelClmn = "left_wheel";
+	/**
+	 * Database column name of right wheel.
+	 */
 	private $logRightWheelClmn = "right_wheel";
+	/**
+	 * Database column name of inclination.
+	 */
 	private $logInclinationClmn = "inclination";
 	
+	/**
+	 * Constructor.
+	 * @param int $id	ID.
+	 */
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "log_id", "logs", true);
 	}
 	
+	/**
+	 * Edit existing log.
+	 * @param int $leftWheel	Left wheel.
+	 * @param int $rightWheel	Right wheel.
+	 * @param int $inclinatoin	Inclination.
+	 * @return					True, if successful. False, otherwise.
+	 */
 	public function editLog($leftWheel, $rightWheel, $inclination)
 	{	
 		$id = $this->data["log_id"];
@@ -39,6 +65,10 @@ class Log extends Model
 		return true;
 	}
 	
+	/**
+	 * Remove existing log.
+	 * @return True, if successful. False, otherwise.
+	 */
 	public function removeLog()
 	{	
 		if(!empty($this->data))
@@ -61,8 +91,19 @@ class Log extends Model
 			return false;
 	}
 	
+	/**
+	 * Load sorted data from query.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param int $start		First row.
+	 * @param int $limit		Number of rows.
+	 * @param User $user		User.
+	 * @return					Logs array.
+	 */
 	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit, User $user)
-	{
+	{	
 		$sqlQuery = "";
 		$completeQuery = "";		
 		
@@ -92,7 +133,16 @@ class Log extends Model
 		
 		return $logs;
 	}
-		
+	
+	/**
+	 * Get number of data rows.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column name to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param User $user		User.
+	 * @return					Number of logs.
+	 */
 	public static function total($qtype, $query, $sortname, $sortorder, User $user)
 	{
 		$sqlQuery = "";

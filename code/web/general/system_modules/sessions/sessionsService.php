@@ -1,19 +1,14 @@
 <?php
-
 require_once("../../init.php");
-
 init();
 handleAuth(true);
-
 require_once("../../engine/lib/session.php");
 require_once("../../engine/lib/user.php");
-
-/*
- * Name: Rinse Cramer
- * Date: 14-06-2011
- * Version: 0.5
- * 
- * Class to serve the session
+/**
+ * Service for sessions.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 if(isset($_REQUEST["action"]))
 {

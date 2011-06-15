@@ -1,16 +1,12 @@
 <?php
-
 require_once("../init.php");
-
 init(false);
 handleAuth(false);
-
-/*
- * Name: Rinse Cramer
- * Date: 29-03-2011
- * Version: 0.11
- * 
- * Webservice for use by Android application Androway.
+/**
+ * Service for logging. Returns json because the Android Androway application requires it.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 if(isset($_REQUEST["query1"]))
 	$_REQUEST["query"] = $_REQUEST["query1"];

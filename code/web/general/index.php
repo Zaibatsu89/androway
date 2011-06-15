@@ -1,5 +1,11 @@
 <?php
 	require_once("init.php");
+	/**
+	 * Index of Androway website.
+	 * @author Rinse Cramer & Tymen Steur
+	 * @date 14-06-2011
+	 * @version 0.5
+	 */
 	init(false);
 ?>
 <html>
@@ -26,12 +32,12 @@
 				<link rel="stylesheet" href="styles/flexigrid.css"/>
 				<link rel="stylesheet" href="styles/jquery.ui.css"/>
 				
-				<script type="text/javascript" src="scripts/lib/jquery.flexigrid.js"></script>				
+				<script type="text/javascript" src="scripts/lib/jquery.flexigrid.js"></script>
 				<script type="text/javascript" src="scripts/framework.protected_functions.js"></script>
 				<script type="text/javascript" src="system_modules/logs/script.js"></script>
 				<script type="text/javascript" src="system_modules/sessions/script.js"></script>
 				<script type="text/javascript" src="system_modules/users/script.js"></script>
-				<?
+				<?php
 			}
 			else if(!isset($_GET['admin']))
 			{
@@ -42,7 +48,7 @@
 				<link rel="stylesheet" href="styles/jquery.svg.css" />
 				
 				<script type="text/javascript">
-				<?
+				<?php
 					if(!isset($_REQUEST["from_app"]))
 					{
 						?>
@@ -50,7 +56,7 @@
 						{
 							$.mobile.selectmenu.prototype.options.nativeMenu = false;
 						});
-						<?
+						<?php
 					}
 				?>
 				</script>
@@ -65,7 +71,7 @@
 				<script type="text/javascript" src="site_modules/text/script.js"></script>		
 				<script type="text/javascript" src="site_modules/logs/script.js"></script>
 				<script type="text/javascript" src="site_modules/sessions/script.js"></script>
-				<?
+				<?php
 			}
 		?>
 		
@@ -74,7 +80,7 @@
 				if(!$sessionHandler->authenticate() && isset($_GET['admin']))
 					echo "$(function(){ $('#loginDialog').dialog({ width: 550 }); });";
 			?>
-
+			
 			function login(formId)
 			{
 				var loginForm = $('#' + formId);
@@ -140,7 +146,7 @@
 			</div>
 			<div class="panel-logo"></div>
 		</div>
-		<?
+		<?php
 		}
 		else if (isset($_GET['admin']))
 		{
@@ -167,7 +173,7 @@
 				</fieldset>
 			</form>
 		</div>
-		<?
+		<?php
 		}
 		else
 		{
@@ -176,7 +182,7 @@
 			<div data-role="header" id="headerMain"></div>
 			<div data-role="content" id="contentText"></div>
 		</div>
-		<?
+		<?php
 		}
 		?>
 	</body>
