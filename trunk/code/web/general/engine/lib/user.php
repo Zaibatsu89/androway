@@ -1,28 +1,55 @@
 <?php
-
 require_once("model.php");
-
-/*
- * Name: Rinse Cramer & Tymen Steur
- * Date: 30-03-2011
- * Version: 0.14
- * 
- * Class for user registration
+/**
+ * Class for user registration.
+ * @author Rinse Cramer & Tymen Steur
+ * @date 14-06-2011
+ * @version 0.5
  */
 class User extends Model
 {
+	/**
+	 * Database table name of users.
+	 */
 	private $userTable = "users";
+	/**
+	 * Database column name of name.
+	 */
 	private $userNameClmn = "name";
+	/**
+	 * Database column name of email address.
+	 */
 	private $userEmailClmn = "email";
+	/**
+	 * Database column name of password.
+	 */
 	private $userPasswordClmn = "password";
+	/**
+	 * Database column name of authority level.
+	 */
 	private $userLevelClmn = "level";
+	/**
+	 * Database column name of date/time.
+	 */
 	private $userDateTimeClmn = "date_time";
-
+	
+	/**
+	 * Constructor.
+	 * @param int $id ID.
+	 */
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "id", "users");
 	}
 	
+	/**
+	 * Create new user.
+	 * @param string $name		Name.
+	 * @param string $email		Email address.
+	 * @param string $password	Password.
+	 * @param string $level		Authority level.
+	 * @return					True, if successful. False, otherwise.
+	 */
 	public function createUser($name, $email, $password, $level)
 	{
 		$dateTime = time();
@@ -50,6 +77,14 @@ class User extends Model
 			return false;
 	}
 	
+	/**
+	 * Edit existing user.
+	 * @param string $name		Name.
+	 * @param string $email		Email address.
+	 * @param string $password	Password.
+	 * @param string $level		Authority level.
+	 * @return					True, if successful. False, otherwise.
+	 */
 	public function editUser($name, $email, $password, $level)
 	{
 		$dateTime = time();
@@ -82,6 +117,10 @@ class User extends Model
 		}
 	}
 	
+	/**
+	 * Remove existing user.
+	 * @return True, if successful. False, otherwise.
+	 */
 	public function removeUser()
 	{
 		if(!empty($this->data))
@@ -102,6 +141,11 @@ class User extends Model
 			return false;
 	}
 	
+	/**
+	 * Reset password.
+	 * @param string $userEmail	User email address.
+	 * @todo Send mail using php mailer.
+	 */
 	public function passwordReset($userEmail)
 	{
 		// Generate a new random password
@@ -112,11 +156,14 @@ class User extends Model
 		
 		// Update the database with the new password
 		self::$db->executeNonQuery("UPDATE ".$this->dbTable." SET $this->userPasswordClmn = '$newPassword' WHERE $this->userEmailClmn ='$userEmail'");
-		
-		// SEND MAIL USING PHP MAILER
 	}
 	
-	// Create a random alphanumerical password with the given length
+	
+	/**
+	 * Create a random alphanumerical password.
+	 * @param int $passwordLength Length of new password.
+	 * @return New password.
+	 */
 	public function createPassword($passwordLength)
 	{
 		$chars = "abcdefghijkmnopqrstuvwxyz023456789";
@@ -133,6 +180,17 @@ class User extends Model
 		return $password;
 	}
 	
+	/**
+	 * Load sorted data from query.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param int $start		First row.
+	 * @param int $limit		Number of rows.
+	 * @param User $user		User.
+	 * @return					Users array.
+	 */
 	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit, User $user)
 	{
 		$sqlQuery = "";
@@ -159,7 +217,16 @@ class User extends Model
 		
 		return $users;
 	}
-		
+	
+	/**
+	 * Get number of data rows.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column name to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param User $user		User.
+	 * @return					Number of users.
+	 */
 	public static function total($qtype, $query, $sortname, $sortorder, User $user)
 	{
 		$sqlQuery = "";

@@ -2,7 +2,7 @@ var userName = '';
 var rowsPerPage = 6;
 
 function loadGrid(data)
-{
+{	
 	var gridElement = $('#grid'+ data.grid_id);
 	
 	if(gridElement.exists())
@@ -85,7 +85,7 @@ function pageChangedEvent()
 }
 
 function handlePaging(gridId, pageNumber)
-{
+{	
 	$.mobile.pageLoading(false);
 	var pagingElement = $('#grid'+ gridId).find('.paging');
 	
@@ -183,7 +183,10 @@ function createPaging(gridId, rows)
 	
 	for(var i = 1; i <= pages; i++)
 	{
-		result += '<a href="#" onclick="handlePaging('+ gridId +', ' + i + ');" data-inline="true" data-role="button" data-theme="c" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow ui-btn-up-c"><span class="ui-btn-inner ui-btn-corner-all" style="cursor: pointer;"><span class="ui-btn-text">' + i + '</span></span></a>';
+		if (i == 1)
+			result += '<a href="#" onclick="handlePaging('+ gridId +', ' + i + ');" data-inline="true" data-role="button" data-theme="c" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow ui-btn-up-c"><span class="ui-btn-inner ui-btn-corner-all ui-btn-up-b" style="cursor: pointer;"><span class="ui-btn-text">' + i + '</span></span></a>';
+		else
+			result += '<a href="#" onclick="handlePaging('+ gridId +', ' + i + ');" data-inline="true" data-role="button" data-theme="c" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow ui-btn-up-c"><span class="ui-btn-inner ui-btn-corner-all" style="cursor: pointer;"><span class="ui-btn-text">' + i + '</span></span></a>';
 	}
 	
 	return result;

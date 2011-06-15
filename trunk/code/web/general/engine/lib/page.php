@@ -1,21 +1,34 @@
 <?php
-
 require_once("model.php");
-
-/*
- * Name: Rinse Cramer
- * Date: 08-04-2011
- * Version: 0.11
- * 
- * Class for page registration
+/**
+ * Class for page registration.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 class Page extends Model
 {
+	/**
+	 * Database table name of pages.
+	 */
 	private $pageTable = "page";
+	/**
+	 * Database column name of title.
+	 */
 	private $pageTitleClmn = "title";
+	/**
+	 * Database column name of date/time.
+	 */
 	private $pageDateTimeClmn = "date_time";
+	/**
+	 * Public array of page children.
+	 */
 	public $children = array();
 	
+	/**
+	 * Constructor.
+	 * @param int $id ID.
+	 */
 	public function __construct($id = null)
 	{
 		parent::__construct($id, "id", "page", false);
@@ -23,7 +36,11 @@ class Page extends Model
 		if($id !== null)
 			$this->children = $this->getChildren();
 	}
-
+	
+	/**
+	 * Get page children array.
+	 * @return Page children array.
+	 */
 	protected function getChildren()
 	{
 		$dbRows = self::$db->getData("SELECT * FROM page WHERE parent_id = " . $this->data["id"]);
@@ -37,6 +54,16 @@ class Page extends Model
 		return $children;
 	}
 	
+	/**
+	 * Load sorted data from query.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @param int $start		First row.
+	 * @param int $limit		Number of rows.
+	 * @return					Page array.
+	 */
 	public static function loadSorted($qtype, $query, $sortname, $sortorder, $start, $limit)
 	{
 		$sqlQuery = "";
@@ -55,7 +82,15 @@ class Page extends Model
 		
 		return $page;
 	}
-		
+	
+	/**
+	 * Get number of data rows.
+	 * @param string $qtype		Query type.
+	 * @param string $query		Query.
+	 * @param string $sortname	Column name to be sorted.
+	 * @param string $sortorder	Sorting order.
+	 * @return					Number of pages.
+	 */
 	public static function total($qtype, $query, $sortname, $sortorder)
 	{
 		$sqlQuery = "";
@@ -68,6 +103,11 @@ class Page extends Model
 		return count($rows);
 	}
 	
+	/**
+	 * Load page.
+	 * @param int $id	Page ID.
+	 * @return			Page data as JSON array.
+	 */
 	public static function load($id)
 	{
 		$resultArray = array();
@@ -113,6 +153,10 @@ class Page extends Model
 		return json_encode($resultArray);
 	}
 	
+	/**
+	 * Load menu.
+	 * @return Menu pages.
+	 */
 	public static function loadMenuData()
 	{
 		$menuPages = array();

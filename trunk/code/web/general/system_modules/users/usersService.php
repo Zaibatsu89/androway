@@ -1,18 +1,13 @@
 <?php
-
 require_once("../../init.php");
-
 init();
 handleAuth(true);
-
 require_once("../../engine/lib/user.php");
-
-/*
- * Name: Tymen Steur
- * Date: 14-06-2011
- * Version: 0.5
- * 
- * Class to serve the user
+/**
+ * Service for users.
+ * @author Tymen Steur
+ * @date 14-06-2011
+ * @version 0.5
  */
 if(isset($_REQUEST["action"]))
 {

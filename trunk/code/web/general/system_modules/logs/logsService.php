@@ -1,18 +1,13 @@
 <?php
-
 require_once("../../init.php");
-
 init();
 handleAuth(true);
-
 require_once("../../engine/lib/log.php");
-
-/*
- * Name: Rinse Cramer
- * Date: 14-06-2011
- * Version: 0.5
- * 
- * Class to serve the log
+/**
+ * Service for logs.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 if(isset($_REQUEST["action"]))
 {

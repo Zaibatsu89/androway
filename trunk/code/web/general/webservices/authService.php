@@ -1,16 +1,12 @@
 <?php
-
 require_once("../init.php");
 init(false);
-
-/*
- * Name: Tymen Steur
- * Date: 29-03-2011
- * Version: 0.1
- * 
- * Class to serve the authentication (returns json because the Android Androway application requires it)
+/**
+ * Service for authentication. Returns json because the Android Androway application requires it.
+ * @author Tymen Steur
+ * @date 14-06-2011
+ * @version 0.5
  */
-
 if(isset($_REQUEST["authType"]))
 {
 	if($_REQUEST["authType"] == "login")

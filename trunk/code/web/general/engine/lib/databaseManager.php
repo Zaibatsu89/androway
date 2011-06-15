@@ -1,23 +1,44 @@
 <?php
-
-/*
- * Name: Rinse Cramer
- * Date: 23-03-2011
- * Version: 0.12
- * 
- * General database managing class
- * Uses PDO
+/**
+ * General database managing class. Uses PDO.
+ * @author Rinse Cramer
+ * @date 14-06-2011
+ * @version 0.5
  */
 class DatabaseManager
 {
+	/**
+	 * Database type.
+	 */
 	private $databaseType = "mysql";
+	/**
+	 * Host name.
+	 */
 	private $hostName = "localhost";
+	/**
+	 * Database name.
+	 */
 	public $dbName = null;
+	/**
+	 * User name.
+	 */
 	private $userName = null;
+	/**
+	 * Password.
+	 */
 	private $password = null;
-		
+	
+	/**
+	 * PDO database.
+	 */	
 	private $pdoDb = null;
 	
+	/**
+	 * Constructor.
+	 * @param string $dbName	Database name.
+	 * @param string $userName	User name.
+	 * @param string $password	Password.
+	 */
 	public function __construct($dbName, $userName, $password)
 	{
 		$this->dbName = $dbName;
@@ -27,6 +48,10 @@ class DatabaseManager
 		$this->pdoDb = new PDO("$this->databaseType:host=$this->hostName;dbname=$this->dbName", $this->userName, $this->password);
 	}
 	
+	/**
+	 * Execute non query.
+	 * @param string $query	Query.
+	 */
 	public function executeNonQuery($query)
 	{		
 		try
@@ -40,6 +65,11 @@ class DatabaseManager
 		}
 	}	
 	
+	/**
+	 * Execute secure non query (protection against LulzSec :P).
+	 * @param string $query		Query.
+	 * @param string $values	Values.
+	 */
 	public function executeSecureNonQuery($query, $values)
 	{
 		try
@@ -54,9 +84,10 @@ class DatabaseManager
 		}
     }
 	
-	/*
-	 * Result is an array with key value pairs.
-	 * $result as $key => $value
+	/**
+	 * Get data as an array with key value pairs. $result as $key => $value.
+	 * @param string $query	Query.
+	 * @return				Data array.
 	 */
 	public function getData($query)
 	{
@@ -83,6 +114,12 @@ class DatabaseManager
 	   	return $result;
 	}
 	
+	/**
+	 * Get data as an array with key value pairs secured (protection against LulzSec :P). $result as $key => $value.
+	 * @param string $query		Query.
+	 * @param string $values	Values.
+	 * @return					Data array.
+	 */
 	public function getDataSecured($query, $values)
 	{
 		$result = array();
