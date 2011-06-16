@@ -54,7 +54,7 @@ public class Constants
      * The url for the remote mobile website.
      * (Passing from_app as a 'get' parameter to signal that the mobile website is loaded from within the app)
      */
-    public static final String WEB_VIEW_URL = ROOT_URL + "/site_index.php?from_app";
+    public static final String WEB_VIEW_URL = ROOT_URL + "/?from_app";
 
     /**
      * The bluetooth verification string based on the AndrowayID
