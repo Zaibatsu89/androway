@@ -41,6 +41,7 @@
     <!-- UI Settings View -->
     <string name="accountSettings">Accountinstellingen</string>
     <string name="systemSettings">Systeeminstellingen</string>
+    <string name="uiSettings">Gebruikersinterface instellingen</string>
     <string name="emailTitle">E-mailadres</string>
     <string name="emailSummary">Het e-mailadres van je account</string>
     <string name="emailInvalid">Dit is niet een geldig e-mailadres.\n\nVerander alstublieft je invoer.</string>
