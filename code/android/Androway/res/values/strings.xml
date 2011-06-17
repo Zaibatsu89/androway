@@ -42,6 +42,7 @@
     <!-- UI Settings View -->
     <string name="accountSettings">Account Settings</string>
     <string name="systemSettings">System Settings</string>
+    <string name="uiSettings">UI Settings</string>
     <string name="emailTitle">Email address</string>
     <string name="emailSummary">Your account email address</string>
     <string name="emailInvalid">The email address must be of the correct format.\n\nPlease change your input.</string>

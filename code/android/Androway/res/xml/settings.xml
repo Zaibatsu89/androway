@@ -40,7 +40,7 @@
             android:defaultValue="true"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="UI Settings">
+    <PreferenceCategory android:title="@string/uiSettings">
         <CheckBoxPreference
             android:name="@string/block1LockedTitle"
             android:summary="@string/block1LockedSummary"

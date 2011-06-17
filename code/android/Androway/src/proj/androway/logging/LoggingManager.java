@@ -23,6 +23,8 @@ import proj.androway.common.SharedObjects;
  */
 public class LoggingManager
 {
+    public boolean stopLogging = false;
+
     private SharedObjects _sharedObjects;
     private Context _context;
     private IDatabaseManager _myDbManager;
@@ -63,23 +65,26 @@ public class LoggingManager
      */
     public void addLog()
     {
-        // Get the values for the log
-        String sessionId = String.valueOf(_sharedObjects.session.sessionId);
-        String leftWheel = String.valueOf(_sharedObjects.incomingData.leftWheelSpeed);
-        String rightWheel = String.valueOf(_sharedObjects.incomingData.rightWheelSpeed);
-        String inclination = String.valueOf(_sharedObjects.incomingData.inclination);
-
-        // Assemble the insert query for the log
-        String query = "INSERT INTO " + Constants.LOG_DB_TABLE + " (session_id, time, left_wheel, right_wheel, inclination) ";
-        query += "VALUES (" + sessionId + ", '" + Math.round(new Date().getTime() / 1000) + "', " + leftWheel + ", " + rightWheel + ", " + inclination + ");";
-
-        try
+        if(!stopLogging)
         {
-            _myDbManager.executeNonQuery(Constants.LOG_DB_NAME, query);
-        }
-        catch (NotSupportedQueryException ex)
-        {
-            Logger.getLogger(LoggingManager.class.getName()).log(Level.SEVERE, null, ex);
+            // Get the values for the log
+            String sessionId = String.valueOf(_sharedObjects.session.sessionId);
+            String leftWheel = String.valueOf(_sharedObjects.incomingData.leftWheelSpeed);
+            String rightWheel = String.valueOf(_sharedObjects.incomingData.rightWheelSpeed);
+            String inclination = String.valueOf(_sharedObjects.incomingData.inclination);
+
+            // Assemble the insert query for the log
+            String query = "INSERT INTO " + Constants.LOG_DB_TABLE + " (session_id, time, left_wheel, right_wheel, inclination) ";
+            query += "VALUES (" + sessionId + ", '" + new Date().getTime() + "', " + leftWheel + ", " + rightWheel + ", " + inclination + ");";
+
+            try
+            {
+                _myDbManager.executeNonQuery(Constants.LOG_DB_NAME, query);
+            }
+            catch (NotSupportedQueryException ex)
+            {
+                Logger.getLogger(LoggingManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

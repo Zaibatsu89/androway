@@ -251,10 +251,13 @@ public class Session implements Runnable
                 _lm.destroyFailedSession(sessionId, userId);
         }
 
+        // Signal the logging manager to stop logging
+        if(_lm != null)
+            _lm.stopLogging = true;
+
         // Set the stopSession property to 1 (true), so the bot will properly stop.
         // Then perform a bluetoothPost, to send the last update message.
         _sharedObjects.outgoingData.stopSession = 1;
-
         bluetoothPost();
 
         // Set the session running setting to false
