@@ -1,7 +1,3 @@
-/*
-  Bot.cpp - Class for interacting with the physical balancing bot.
- */
-
 #include <AFMotor.h>
 #include "Bot.h"
 
