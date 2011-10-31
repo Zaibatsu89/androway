@@ -7,14 +7,14 @@
 	<websiteTitle>Androway - </websiteTitle>
 	
 	<standardDatabase>
-		<name>androway_framework</name>
-		<user>androway</user>
-		<password>hz7bkaxw</password>
+		<name></name>
+		<user></user>
+		<password></password>
 	</standardDatabase>
 	
 	<alternativeDatabase>
-		<name>androway_logging</name>
-		<user>androway_logging</user>
-		<password>hz7bkaxw</password>
+		<name></name>
+		<user></user>
+		<password></password>
 	</alternativeDatabase>
 </config>
