@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$d6/de6/interfaceproj_1_1androway_1_1database_1_1_i_database_manager.html" title="proj.androway.database.IDatabaseManager" alt="" coords="6,31,277,57"/>
+<area shape="rect" id="node3" href="$df/d4f/classproj_1_1androway_1_1database_1_1_database_manager_base.html" title="proj.androway.database.DatabaseManagerBase" alt="" coords="325,31,624,57"/>
+<area shape="rect" id="node5" href="$d4/d08/classproj_1_1androway_1_1database_1_1http_1_1_http_manager.html" title="proj.androway.database.http.HttpManager" alt="" coords="683,5,946,32"/>
+<area shape="rect" id="node7" href="$de/d15/classproj_1_1androway_1_1database_1_1sqlite_1_1_sq_lite_manager.html" title="proj.androway.database.sqlite.SqLiteManager" alt="" coords="672,56,957,83"/>
+</map>

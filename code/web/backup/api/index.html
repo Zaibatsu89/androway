@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>Androway - API 0.5</title>
+		
+		<style type="text/css">
+			html, body
+			{
+				font-family: Lucida Grande,Verdana,Geneva,Arial,sans-serif;
+				padding: 0;
+				margin: 0;
+			}
+			
+			#background
+			{
+				width: 100%;
+				height: 100%;
+				background: url(panel_bg.png) 0px 102px repeat-x;
+			}
+			
+			#titlearea
+			{
+				width: 100%;
+				height: 66px;
+				background: url(header_bg.png) repeat-x;
+			}
+			
+			#choose_api
+			{
+				width: 100%;
+				height: 36px;
+				background: url(tab_b.png) repeat-x;
+				border-top: 1px solid black;
+				border-bottom: 1px solid black;
+			}
+			
+			#choose_api div
+			{
+				float: left;
+			}
+			
+			#choose_api div a
+			{
+				line-height: 36px;
+				padding: 10px 20px;
+				font-size: 13px;
+				color: black;
+				font-weight: bold;
+				text-shadow: 0 1px 1px white;
+				text-decoration: none;
+				background: none;
+				border-right: 1px solid #666666;
+			}
+			
+			#choose_api div a:hover
+			{
+				color: white;
+				text-shadow: 0 1px 1px black;
+				background: url(tab_h.png) repeat-x;
+				border-right: 1px solid transparent;
+			}
+			
+			#choose_api div a:active
+			{
+				color: white;
+				text-shadow: 0 1px 1px black;
+				background: url(tab_a.png) repeat-x;
+				border-right: 1px solid transparent;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="background">
+			<div id="titlearea">
+				<img src="header_logo.png" alt="Androway">
+				<img src="header_api.png" alt="API">
+				<img src="header_version.png" alt="Version 0.5">
+			</div>
+			<div id="choose_api">
+				<div><a href="android/">Android</a></div>
+				<div><a href="php/">Web application</a></div>
+				<div><a href="embedded/">Embedded</a></div>
+			</div>
+		</div>
+	</body>
+</html>
