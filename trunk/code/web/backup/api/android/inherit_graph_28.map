@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$db/dcc/classproj_1_1androway_1_1ui_1_1block__component_1_1_block_component.html" title="proj.androway.ui.block_component.BlockComponent" alt="" coords="5,81,331,108"/>
+<area shape="rect" id="node3" href="$d7/dc7/classproj_1_1androway_1_1ui_1_1block__component_1_1balance__block_1_1_balance_block.html" title="proj.androway.ui.block_component.balance_block.BalanceBlock" alt="" coords="379,5,773,32"/>
+<area shape="rect" id="node5" href="$de/da0/classproj_1_1androway_1_1ui_1_1block__component_1_1_compass_block.html" title="proj.androway.ui.block_component.CompassBlock" alt="" coords="419,56,733,83"/>
+<area shape="rect" id="node7" href="$d5/db2/classproj_1_1androway_1_1ui_1_1block__component_1_1_direction_block.html" title="proj.androway.ui.block_component.DirectionBlock" alt="" coords="421,107,731,133"/>
+<area shape="rect" id="node9" href="$dc/d42/classproj_1_1androway_1_1ui_1_1block__component_1_1_inclination_block.html" title="proj.androway.ui.block_component.InclinationBlock" alt="" coords="417,157,735,184"/>
+</map>
